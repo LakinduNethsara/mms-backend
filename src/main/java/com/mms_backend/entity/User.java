@@ -24,5 +24,5 @@ public class User {
     private Year registered_year;
     private String role;
     private String department_id;
-    private Boolean isDeleted;
+    private Boolean is_deleted;
 }
