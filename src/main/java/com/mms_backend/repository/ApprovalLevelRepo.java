@@ -1,6 +1,6 @@
 package com.mms_backend.repository;
 
-import com.mms_backend.entity.MarksApprovalLevel;
+import com.mms_backend.entity.AR.MarksApprovalLevel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
