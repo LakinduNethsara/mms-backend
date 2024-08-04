@@ -356,8 +356,8 @@ public class ARService {
 
 
 
-    public List<Object[]> getABDetails(){        //Get all  students records to list down from marks table having AB s for valid exams
-        List<Object[]> eStarList= arMarksRepo.getABDetails();
+    public List<Object[]> getABDetails(String approved_level){        //Get all  students records to list down from marks table having AB s for valid exams
+        List<Object[]> eStarList= arMarksRepo.getABDetails(approved_level);
         return eStarList;
     }
 
