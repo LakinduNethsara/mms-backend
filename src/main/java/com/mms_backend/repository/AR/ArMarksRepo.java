@@ -17,8 +17,8 @@ public interface ArMarksRepo extends JpaRepository<MarksEntity,Integer> {
             " on marks.course_id=mark_approved_level.course_id AND marks.academic_year =mark_approved_level.academic_year ) inner join course on course.course_id=marks.course_id)" +
             "inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id=marks.evaluation_criteria_id) WHERE ((marks.assignment_score='AB') AND " +
             "(evaluationcriteria.assessment_type='End theory exam' OR evaluationcriteria.assessment_type='End practical exam' OR evaluationcriteria.assessment_type='Mid theory exam'" +
-            " OR evaluationcriteria.assessment_type='Mid practical exam')) order by course.level, course.semester, course.course_id, marks.student_id")
-    List<Object[]> getABDetails();
+            " OR evaluationcriteria.assessment_type='Mid practical exam') AND mark_approved_level.approval_level=:approved_level) order by course.level, course.semester, course.course_id, marks.student_id")
+    List<Object[]> getABDetails(String approved_level);
 
 
     //get E* details by selected course id

@@ -112,9 +112,9 @@ public class ARController {
     /*---------------------------------------------------------------------------------------- Controller for marks table ----------------------------START-------------*/
 
 
-    @GetMapping("/getABDetails")      //Get all  students records to list down from marks table having AB s for valid exams
-    public List<Object[]> getABDetails(){
-        return arService.getABDetails();
+    @GetMapping("/getABDetails/{approved_level}")      //Get all  students records to list down from marks table having AB s for valid exams
+    public List<Object[]> getABDetails(@PathVariable String approved_level){
+        return arService.getABDetails(approved_level);
 
 
         /*Usage
