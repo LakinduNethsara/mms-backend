@@ -4,6 +4,7 @@ import com.mms_backend.entity.AR.ResultBoardMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -18,4 +19,11 @@ public interface ARResultBoardMemberRepo extends JpaRepository<ResultBoardMember
     @Modifying
     @Query(nativeQuery = true, value = "delete result_board_member from result_board_member inner join result_board on result_board_member.result_board_id= result_board.id  where result_board_member.result_board_id = :result_board_id and result_board.status='Not started'")     //Delete all assigned marks sheets by result board id
     int deleteAssignedMarksSheetsByResultBoardID(int result_board_id);
+
+
+    //getAssignedResultBoardforCC---------------------------------
+    @Query(nativeQuery = true,value = "select * from result_board_member inner join result_board on result_board_member.result_board_id=result_board.id where course_coordinator_id=:user_id and status='Started'")
+    List<ResultBoardMember> getAssignedResultBoardforCC(@Param("user_id") String user_id);
+
+    //------------------------------------------------------------
 }
