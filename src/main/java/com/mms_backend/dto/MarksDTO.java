@@ -17,7 +17,6 @@ public class MarksDTO {
     private String assignment_name;
     private String assignment_score;
     private String evaluation_criteria_id;
-    private byte[] signature;
 
 
 

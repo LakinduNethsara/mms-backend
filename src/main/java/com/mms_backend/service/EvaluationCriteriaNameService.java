@@ -42,4 +42,19 @@ public class EvaluationCriteriaNameService {
         return responseDTO;
     }
 
+    public ResponseDTO getAssessmentTypes(String course_id,String type)
+    {
+        List<EvaluationCriteriaNameEntity> list=evaluationCriteriaNameRepo.getAssessmentTypes(course_id,type);
+        try {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(list);
+            responseDTO.setMessage("Successful");
+        }catch (Exception e){
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage(e.getMessage());
+        }
+        return responseDTO;
+    }
+
 }

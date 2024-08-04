@@ -93,4 +93,29 @@ public class MarksController {
         else
             return new ResponseEntity(list,HttpStatus.OK);
     }
+
+    @GetMapping("getEnteredCAMarks/{course_id}")
+    public ResponseEntity getenteredCAMarks(@PathVariable String course_id)
+    {
+        List<MarksDTO> list=marksService.getenteredCAMarks(course_id);
+        if(list.isEmpty())
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity(list,HttpStatus.OK);
+
+    }
+
+    @PostMapping("inputCAMarks")
+    public ResponseEntity enterCAMarks(@RequestBody List<MarksDTO> list)
+    {
+        ResponseDTO response=marksService.saveCAMarks(list);
+        if(response.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return  new ResponseEntity(HttpStatus.OK);
+        }
+        else
+            return  new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

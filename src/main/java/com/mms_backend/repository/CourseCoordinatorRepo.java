@@ -12,7 +12,7 @@ public interface CourseCoordinatorRepo extends JpaRepository<CourseCoordinatorEn
     @Query(nativeQuery = true,value = "SELECT * FROM coursecoordinator where course_id =:course_id")
     public CourseCoordinatorEntity getCCBycourse(@Param("course_id")String course_id);
 
-    @Query(nativeQuery = true,value = "select cc.id, cc.user_id, cc.course_id, cc.academic_year from coursecoordinator cc left join evaluationcriteria ec on cc.course_id = ec.course_id where cc.user_id = (select user_id from user where user_name=:user_name) and ec.course_id is null")
-    public List<CourseCoordinatorEntity> getAllCidToCourseCriteria(@Param("user_name")String user_name);
+    @Query(nativeQuery = true,value = "select cc.id, cc.user_id, cc.course_id, cc.academic_year from coursecoordinator cc left join evaluationcriteria ec on cc.course_id = ec.course_id where cc.user_id = (select user_id from user where email=:email) and ec.course_id is null")
+    public List<CourseCoordinatorEntity> getAllCidToCourseCriteria(@Param("email")String email);
 
 }
