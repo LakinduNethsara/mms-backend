@@ -71,4 +71,47 @@ public class GPAService
         return responseDTO;
     }
 
+
+
+
+    public float calculateGPAForCourse(String grade,int credit) {
+        float gpaPoints = 0.0f;
+
+        if (grade.equals("A+") || grade.equals("A")) {
+            gpaPoints = 4.00f;
+        } else if (grade.equals("A-")) {
+            gpaPoints = 3.70f;
+        } else if (grade.equals("B+")) {
+            gpaPoints = 3.30f;
+        } else if (grade.equals("B")) {
+            gpaPoints = 3.00f;
+        } else if (grade.equals("B-")) {
+            gpaPoints = 2.70f;
+        } else if (grade.equals("C+")) {
+            gpaPoints = 2.30f;
+        } else if (grade.equals("C")) {
+            gpaPoints = 2.00f;
+        } else if (grade.equals("C-")) {
+            gpaPoints = 1.70f;
+        } else if (grade.equals("D+")) {
+            gpaPoints = 1.30f;
+        } else if (grade.equals("D")) {
+            gpaPoints = 1.00f;
+        } else if (grade.equals("E") || grade.equals("F")) {
+            gpaPoints = 0.00f;
+        }
+
+        float gpaForCourse = gpaPoints * credit;
+
+        return gpaForCourse;
+    }
+
+
+    public void gpaCalculate(String course_id,int credit)
+    {
+
+    }
+
+
+
 }
