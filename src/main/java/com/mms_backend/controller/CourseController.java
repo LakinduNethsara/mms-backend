@@ -141,9 +141,9 @@ public class CourseController {
             return new ResponseEntity(responses,HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("getcourseforcc/{user_name}")
-    public ResponseEntity getCourseForCC(@PathVariable String user_name){
-        ResponseDTO getCForCC = courseService.getApprovedCourse(user_name);
+    @GetMapping("getcourseforcc/{email}")
+    public ResponseEntity getCourseForCC(@PathVariable String email){
+        ResponseDTO getCForCC = courseService.getApprovedCourse(email);
         if (getCForCC.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(getCForCC,HttpStatus.OK);
         }else return new ResponseEntity(getCForCC,HttpStatus.NOT_FOUND);

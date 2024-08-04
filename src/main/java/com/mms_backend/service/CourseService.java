@@ -213,8 +213,8 @@ public class CourseService {
         return responseDTO;
     }
 
-    public ResponseDTO getApprovedCourse(String user_name){
-        List<CourseEntity> courseEntities = courseRepo.findLecturerApprovedCourses(user_name);
+    public ResponseDTO getApprovedCourse(String email){
+        List<CourseEntity> courseEntities = courseRepo.findLecturerApprovedCourses(email);
         if (courseEntities.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
