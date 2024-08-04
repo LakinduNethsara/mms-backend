@@ -44,7 +44,7 @@ public class MarkSheetService
     List<StudentMarks> studentMarksList;
     List<StudentRegCourses> studentRegCoursesList;
     @Autowired
-    private StudentRepo studentRepo;
+    private UserRepo studentRepo;
     Boolean CA=false;
     Boolean end=false;
 
@@ -143,7 +143,7 @@ public class MarkSheetService
             }
 
 
-            Student studentDetails=studentRepo.getStudentDetailsByStudentID((student.getStudent_id()));
+            User studentDetails=studentRepo.getStudentDetailsByStudentID((student.getStudent_id()));
 
             StudentData newstudent = new StudentData();
             newstudent.setStudent_id(student.getStudent_id());
