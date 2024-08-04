@@ -132,8 +132,8 @@ public class CourseCoordinatorService {
         return responseDTO;
     }
 
-    public ResponseDTO getAllCIDForCC(String user_name){
-        List<CourseCoordinatorEntity> courseCoordinatorEntities = courseCoordinatorRepo.getAllCidToCourseCriteria(user_name);
+    public ResponseDTO getAllCIDForCC(String email){
+        List<CourseCoordinatorEntity> courseCoordinatorEntities = courseCoordinatorRepo.getAllCidToCourseCriteria(email);
         if (courseCoordinatorEntities.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);

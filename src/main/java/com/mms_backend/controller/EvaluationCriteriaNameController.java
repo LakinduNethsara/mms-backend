@@ -28,4 +28,16 @@ public class EvaluationCriteriaNameController {
         if (evCriteriaName.getCode().equals(VarList.RIP_SUCCESS)) return new ResponseEntity(evCriteriaName, HttpStatus.CREATED);
         else return new ResponseEntity(evCriteriaName, HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("getAssessmentType/{course_id}/{type}")
+    public ResponseEntity getAssessmentTypes(@PathVariable String course_id, @PathVariable String type)
+    {
+        ResponseDTO list=evaluationCriteriaNameService.getAssessmentTypes(course_id, type);
+        if(list!=null)
+        {
+            return new ResponseEntity(responseDTO,HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND);
+    }
 }

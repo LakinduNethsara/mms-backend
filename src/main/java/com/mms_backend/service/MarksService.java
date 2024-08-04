@@ -99,6 +99,35 @@ public class MarksService {
 
     }
 
+    public List<MarksDTO> getenteredCAMarks(String course_id)
+    {
+        List<MarksEntity> list=marksRepo.getCAMarks(course_id);
+        if(list.isEmpty())
+        {
+            return null;
+        }
+        else
+            return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
+    }
+
+    public ResponseDTO saveCAMarks(List<MarksDTO> list)
+    {
+        try {
+            List<MarksEntity> marks=modelMapper.map(list,new TypeToken<ArrayList<MarksEntity>>(){}.getType());
+            marksRepo.saveAll(marks);
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Successfully");
+
+        }catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_FAIL);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Error saving Marks");
+        }
+        return responseDTO;
+    }
+
 
 
 
