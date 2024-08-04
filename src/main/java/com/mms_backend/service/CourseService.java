@@ -213,8 +213,8 @@ public class CourseService {
         return responseDTO;
     }
 
-    public ResponseDTO getApprovedCourse(String user_name){
-        List<CourseEntity> courseEntities = courseRepo.findLecturerApprovedCourses(user_name);
+    public ResponseDTO getApprovedCourse(String email){
+        List<CourseEntity> courseEntities = courseRepo.findLecturerApprovedCourses(email);
         if (courseEntities.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
@@ -228,8 +228,8 @@ public class CourseService {
         return responseDTO;
     }
 
-    public ResponseDTO getAllRegCourseForCC(String user_name){
-        List<CourseEntity> courseEntityList = courseRepo.findCCRegCourses(user_name);
+    public ResponseDTO getAllRegCourseForCC(String email){
+        List<CourseEntity> courseEntityList = courseRepo.findCCRegCourses(email);
         if (courseEntityList.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);

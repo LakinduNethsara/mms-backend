@@ -83,6 +83,30 @@ public class StudentRegistedCourseController
         }
     }
 
+    @GetMapping("getMarksNotEnteredStudent/{course_id}")
+    public ResponseEntity getMarksNotEnteredStudent(@PathVariable String course_id)
+    {
+        ResponseDTO responseDTO=studentRegCoursesServices.getMarksNotEnteredStudents(course_id);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(responseDTO,HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("getallregstudents/{course_id}")
+    public ResponseEntity getAllRegStudents(@PathVariable String course_id)
+    {
+        ResponseDTO responseDTO=studentRegCoursesServices.getAllRegStudentsService(course_id);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(responseDTO,HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
 

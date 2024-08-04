@@ -25,6 +25,9 @@ public class StudentRegCoursesServices
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ResponseDTO responseDTO;
+
     public ResponseDTO getStudentsByCourseCode(String course_id)
     {
         List<StudentRegCourses> list=studentRegCoursesRepo.getStudentsbyCourseCode(course_id);
@@ -83,5 +86,38 @@ public class StudentRegCoursesServices
         responseDTO.setContent(list1);
         responseDTO.setMessage("Successfull");
         return responseDTO;
+    }
+
+    public ResponseDTO getMarksNotEnteredStudents(String course_id)
+    {
+        List<String> student_list=studentRegCoursesRepo.getMarksNotEnteredStudents(course_id);
+        if(student_list!=null)
+        {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(student_list);
+            responseDTO.setMessage("Successfully");
+        }else {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(student_list);
+            responseDTO.setMessage("Students not found");
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO getAllRegStudentsService(String course_id)
+    {
+        List<String> allstudent_list=studentRegCoursesRepo.getAllRegStudents(course_id);
+        if(allstudent_list!=null)
+        {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(allstudent_list);
+            responseDTO.setMessage("Successfully");
+        }else {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(allstudent_list);
+            responseDTO.setMessage("Students not found");
+        }
+        return responseDTO;
+
     }
 }

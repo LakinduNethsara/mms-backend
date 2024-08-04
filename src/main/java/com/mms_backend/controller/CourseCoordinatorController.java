@@ -77,9 +77,9 @@ public class CourseCoordinatorController {
         }
     }
 
-    @GetMapping("getAllCidToCourseCriteria/{user_name}")
-    public ResponseEntity getAllCidToCourseCriteria(@PathVariable String user_name){
-        ResponseDTO responseDTO = courseCoordinatorService.getAllCIDForCC((user_name));
+    @GetMapping("getAllCidToCourseCriteria/{email}")
+    public ResponseEntity getAllCidToCourseCriteria(@PathVariable String email){
+        ResponseDTO responseDTO = courseCoordinatorService.getAllCIDForCC((email));
         if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(responseDTO,HttpStatus.OK);
         }else {
