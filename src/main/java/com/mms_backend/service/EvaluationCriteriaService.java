@@ -67,4 +67,25 @@ public class EvaluationCriteriaService
         }
         return responseDTO;
     }
+
+    public ResponseDTO getCA(String course_id)
+    {
+        List<EvaluationCriteria> list=evaluationCriteriaRepo.getCA(course_id);
+        if(list.isEmpty())
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
+
+            return responseDTO;
+        }
+
+        else
+        {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(modelMapper.map(list,new TypeToken<ArrayList<EvaluationCriteriaDTO>>(){}.getType()));
+            responseDTO.setMessage("Successfull");
+        }
+       return  responseDTO;
+    }
 }

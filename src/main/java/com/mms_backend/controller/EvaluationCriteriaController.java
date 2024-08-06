@@ -41,4 +41,15 @@ public class EvaluationCriteriaController
         else return new ResponseEntity(evCriteria,HttpStatus.BAD_REQUEST);
 
     }
+
+    @GetMapping("/getCA/{course_id}")
+    public ResponseEntity getCA(@PathVariable String course_id)
+    {
+        responseDTO=evaluationCriteriaService.getCA(course_id);
+        if(responseDTO.getCode()== VarList.RIP_NO_DATA_FOUND)
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(responseDTO.getContent(),HttpStatus.OK);
+    }
 }
