@@ -110,6 +110,17 @@ public class MarksService {
             return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
     }
 
+    public List<MarksDTO> getenteredFAMarks(String course_id)
+    {
+        List<MarksEntity> list=marksRepo.getFAMarks(course_id);
+        if(list.isEmpty())
+        {
+            return null;
+        }
+        else
+            return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
+    }
+
     public ResponseDTO saveCAMarks(List<MarksDTO> list)
     {
         try {

@@ -107,6 +107,19 @@ public class MarksController {
 
     }
 
+    @GetMapping("getEnteredFAMarks/{course_id}")
+    public ResponseEntity getenteredFAMarks(@PathVariable String course_id)
+    {
+        List<MarksDTO> list=marksService.getenteredFAMarks(course_id);
+        if(list.isEmpty())
+        {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity(list,HttpStatus.OK);
+
+    }
+
     @PostMapping("inputCAMarks")
     public ResponseEntity enterCAMarks(@RequestBody List<MarksDTO> list)
     {
