@@ -30,10 +30,10 @@ public class ResultBoardController
         }
     }
 
-    @GetMapping("getAssignedResultSheet/{user_id}")
-    public ResponseEntity getAssignedResultSheetsforRB(@PathVariable String user_id)
+    @GetMapping("getAssignedResultSheet/{user_id}/{result_board_id}")
+    public ResponseEntity getAssignedResultSheetsforRB(@PathVariable String user_id,@PathVariable String result_board_id)
     {
-        ResponseDTO responseDTO=resultBoardService.getAssignedResultSheetsforDeanCC(user_id);
+        ResponseDTO responseDTO=resultBoardService.getAssignedResultSheetsforDeanCC(user_id,result_board_id);
         if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
         {
             return new ResponseEntity(responseDTO, HttpStatus.OK);

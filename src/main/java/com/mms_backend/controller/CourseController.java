@@ -110,6 +110,16 @@ public class CourseController {
         }
     }
 
+    @GetMapping("getcourse/{course_id}")
+    public ResponseEntity getCourseById(@PathVariable String course_id){
+        ResponseDTO getACourseById =courseService.getACourseBycourseId(course_id);
+        if (getACourseById.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity(getACourseById,HttpStatus.OK);
+        }else {
+            return new ResponseEntity(getACourseById,HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping("updateacourse/{id}")
     public ResponseEntity updateACourseById(@RequestBody CourseDTO courseDTO){
         ResponseDTO updateOneCourseById = courseService.updateACourseById(courseDTO);

@@ -162,6 +162,17 @@ public class CourseService {
         }
         return responseDTO;
     }
+
+
+    public ResponseDTO getACourseBycourseId(String id){
+
+            CourseEntity courseById = courseRepo.findBycourseId(id);
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(courseById);
+            responseDTO.setMessage("Data found");
+
+        return responseDTO;
+    }
     public ResponseDTO updateACourseById(CourseDTO courseDTO){
         CourseEntity updateOneCourseById = modelMapper.map(courseDTO,CourseEntity.class);
         try {

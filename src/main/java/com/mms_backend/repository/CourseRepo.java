@@ -23,4 +23,7 @@ public interface CourseRepo extends JpaRepository<CourseEntity,Integer> {
 
     @Query(nativeQuery = true,value="select c.id, c.course_id,c.course_name,c.hours,c.type,c.credit,c.department_id,c.level,c.semester from course c inner join assigncertifylecturer a on c.course_id=a.course_id inner join mark_approved_level on c.course_id = mark_approved_level.course_id where mark_approved_level.approval_level = 'course_coordinator' and a.lecturer_id=:lecturer_id")
     List<CourseEntity> findLecturerCertifiedAssignCourse(@Param("lecturer_id") String lecturer_id);
+
+    @Query(nativeQuery = true,value = "select * from course where course_id=:course_id")
+    CourseEntity findBycourseId(@Param("course_id") String course_id);
 }
