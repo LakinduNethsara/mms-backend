@@ -12,4 +12,7 @@ public interface EvaluationCriteriaRepo extends JpaRepository<EvaluationCriteria
 
     @Query(nativeQuery = true , value = "select * from evaluationcriteria where course_id=:course_id")
     public List<EvaluationCriteria> getEvaluationCriteria(@Param( "course_id")String course_id);
+
+    @Query(nativeQuery = true , value = "select * from evaluationcriteria where course_id=:course_id and type='CA'")
+    public List<EvaluationCriteria> getCA(@Param( "course_id")String course_id);
 }

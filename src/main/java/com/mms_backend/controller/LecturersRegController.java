@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", allowCredentials = "false")
 @RestController
 @RequestMapping("api/lecreg")
@@ -73,5 +75,16 @@ public class LecturersRegController {
         }
         else
             return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("insertbulkusersdetails")
+    public ResponseEntity saveAllUsersDetails(@RequestBody List<LecturersRegDTO> lecturersRegDTOS){
+        ResponseDTO UsersDAsBulk = lecturersRegService.insertALLUsersDetailsAsBulk(lecturersRegDTOS);
+        if (UsersDAsBulk.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity(UsersDAsBulk,HttpStatus.CREATED);
+
+        }else{
+            return new ResponseEntity(UsersDAsBulk,HttpStatus.BAD_REQUEST);
+        }
     }
 }
