@@ -28,4 +28,7 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
     @Query(nativeQuery = true,value = "select marks.id, marks.student_id ,marks.course_id ,marks.academic_year ,marks.level ,marks.semester ,marks.assignment_name ,marks.assignment_score ,marks.evaluation_criteria_id  from marks inner join evaluationcriteria on marks.evaluation_criteria_id=evaluationcriteria.evaluationcriteria_id where evaluationcriteria.type='CA' and evaluationcriteria.course_id=:course_id")
     List<MarksEntity> getCAMarks(@Param("course_id") String course_id);
 
+    @Query (nativeQuery = true, value = "select marks.*  from marks inner join evaluationcriteria on marks.evaluation_criteria_id = evaluationcriteria.evaluationcriteria_id where marks.course_id=:course_id and marks.academic_year=:academic_year and evaluationcriteria.type='CA' ")
+    List<MarksEntity> getMarksForCA(@Param("course_id") String course_id,@Param("academic_year") String academic_year);
+
 }

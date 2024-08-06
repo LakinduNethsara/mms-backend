@@ -155,4 +155,28 @@ public class LecturersRegService {
         return responseDTO;
     }
 
+    public ResponseDTO insertALLUsersDetailsAsBulk(List<LecturersRegDTO> lecturersRegDTOList){
+        if (lecturersRegDTOList.isEmpty())
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Empty");
+            return responseDTO;
+        }else {
+            List<LecturersRegEntity> lecturersRegEntityList = modelMapper.map(lecturersRegDTOList,new TypeToken<ArrayList<LecturersRegEntity>>(){}.getType());
+            try {
+                lecturersRegRepo.saveAll(lecturersRegEntityList);
+                responseDTO.setCode(VarList.RIP_SUCCESS);
+                responseDTO.setContent(lecturersRegDTOList);
+                responseDTO.setMessage("Details have been uploaded");
+            }catch (Exception e)
+            {
+                responseDTO.setCode(VarList.RIP_ERROR);
+                responseDTO.setContent(null);
+                responseDTO.setMessage("Can not save");
+            }
+        }
+        return responseDTO;
+    }
+
 }

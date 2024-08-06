@@ -118,4 +118,19 @@ public class MarksController {
         else
             return  new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("getMarksForCA/{course_id},{academic_year}")
+    public ResponseEntity getMarksForCA(@PathVariable String course_id,@PathVariable String academic_year)
+    {
+        ResponseDTO list=marksService.getMarksForCA(course_id,academic_year);
+        if(list.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity(list,HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity(list,HttpStatus.NOT_FOUND);
+        }
+
+    }
 }
