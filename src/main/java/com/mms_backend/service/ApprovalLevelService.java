@@ -4,6 +4,7 @@ import com.mms_backend.Util.VarList;
 import com.mms_backend.dto.AssigncertifylecturerDTO;
 import com.mms_backend.dto.Marks_approved_logDTO;
 import com.mms_backend.dto.ResponseDTO;
+import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Assigncertifylecturer;
 import com.mms_backend.entity.Marks_approved_log;
 import com.mms_backend.repository.ApprovalLevelRepo;
@@ -152,5 +153,10 @@ public class ApprovalLevelService {
         return responseDTO;
     }
 
+    public String getApprovalLevel(String course_id)
+    {
+        MarksApprovalLevel marksApprovalLevel=approvalLevelRepo.getApprovalLevel(course_id);
+        return marksApprovalLevel.getApproval_level();
+    }
 
 }

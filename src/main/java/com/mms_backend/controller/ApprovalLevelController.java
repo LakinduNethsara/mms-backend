@@ -93,5 +93,15 @@ public class ApprovalLevelController
             return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND );
         }
     }
+
+    @GetMapping("/getApprovedLevel/{course_id}")
+    public ResponseEntity getSignature(@PathVariable String course_id)
+    {
+        String approvalLevel=approvalLevelService.getApprovalLevel(course_id);
+
+            return new ResponseEntity(approvalLevel,HttpStatus.OK);
+
+
+    }
 }
 

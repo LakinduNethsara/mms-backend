@@ -29,7 +29,7 @@ public interface ARResultBoardRepo extends JpaRepository<ResultBoard,Integer>{
     List<ResultBoard> getCertifyPendingResultBoards(String approval_level, String status);      //Get result board details where AR can certify (Available for AR certification)
 
     //get Results boards for course coordinators and HOD.------------------------------------
-    @Query(nativeQuery = true,value="select * from result_board where department=:department status='Not started'")
+    @Query(nativeQuery = true,value="select * from result_board where department=:department and status!='Ended'")
     List<ResultBoard> getAvailableResultsBoardsofDepartment(@Param("department") String department_id);
 
     //-------------------------------------------------------------------------------------------
