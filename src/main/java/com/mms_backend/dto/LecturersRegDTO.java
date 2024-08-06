@@ -14,9 +14,11 @@ public class LecturersRegDTO {
     private String user_id;
     private String full_name;
     private String name_with_initials;
-    private String user_name;
     private String email;
     private String password;
     private Year registered_year;
     private String role;
+    private String department_id;
+    private Boolean is_deleted;
+
 }
