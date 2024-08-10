@@ -2,6 +2,7 @@ package com.mms_backend.service;
 
 import com.mms_backend.Util.VarList;
 import com.mms_backend.dto.AssigncertifylecturerDTO;
+import com.mms_backend.dto.CourseDTO;
 import com.mms_backend.dto.Marks_approved_logDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.entity.AR.MarksApprovalLevel;
@@ -12,9 +13,13 @@ import com.mms_backend.repository.Approved_user_levelRepo;
 import com.mms_backend.repository.AssignCertifyLecturer;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -110,6 +115,32 @@ public class ApprovalLevelService {
                 responseDTO.setCode(VarList.RIP_SUCCESS);
                 responseDTO.setMessage("successfuly get");
                 responseDTO.setContent(modelMapper.map(marksApprovedLog,Marks_approved_logDTO.class));
+            }
+            else
+            {
+                responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+                responseDTO.setMessage("no signature");
+                responseDTO.setContent(null);
+            }
+
+        } catch (RuntimeException e) {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setMessage(e.getMessage());
+            responseDTO.setContent(null);
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO getSignatures( String course_id,String academic_year)
+    {
+        try {
+            List<Marks_approved_log> marksApprovedLog=approved_user_levelRepo.getSignatures(course_id,academic_year);
+            if(marksApprovedLog!=null)
+            {
+                responseDTO.setCode(VarList.RIP_SUCCESS);
+                responseDTO.setMessage("successfuly get");
+                responseDTO.setContent(modelMapper.map(marksApprovedLog,new TypeToken<ArrayList<Marks_approved_logDTO>>(){}.getType()));
             }
             else
             {

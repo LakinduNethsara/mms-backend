@@ -79,6 +79,19 @@ public class ApprovalLevelController
             return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND );
         }
     }
+    @GetMapping("/getSignature/{course_id}/{academic_year}")
+    public ResponseEntity getSignatures(@PathVariable String course_id,@PathVariable String academic_year)
+    {
+        ResponseDTO responseDTO=approvalLevelService.getSignatures(course_id,academic_year);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity(responseDTO,HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND );
+        }
+    }
 
     @GetMapping("/getSignature/{level}/{semester}/{department_id}/{approval_level}/{academic_year}")
     public ResponseEntity getSignature(@PathVariable int level,@PathVariable int semester,@PathVariable String department_id,@PathVariable String approval_level,@PathVariable String academic_year)
