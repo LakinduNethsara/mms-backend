@@ -17,8 +17,6 @@ public class MarksEntity {
     private String student_id;
     private String course_id;
     private String academic_year;
-    private String level;
-    private String semester;
     private String assignment_name;
     private String assignment_score;
     private String evaluation_criteria_id;
