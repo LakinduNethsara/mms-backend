@@ -18,7 +18,6 @@ public class Course {
     private String course_name;
     private int hours;
     private String type;
-    private double credit;
     private String department_id;
     private int level;
     private int semester;
