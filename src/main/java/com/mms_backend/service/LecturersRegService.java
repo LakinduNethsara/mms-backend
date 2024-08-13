@@ -3,8 +3,11 @@ package com.mms_backend.service;
 import com.mms_backend.dto.LecturersRegDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.UserDTO;
+import com.mms_backend.entity.User;
 import com.mms_backend.repository.LecturersRegRepo;
 import com.mms_backend.entity.LecturersRegEntity;
+import com.mms_backend.repository.UserRepo;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,6 +25,9 @@ public class LecturersRegService {
 
     @Autowired
     LecturersRegRepo lecturersRegRepo;
+
+    @Autowired
+    UserRepo userRepo;
 
     @Autowired
     ResponseDTO responseDTO;
@@ -56,16 +62,16 @@ public class LecturersRegService {
     }
 
 
-    public ResponseDTO getAllLecturers(){
+    public ResponseDTO getAllLecturers(String department_id){
 
 
         try
         {
-            List<LecturersRegEntity> lecList = lecturersRegRepo.findAll();
+            List<User> lecList = userRepo.findAllLecturersOfDepartment(department_id);
             if(!lecList.isEmpty())
             {
                 responseDTO.setCode(VarList.RIP_SUCCESS);
-                responseDTO.setContent(modelMapper.map(lecList,new TypeToken<ArrayList<LecturersRegDTO>>(){}.getType()));
+                responseDTO.setContent(modelMapper.map(lecList,new TypeToken<ArrayList<UserDTO>>(){}.getType()));
                 responseDTO.setMessage("Data found");
             }
             else {

@@ -19,7 +19,7 @@ public class GPADTO
 
     private int semester;
 
-    private double sgpa;
+    private String  sgpa;
 
-    private double cgpa;
+    private String cgpa;
 }
