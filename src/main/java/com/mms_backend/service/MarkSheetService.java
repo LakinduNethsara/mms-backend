@@ -1,5 +1,6 @@
 package com.mms_backend.service;
 
+import com.mms_backend.dto.MarksEditLogDTO;
 import com.mms_backend.dto.ObjectDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.entity.*;
@@ -45,6 +46,9 @@ public class MarkSheetService
     List<StudentRegCourses> studentRegCoursesList;
     @Autowired
     private UserRepo studentRepo;
+
+    @Autowired
+    private MarksEditLogRepo marksEditLogRepo;
     Boolean CA=false;
     Boolean end=false;
 
@@ -177,19 +181,18 @@ public class MarkSheetService
         return list;
     }
 
-    public void updateEndMarks(StudentData studentData)
+    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog)
     {
-        System.out.println("Came here 2");
         try
         {
             for (ObjectDTO object:studentData.getEnd()) {
                 if(object.getDescription().equals("score"))
                 {
-                    System.out.println("Came here 3");
                     marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey());
-                    System.out.println("Came here 3");
+
                 }
             }
+            marksEditLogRepo.save(modelMapper.map(marksEditLog,Marks_edit_log.class));
         }catch (Exception e)
         {
             System.out.println(e.getMessage());
