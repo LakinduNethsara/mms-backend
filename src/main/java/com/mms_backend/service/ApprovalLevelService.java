@@ -48,7 +48,7 @@ public class ApprovalLevelService {
         try {
 
             approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO, Marks_approved_log.class));
-            approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level());
+            approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(),marksApprovedLogDTO.getDepartment_id());
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);
@@ -76,7 +76,7 @@ public class ApprovalLevelService {
 
         try {
 
-            approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level());
+            approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(), marksApprovedLogDTO.getDepartment_id());
             approved_user_levelRepo.removeSignature(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id(), marksApprovedLogDTO.getAcademic_year());
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
@@ -184,9 +184,9 @@ public class ApprovalLevelService {
         return responseDTO;
     }
 
-    public String getApprovalLevel(String course_id)
+    public String getApprovalLevel(String course_id,String department_id)
     {
-        MarksApprovalLevel marksApprovalLevel=approvalLevelRepo.getApprovalLevel(course_id);
+        MarksApprovalLevel marksApprovalLevel=approvalLevelRepo.getApprovalLevel(course_id,department_id);
         return marksApprovalLevel.getApproval_level();
     }
 

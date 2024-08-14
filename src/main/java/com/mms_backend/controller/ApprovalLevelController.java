@@ -107,10 +107,10 @@ public class ApprovalLevelController
         }
     }
 
-    @GetMapping("/getApprovedLevel/{course_id}")
-    public ResponseEntity getSignature(@PathVariable String course_id)
+    @GetMapping("/getApprovedLevel/{course_id}/{department_id}")
+    public ResponseEntity getSignature(@PathVariable String course_id,@PathVariable String department_id)
     {
-        String approvalLevel=approvalLevelService.getApprovalLevel(course_id);
+        String approvalLevel=approvalLevelService.getApprovalLevel(course_id,department_id);
 
             return new ResponseEntity(approvalLevel,HttpStatus.OK);
 

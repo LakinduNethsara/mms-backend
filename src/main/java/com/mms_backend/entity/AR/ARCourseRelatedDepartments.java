@@ -9,17 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "course")
-public class Course {
+@Table(name="courses_related_departments")
+public class ARCourseRelatedDepartments {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
     private String course_id;
-    private String course_name;
-    private int hours;
-    private String type;
     private String department_id;
-    private int level;
-    private int semester;
+    private String credit;
 
 }

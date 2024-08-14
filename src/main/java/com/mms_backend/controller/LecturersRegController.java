@@ -31,9 +31,9 @@ public class LecturersRegController {
 
     }
 
-    @GetMapping("get/alllecturersdetails")
-    public ResponseEntity getAllLecDetails(){
-        ResponseDTO response=lecturersRegService.getAllLecturers();
+    @GetMapping("get/alllecturersdetails/{department_id}")
+    public ResponseEntity getAllLecDetails(@PathVariable String department_id){
+        ResponseDTO response=lecturersRegService.getAllLecturers(department_id);
         if(response.getCode().equals(VarList.RIP_SUCCESS))
         {
             return new ResponseEntity(response, HttpStatus.OK);
