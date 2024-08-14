@@ -1,9 +1,6 @@
 package com.mms_backend.controller.Student;
 
-import com.mms_backend.dto.AR.CourseDTO;
-import com.mms_backend.dto.AR.GradeDTO;
-import com.mms_backend.dto.AR.MedicalDTO;
-import com.mms_backend.dto.AR.ResultBoardDTO;
+import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.EvaluationCriteriaDTO;
 import com.mms_backend.dto.GPADTO;
 import com.mms_backend.dto.UserDTO;
@@ -257,5 +254,20 @@ public class StudentController {
 
 
     /*---------------------------------------------------------------------------------------- Controller for GPA table ----------------------------END-------------*/
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Controller for courses_related_departments table ----------------------------START-------------*/
+
+    @GetMapping("/get_course_credits/{course_id}")
+    public List<ARCourseRelatedDepartmentsDTO> get_course_credits(@PathVariable String course_id) {
+        return studentService.get_course_credits(course_id);
+    }
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Controller for courses_related_departments table ----------------------------END-------------*/
 
 }

@@ -1,12 +1,10 @@
 package com.mms_backend.service.Student;
 
-import com.mms_backend.dto.AR.CourseDTO;
-import com.mms_backend.dto.AR.GradeDTO;
-import com.mms_backend.dto.AR.MedicalDTO;
-import com.mms_backend.dto.AR.ResultBoardDTO;
+import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.EvaluationCriteriaDTO;
 import com.mms_backend.dto.GPADTO;
 import com.mms_backend.dto.UserDTO;
+import com.mms_backend.entity.AR.ARCourseRelatedDepartments;
 import com.mms_backend.entity.AR.Course;
 import com.mms_backend.entity.AR.Grade;
 import com.mms_backend.entity.AR.ResultBoard;
@@ -38,6 +36,8 @@ public class StudentService {
     StudentResultBoardRepo studentResultBoardRepo;
     @Autowired
     StudentGPARepo studentGPARepo;
+    @Autowired
+    StudentCourseRelatedDepartmentsRepo courseRelatedDepartmentsRepo;
 
     @Autowired
     private ModelMapper mp;
@@ -184,6 +184,24 @@ public class StudentService {
 
 
     /*---------------------------------------------------------------------------------------- Service for GPA table ----------------------------END-------------*/
+
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Service for courses_related_departments table ----------------------------START-------------*/
+
+    public List<ARCourseRelatedDepartmentsDTO> get_course_credits (String course_id){
+        List<ARCourseRelatedDepartments> credit_List = courseRelatedDepartmentsRepo.get_course_credits(course_id);
+        return mp.map(credit_List,new TypeToken<ArrayList<ARCourseRelatedDepartmentsDTO>>(){}.getType());
+    }
+
+
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Service for courses_related_departments table ----------------------------END-------------*/
 
 
 }
