@@ -10,7 +10,7 @@ public interface ARCourseRepo extends JpaRepository<Course,Integer> {
 
 
     @Query(nativeQuery = true,value = "select  DISTINCT course.id, course.course_id , course.course_name , course.hours ,course.type ,\n" +               // Get all courses of selected department by level and semester
-            "course.department_id ,course.level ,course.semester from course where course.level=:level AND course.semester=:semester AND course.department_id=:department_id")
+            "course.department_id ,course.level ,course.semester from course inner join courses_related_departments on course.course_id = courses_related_departments.course_id where course.level=:level AND course.semester=:semester AND courses_related_departments.department_id=:department_id")
     List <Course> getViewMarksCourseList(String level, String semester,String department_id);
 
 
