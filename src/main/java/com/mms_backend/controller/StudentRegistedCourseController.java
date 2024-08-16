@@ -95,10 +95,10 @@ public class StudentRegistedCourseController
         }
     }
 
-    @GetMapping("getallregstudents/{course_id}")
-    public ResponseEntity getAllRegStudents(@PathVariable String course_id)
+    @GetMapping("getallregstudents/{course_id},{academic_year}")
+    public ResponseEntity getAllRegStudents(@PathVariable String course_id,@PathVariable String academic_year)
     {
-        ResponseDTO responseDTO=studentRegCoursesServices.getAllRegStudentsService(course_id);
+        ResponseDTO responseDTO=studentRegCoursesServices.getAllRegStudentsService(course_id,academic_year);
         if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
         {
             return new ResponseEntity<>(responseDTO,HttpStatus.OK);

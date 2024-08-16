@@ -10,7 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class StudentRegCoursesDTO
 {
+
     private String student_id;
 
     private String course_id;
+
+    private String academic_year;
+
+    private String repeat;
 }
