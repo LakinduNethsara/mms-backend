@@ -90,6 +90,56 @@ public class LecturersRegService {
         return responseDTO;
     }
 
+    public ResponseDTO getAllUsersData(){
+        try
+        {
+            List<User> lecList = userRepo.findStaff();
+            if(!lecList.isEmpty())
+            {
+                responseDTO.setCode(VarList.RIP_SUCCESS);
+                responseDTO.setContent(modelMapper.map(lecList,new TypeToken<ArrayList<UserDTO>>(){}.getType()));
+                responseDTO.setMessage("Data found");
+            }
+            else {
+                responseDTO.setCode(VarList.RIP_ERROR);
+                responseDTO.setContent(null);
+                responseDTO.setMessage("No Data found");
+            }
+        }
+        catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage(e.getMessage());
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO getAllLecturersData(){
+        try
+        {
+            List<User> lecList = userRepo.findAllLecturers();
+            if(!lecList.isEmpty())
+            {
+                responseDTO.setCode(VarList.RIP_SUCCESS);
+                responseDTO.setContent(modelMapper.map(lecList,new TypeToken<ArrayList<UserDTO>>(){}.getType()));
+                responseDTO.setMessage("Data found");
+            }
+            else {
+                responseDTO.setCode(VarList.RIP_ERROR);
+                responseDTO.setContent(null);
+                responseDTO.setMessage("No Data found");
+            }
+        }
+        catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage(e.getMessage());
+        }
+        return responseDTO;
+    }
+
     public ResponseDTO editLecturerDetails(LecturersRegDTO lecturersRegDTO){
         if(lecturersRegRepo.existsById(lecturersRegDTO.getId()))
         {

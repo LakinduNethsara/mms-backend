@@ -43,13 +43,8 @@ public class EvaluationCriteriaController
     }
 
     @GetMapping("/getCA/{course_id}")
-    public ResponseEntity getCA(@PathVariable String course_id)
+    public List<Object> getCA(@PathVariable String course_id)
     {
-        responseDTO=evaluationCriteriaService.getCA(course_id);
-        if(responseDTO.getCode()== VarList.RIP_NO_DATA_FOUND)
-        {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(responseDTO.getContent(),HttpStatus.OK);
+       return evaluationCriteriaService.getCA(course_id);
     }
 }
