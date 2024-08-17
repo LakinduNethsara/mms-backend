@@ -1,5 +1,7 @@
 package com.mms_backend.controller;
 
+import com.mms_backend.dto.UpdateMarksDTO;
+import com.mms_backend.entity.Marks_edit_log;
 import com.mms_backend.entity.StudentData;
 import com.mms_backend.service.MarkSheetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,10 @@ public class MarksheetController
     }
 
     @PutMapping("updateMarks")
-    public void updateStudentMarks(@RequestBody StudentData studentData)
+    public void updateStudentMarks(@RequestBody UpdateMarksDTO updateMarksDTO)
     {
-        System.out.println("Came here 1");
-        markSheetService.updateEndMarks(studentData);
+        markSheetService.updateEndMarks(updateMarksDTO.getStudentData(),updateMarksDTO.getMarksEditLogDTO());
     }
+
+
 }
