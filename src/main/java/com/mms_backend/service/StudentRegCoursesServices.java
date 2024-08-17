@@ -104,9 +104,9 @@ public class StudentRegCoursesServices
         return responseDTO;
     }
 
-    public ResponseDTO getAllRegStudentsService(String course_id)
+    public ResponseDTO getAllRegStudentsService(String course_id,String academic_year)
     {
-        List<String> allstudent_list=studentRegCoursesRepo.getAllRegStudents(course_id);
+        List<String> allstudent_list=studentRegCoursesRepo.getAllRegStudents(course_id,academic_year);
         if(allstudent_list!=null)
         {
             responseDTO.setCode(VarList.RIP_SUCCESS);

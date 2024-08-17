@@ -16,4 +16,5 @@ public class AssessmentTypeListEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String assessment_type_name;
+    private String ca_mid_end;
 }

@@ -3,6 +3,8 @@ package com.mms_backend.service;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentDetailsDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.UserDTO;
+import com.mms_backend.entity.User;
 import com.mms_backend.repository.StudentDetailsRepo;
 import com.mms_backend.entity.StudentDetailsEntity;
 import jakarta.transaction.Transactional;
@@ -28,19 +30,19 @@ public class StudentDetailsService {
     ResponseDTO responseDTO;
 
     public ResponseDTO getAllStudentsD(){
-        List<StudentDetailsEntity> courseEntities = studentDetailsRepo.findAll();
+        List<User> courseEntities = studentDetailsRepo.findAllStudents();
         if (courseEntities.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
             responseDTO.setMessage("Students Details not found!");
         }else {
             responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(mmp.map(courseEntities, new TypeToken<ArrayList<StudentDetailsDTO>>(){}.getType()));
+            responseDTO.setContent(mmp.map(courseEntities, new TypeToken<ArrayList<UserDTO>>(){}.getType()));
             responseDTO.setMessage("Students Details found!");
         }
         return responseDTO;
     }
-    public ResponseDTO insertStudentDetailsAsBulk(List <StudentDetailsDTO> studentDetailsDTOS){
+    public ResponseDTO insertStudentDetailsAsBulk(List <UserDTO> studentDetailsDTOS){
 
         if(studentDetailsDTOS.isEmpty())
         {
@@ -49,7 +51,7 @@ public class StudentDetailsService {
             responseDTO.setMessage("Empty Data");
         }
         else {
-            List<StudentDetailsEntity> studentDetailsAsBulk = mmp.map( studentDetailsDTOS,new TypeToken<ArrayList <StudentDetailsEntity>>(){}.getType());
+            List<User> studentDetailsAsBulk = mmp.map(studentDetailsDTOS,new TypeToken<ArrayList <User>>(){}.getType());
             //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
             try {
@@ -68,8 +70,8 @@ public class StudentDetailsService {
         return responseDTO;
     }
 
-    public ResponseDTO insertAStudentD(StudentDetailsDTO studentDetailsDTO){
-        StudentDetailsEntity insertOneStudentD = mmp.map(studentDetailsDTO,StudentDetailsEntity.class);
+    public ResponseDTO insertAStudentD(UserDTO studentDetailsDTO){
+        User insertOneStudentD = mmp.map(studentDetailsDTO,User.class);
         try {
             studentDetailsRepo.save(insertOneStudentD);
             responseDTO.setCode(VarList.RIP_SUCCESS);
@@ -86,7 +88,7 @@ public class StudentDetailsService {
     public ResponseDTO getAStudentDById(int id){
         if (studentDetailsRepo.existsById(id)){
 
-            Optional<StudentDetailsEntity> StudentDById = studentDetailsRepo.findById(id);
+            Optional<User> StudentDById = studentDetailsRepo.findById(id);
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(StudentDById);
             responseDTO.setMessage("Data found");
@@ -100,10 +102,10 @@ public class StudentDetailsService {
         return responseDTO;
     }
 
-    public ResponseDTO updateAStudentDById(StudentDetailsDTO studentDetailsDTO){
+    public ResponseDTO updateAStudentDById(UserDTO studentDetailsDTO){
         if (studentDetailsRepo.existsById(studentDetailsDTO.getId())){
             try {
-                studentDetailsRepo.save(mmp.map(studentDetailsDTO,StudentDetailsEntity.class));
+                studentDetailsRepo.save(mmp.map(studentDetailsDTO,User.class));
                 responseDTO.setCode(VarList.RIP_SUCCESS);
                 responseDTO.setContent(studentDetailsDTO);
                 responseDTO.setMessage("The Student Details has been updated");

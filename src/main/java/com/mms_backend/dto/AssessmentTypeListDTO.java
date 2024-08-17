@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AssessmentTypeListDTO {
     private int id;
     private String assessment_type_name;
+    private String ca_mid_end;
 }

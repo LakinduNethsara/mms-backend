@@ -20,4 +20,6 @@ public class StudentRegCourses
     private String course_id;
 
     private String academic_year;
+
+    private String repeat;
 }
