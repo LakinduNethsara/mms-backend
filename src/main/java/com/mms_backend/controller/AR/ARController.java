@@ -128,7 +128,6 @@ public class ARController {
         return arService.getABDetailsByCourseId(course_id);
 
         /*Usage
-            ViewMarksTable
             ViewMarksTableValidations
          */
     }
