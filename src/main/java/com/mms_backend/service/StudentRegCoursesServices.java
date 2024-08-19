@@ -1,5 +1,6 @@
 package com.mms_backend.service;
 
+import com.mms_backend.dto.RegStudentsObject;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentRegCoursesDTO;
 import com.mms_backend.dto.StudentRegisteredCourses;
@@ -106,11 +107,20 @@ public class StudentRegCoursesServices
 
     public ResponseDTO getAllRegStudentsService(String course_id,String academic_year)
     {
-        List<String> allstudent_list=studentRegCoursesRepo.getAllRegStudents(course_id,academic_year);
+
+        List<RegStudentsObject> list=new ArrayList<>();
+        List<StudentRegCourses> allstudent_list=studentRegCoursesRepo.getAllRegStudents(course_id,academic_year);
+        for(StudentRegCourses studentRegCourses:allstudent_list)
+        {
+            RegStudentsObject regStudentsObject=new RegStudentsObject();
+            regStudentsObject.setStudent_id(studentRegCourses.getStudent_id());
+            regStudentsObject.setRepeat(Integer.parseInt(studentRegCourses.getRepeat()));
+            list.add(regStudentsObject);
+        }
         if(allstudent_list!=null)
         {
             responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(allstudent_list);
+            responseDTO.setContent(list);
             responseDTO.setMessage("Successfully");
         }else {
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
