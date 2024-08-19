@@ -78,6 +78,7 @@ public class ApprovalLevelService {
 
             approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(), marksApprovedLogDTO.getDepartment_id());
             approved_user_levelRepo.removeSignature(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id(), marksApprovedLogDTO.getAcademic_year());
+            assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);

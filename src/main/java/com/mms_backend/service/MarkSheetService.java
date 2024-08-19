@@ -52,6 +52,8 @@ public class MarkSheetService
     Boolean CA=false;
     Boolean end=false;
 
+    String description;
+
     public void getEvaluationCriteria(String course_id)
     {
         evaluationCriteriaList=evaluationCriteriaRepo.getEvaluationCriteria(course_id);
@@ -105,7 +107,8 @@ public class MarkSheetService
                         }
                         for (Calculations calculation : calculations) {
                             if (calculation.getStudent_id().equals(student.getStudent_id()) && calculation.getEvaluation_criteria_id().equals(object.getEvaluationcriteria_id())) {
-                                caMarks.add(new ObjectDTO(object.getDescription(), calculation.getMark()!=null?calculation.getMark():"-","average"));
+                                description="Best "+object.getNo_of_taken()+" average";
+                                caMarks.add(new ObjectDTO(description, calculation.getMark()!=null?calculation.getMark():"-","average"));
                             }
                         }
                     } else {
