@@ -49,6 +49,10 @@ public class ApprovalLevelService {
 
             approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO, Marks_approved_log.class));
             approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(),marksApprovedLogDTO.getDepartment_id());
+            if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer"))
+            {
+                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
+            }
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);

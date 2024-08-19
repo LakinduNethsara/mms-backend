@@ -76,20 +76,20 @@ public class MarkSheetService
     }
 
 
-    public void getStudentsByCourseCode(String course_id)
+    public void getStudentsByCourseCode(String course_id,int type)
     {
-        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCode(course_id);
+        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type);
 
     }
 
-    public List<StudentData> getData(String course_id) {
+    public List<StudentData> getData(String course_id,int type) {
 
         List<StudentData> list=new ArrayList<>();
         getEvaluationCriteria(course_id);
         getAllScoreByCourseId(course_id);
         getMarksCalculations(course_id);
         getMarksbyC(course_id);
-        getStudentsByCourseCode(course_id);
+        getStudentsByCourseCode(course_id,type);
 
         for (StudentRegCourses student : studentRegCoursesList) {
             List<ObjectDTO> caMarks = new ArrayList<>();
@@ -158,6 +158,7 @@ public class MarkSheetService
             newstudent.setCourse_id(course_id);
             newstudent.setCa(caMarks);
             newstudent.setEnd(endMarks);
+            newstudent.setRepeat(student.getRepeat());
 
 
 
