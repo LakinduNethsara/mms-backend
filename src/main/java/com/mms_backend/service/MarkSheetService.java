@@ -60,36 +60,34 @@ public class MarkSheetService
     }
 
 
-    public void getAllScoreByCourseId(String course_id){
-
-        marksEntityList=marksRepo.findStudentMarksByCourseID(course_id);
+    public void getAllScoreByCourseId(String course_id,String academic_year){
+        marksEntityList=marksRepo.findStudentMarksByCourseID(course_id,academic_year);
     }
 
-    public void getMarksCalculations(String course_id)
+    public void getMarksCalculations(String course_id,String academic_year)
     {
-        calculations=calculationsRepo.getCalculationresults(course_id);
+        calculations=calculationsRepo.getStudentsCalculationresults(course_id,academic_year);
     }
 
-    public void getMarksbyC(String course_id)
+    public void getMarksbyC(String course_id,String academic_year)
     {
-        studentMarksList=studentMarksRepo.findMarksByCourse(course_id);
+        studentMarksList=studentMarksRepo.findMarksByCourse(course_id, academic_year);
     }
 
 
-    public void getStudentsByCourseCode(String course_id,int type)
+    public void getStudentsByCourseCode(String course_id,int type,String academicYear)
     {
-        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type);
-
+        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type,academicYear);
     }
 
-    public List<StudentData> getData(String course_id,int type) {
+    public List<StudentData> getData(String course_id,int type,String academicYear) {
 
         List<StudentData> list=new ArrayList<>();
         getEvaluationCriteria(course_id);
-        getAllScoreByCourseId(course_id);
-        getMarksCalculations(course_id);
-        getMarksbyC(course_id);
-        getStudentsByCourseCode(course_id,type);
+        getAllScoreByCourseId(course_id,academicYear);
+        getMarksCalculations(course_id,academicYear);
+        getMarksbyC(course_id,academicYear);
+        getStudentsByCourseCode(course_id,type,academicYear);
 
         for (StudentRegCourses student : studentRegCoursesList) {
             List<ObjectDTO> caMarks = new ArrayList<>();

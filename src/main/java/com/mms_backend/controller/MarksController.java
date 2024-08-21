@@ -37,9 +37,9 @@ public class MarksController {
        return marksService.getAllScore();
     }
 
-    @GetMapping("get/scoreByCourseId/{course_id}")
-    public List<MarksDTO> getAllScoreByCourseId(@PathVariable String course_id){
-        return marksService.getAllScoreByCourseId(course_id);
+    @GetMapping("get/scoreByCourseId/{course_id}/{academic_year}")
+    public List<MarksDTO> getAllScoreByCourseId(@PathVariable String course_id,@PathVariable String academic_year){
+        return marksService.getAllScoreByCourseId(course_id,academic_year);
     }
 
     @PutMapping("edit/score/{id}")

@@ -17,16 +17,16 @@ public class MarksheetController
     @Autowired
     MarkSheetService markSheetService;
 
-    @GetMapping("getMarks/{course_id}/{type}")
-    public List<StudentData> getMarks(@PathVariable String course_id ,@PathVariable int type)
+    @GetMapping("getMarks/{course_id}/{type}/{academicYear}")
+    public List<StudentData> getMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear)
     {
-        return markSheetService.getData(course_id,type);
+        return markSheetService.getData(course_id,type,academicYear);
     }
 
-    @GetMapping("getStudentMarks/{course_id}/{type}")
-    public List<StudentData> getStudentMarks(@PathVariable String course_id ,@PathVariable int type)
+    @GetMapping("getStudentMarks/{course_id}/{type}/{academicYear}")
+    public List<StudentData> getStudentMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear)
     {
-        return markSheetService.getData(course_id,type);
+        return markSheetService.getData(course_id,type,academicYear);
     }
 
     @PutMapping("updateMarks")

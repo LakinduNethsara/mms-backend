@@ -34,9 +34,9 @@ public class MarksService {
     }
 
 
-    public List<MarksDTO> getAllScoreByCourseId(String course_id){
+    public List<MarksDTO> getAllScoreByCourseId(String course_id,String academic_year){
 
-        List<MarksEntity> list=marksRepo.findStudentMarksByCourseID(course_id);
+        List<MarksEntity> list=marksRepo.findStudentMarksByCourseID(course_id,academic_year);
 
         return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
     }
