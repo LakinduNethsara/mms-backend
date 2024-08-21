@@ -114,7 +114,7 @@ public class StudentRegCoursesServices
         {
             RegStudentsObject regStudentsObject=new RegStudentsObject();
             regStudentsObject.setStudent_id(studentRegCourses.getStudent_id());
-            regStudentsObject.setRepeat(Integer.parseInt(studentRegCourses.getRepeat()));
+            regStudentsObject.setRepeat(studentRegCourses.getRepeat());
             list.add(regStudentsObject);
         }
         if(allstudent_list!=null)
@@ -129,5 +129,25 @@ public class StudentRegCoursesServices
         }
         return responseDTO;
 
+    }
+
+    public ResponseDTO getAllStudentsByCID(String course_id,String academic_year)
+    {
+        List<StudentRegCourses> list=studentRegCoursesRepo.getAllStudentsByCID(course_id,academic_year);
+        ResponseDTO responseDTO=new ResponseDTO();
+        List<StudentRegCoursesDTO> list1=modelMapper.map(list,new TypeToken<ArrayList<StudentRegCoursesDTO>>(){}.getType());
+        if(list.isEmpty())
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
+        }
+        else
+        {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(list1);
+            responseDTO.setMessage("Successfull");
+        }
+        return responseDTO;
     }
 }

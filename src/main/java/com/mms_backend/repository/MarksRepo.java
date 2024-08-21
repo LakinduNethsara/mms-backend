@@ -34,4 +34,10 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
     @Query (nativeQuery = true, value = "select *  from marks inner join evaluationcriteria on marks.evaluation_criteria_id = evaluationcriteria.evaluationcriteria_id inner join studentregcourses on marks.student_id = studentregcourses.student_id and marks.course_id = studentregcourses.course_id and marks.academic_year = studentregcourses.academic_year where marks.course_id=:course_id and marks.academic_year=:academic_year and evaluationcriteria.type='CA'")
     List<Object> getMarksForCA(@Param("course_id") String course_id,@Param("academic_year") String academic_year);
 
+    @Query(nativeQuery=true ,value = "select * from marks where student_id=:student_id and course_id=:course_id and assignment_name=:assignment_name and academic_year=:academic_year")
+    List<MarksEntity> getMarksByStuIDCourseIDAssignmentName(@Param("student_id") String student_id,@Param("course_id") String course_id,@Param("assignment_name") String assignment_name,@Param("academic_year") String academic_year);
+
+    @Query(nativeQuery=true ,value = "select marks.* from marks inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id = marks.evaluation_criteria_id inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type where marks.student_id=:student_id and marks.course_id=:course_id and marks.academic_year=:academic_year and assessment_type_list.ca_mid_end='CA'")
+    List<MarksEntity> getOLDCAByStuIDCourseID_AY(@Param("student_id") String student_id,@Param("course_id") String course_id,@Param("academic_year") String academic_year);
+
 }

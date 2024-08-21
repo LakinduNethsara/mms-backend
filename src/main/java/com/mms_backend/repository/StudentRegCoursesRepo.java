@@ -17,4 +17,7 @@ public interface StudentRegCoursesRepo extends JpaRepository<StudentRegCourses,S
 
     @Query(nativeQuery = true,value = "select distinct studentregcourses.* from studentregcourses left join marks on studentregcourses.student_id=marks.student_id where studentregcourses.course_id=:course_id and studentregcourses.academic_year=:academic_year")
     List<StudentRegCourses> getAllRegStudents(@Param("course_id") String course_id,@Param("academic_year") String academic_year);
+
+    @Query(nativeQuery = true,value = "select * from studentregcourses where course_id=:course_id and academic_year=:academic_year")
+    List<StudentRegCourses> getAllStudentsByCID(@Param("course_id") String course_id,@Param("academic_year") String academic_year);
 }
