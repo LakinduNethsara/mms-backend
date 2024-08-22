@@ -4,6 +4,7 @@ package com.mms_backend.controller;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentDetailsDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.UserDTO;
 import com.mms_backend.service.StudentDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class StudentDetailsController {
     }
 
     @PostMapping("insertbulkstudentsdetails")
-    public ResponseEntity saveStudentDetails(@RequestBody List<StudentDetailsDTO> studentDetailsDTOS){
+    public ResponseEntity saveStudentDetails(@RequestBody List<UserDTO> studentDetailsDTOS){
         ResponseDTO StudentDAsBulk = studentDetailsService.insertStudentDetailsAsBulk(studentDetailsDTOS);
         if (StudentDAsBulk.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(StudentDAsBulk,HttpStatus.CREATED);
@@ -43,7 +44,7 @@ public class StudentDetailsController {
     }
 
     @PostMapping("insertastudent")
-    public ResponseEntity insertAStudentDetails(@RequestBody StudentDetailsDTO studentDetailsDTO){
+    public ResponseEntity insertAStudentDetails(@RequestBody UserDTO studentDetailsDTO){
         ResponseDTO insertOneStudentD = studentDetailsService.insertAStudentD(studentDetailsDTO);
         if (insertOneStudentD.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(insertOneStudentD,HttpStatus.CREATED);
@@ -63,7 +64,7 @@ public class StudentDetailsController {
     }
 
     @PutMapping("updateastudent")
-    public ResponseEntity updateAStudentDetailsById(@RequestBody StudentDetailsDTO studentDetailsDTO){
+    public ResponseEntity updateAStudentDetailsById(@RequestBody UserDTO studentDetailsDTO){
         ResponseDTO updateOneStudentDById = studentDetailsService.updateAStudentDById(studentDetailsDTO);
         if (updateOneStudentDById.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(updateOneStudentDById,HttpStatus.OK);

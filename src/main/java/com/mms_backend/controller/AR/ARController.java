@@ -231,6 +231,15 @@ public class ARController {
          */
     }
 
+    @PostMapping("/calculateSGPA/{level}/{semester}/{department_id}/{academic_year}")
+    public void calculateSGPA(@PathVariable String level, @PathVariable String semester, @PathVariable String department_id, @PathVariable String academic_year){
+        arService.calculateSGPA(level, semester, department_id, academic_year);
+
+        /*Usage
+         */
+
+    }
+
 
     /*---------------------------------------------------------------------------------------- Controller for Gpa table ----------------------------END-------------*/
 

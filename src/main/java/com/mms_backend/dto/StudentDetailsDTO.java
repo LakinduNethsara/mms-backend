@@ -10,6 +10,7 @@ import java.time.Year;
 @NoArgsConstructor
 @Data
 public class StudentDetailsDTO {
+
     private int id;
     private String student_id;
     private String full_name;

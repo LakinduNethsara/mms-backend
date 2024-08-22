@@ -147,6 +147,11 @@ public class ARService {
         return mp.map(gpaList,new TypeToken<ArrayList<GPADTO>>(){}.getType());
     }
 
+
+    public void calculateSGPA(String level, String semester, String departmentId, String academicYear){         //Calculate GPA and insert SGPA to the table - Stored procedure
+        arGPARepo.calculateSGPA(level, semester, departmentId, academicYear);
+    }
+
     /*---------------------------------------------------------------------------------------- Service for Gpa table ----------------------------END-------------*/
 
 

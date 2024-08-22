@@ -2,6 +2,7 @@ package com.mms_backend.controller;
 
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.StudentMarksDTO;
 import com.mms_backend.service.MarkSheetService;
 import com.mms_backend.service.StudentMarksService;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*", allowCredentials = "false")
 @RestController
@@ -84,6 +87,18 @@ public class StudentMarksController
     public ResponseEntity getMarksBySC(@PathVariable String course_id,@PathVariable String student_id)
     {
         ResponseDTO response=studentMarksService.getMarksbySC(course_id,student_id);
+        if(response.getCode().equals(VarList.RIP_NO_DATA_FOUND))
+        {
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity(response,HttpStatus.OK);
+    }
+
+    @PutMapping("saveCAMarks")
+    public ResponseEntity saveCAMarks(@RequestBody List<StudentMarksDTO> studentMarksDTO)
+    {
+        ResponseDTO response=studentMarksService.saveCAMarks(studentMarksDTO);
         if(response.getCode().equals(VarList.RIP_NO_DATA_FOUND))
         {
             return new ResponseEntity(response,HttpStatus.NOT_FOUND);

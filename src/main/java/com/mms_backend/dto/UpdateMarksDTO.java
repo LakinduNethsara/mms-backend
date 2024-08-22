@@ -1,5 +1,6 @@
 package com.mms_backend.dto;
 
+import com.mms_backend.entity.StudentData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AssessmentTypeListDTO {
-    private int id;
-    private String assessment_type_name;
-    private String ca_mid_end;
+public class UpdateMarksDTO
+{
+    private StudentData studentData;
+    private MarksEditLogDTO marksEditLogDTO;
 }

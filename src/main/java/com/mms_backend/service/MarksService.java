@@ -139,22 +139,11 @@ public class MarksService {
         return responseDTO;
     }
 
-    public ResponseDTO getMarksForCA(String course_id,String academic_year)
+    public List<Object> getMarksForCA(String course_id, String academic_year)
     {
-        List<MarksEntity> list=marksRepo.getMarksForCA(course_id,academic_year);
-        if(list.isEmpty())
-        {
-            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
-            responseDTO.setContent(null);
-            responseDTO.setMessage("Not found");
-        }
-        else
-        {
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType()));
-            responseDTO.setMessage("Not found");
-        }
-        return responseDTO;
+        List<Object> list=marksRepo.getMarksForCA(course_id,academic_year);
+
+        return list;
     }
 
 

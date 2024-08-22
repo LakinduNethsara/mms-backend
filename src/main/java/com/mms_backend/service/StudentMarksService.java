@@ -123,5 +123,37 @@ public class StudentMarksService
     }
 
 
+    public ResponseDTO saveCAMarks(List<StudentMarksDTO> studentMarksDTO)
+    {
+        try
+        {
+            for(StudentMarksDTO student:studentMarksDTO)
+            {
+                StudentMarks studentMarks=studentMarksRepo.findMarksByCS(student.getCourse_id(),student.getStudent_id());
+                if(studentMarks!=null)
+                {
+                    studentMarks.setTotal_ca_mark(student.getTotal_ca_mark());
+                    studentMarks.setCa_eligibility(student.getCa_eligibility());
+                    studentMarksRepo.save(studentMarks);
+                }
+                else {
+                    studentMarksRepo.save(mp.map(student,StudentMarks.class));
+                }
+            }
+
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Successfull");
+
+        }catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Successfull");
+        }
+        return responseDTO;
+    }
+
+
 
 }

@@ -42,6 +42,29 @@ public class LecturersRegController {
             return new ResponseEntity(response,HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("get/allusersdetails")
+    public ResponseEntity getAllLecDetails(){
+        ResponseDTO response=lecturersRegService.getAllUsersData();
+        if(response.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("get/alllecturersdetails")
+    public ResponseEntity getAllLecturerDetails(){
+        ResponseDTO response=lecturersRegService.getAllLecturersData();
+        if(response.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+    }
+
+
     @PutMapping("edit/alecdetails")
     public ResponseEntity editLecturerDetails(@RequestBody LecturersRegDTO lecturersRegDTO)
     {
