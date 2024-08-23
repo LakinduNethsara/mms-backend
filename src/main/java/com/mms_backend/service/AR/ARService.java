@@ -87,7 +87,7 @@ public class ARService {
     }
     public int updateStudentScore(UpdateABDTO updateABDTO){      //Update selected student grade with medical submissions
 
-        return arMarksRepo.updateStudentScore(updateABDTO.getNew_score(), updateABDTO.getStudent_id(), updateABDTO.getCourse_id(), updateABDTO.getAcademic_year(), updateABDTO.getExam_type());
+        return arMarksRepo.updateStudentScore(updateABDTO.getNew_score(), updateABDTO.getStudent_id(), updateABDTO.getCourse_id(), updateABDTO.getAcademic_year(),updateABDTO.getExam_type());
 
     }
 
