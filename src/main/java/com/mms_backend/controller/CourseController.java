@@ -68,10 +68,10 @@ public class CourseController {
     }
 
 
-    @GetMapping("/getcidcnamebyls/{level}/{semester}/{department}/{approved_level}/{academic_year}")
-    public ResponseEntity getCidCnameByDLS(@PathVariable int level, @PathVariable int semester,@PathVariable String department,@PathVariable String approved_level,@PathVariable String academic_year){
+    @GetMapping("/getcidcnamebyls/{level}/{semester}/{department}/{approved_level}")
+    public ResponseEntity getCidCnameByDLS(@PathVariable int level, @PathVariable int semester,@PathVariable String department,@PathVariable String approved_level){
 
-        ResponseDTO responseDTO = courseService.findCidCnameByDLS(level, semester,department,approved_level,academic_year);
+        ResponseDTO responseDTO = courseService.findCidCnameByDLS(level, semester,department,approved_level);
         if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(responseDTO, HttpStatus.OK);
         } else {
@@ -167,7 +167,7 @@ public class CourseController {
         if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(responseDTO, HttpStatus.OK);
         } else {
-            return new ResponseEntity(responseDTO, HttpStatus.OK);
+            return new ResponseEntity(responseDTO, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -176,6 +176,28 @@ public class CourseController {
         ResponseDTO getcsforcc = courseService.getAllRegCourseForCC(email);
         if (getcsforcc.getCode().equals(VarList.RIP_SUCCESS)) return new ResponseEntity(getcsforcc,HttpStatus.OK);
         else return new ResponseEntity(getcsforcc,HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("getGradeMargin/{course_id}/{academic_year}")
+    public ResponseEntity getGradeMargin(@PathVariable String course_id,@PathVariable String academic_year)
+    {
+        ResponseDTO response=courseService.getGradeMargin(course_id,academic_year);
+        if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("updateGradeMargins/{course_id}/{academic_year}/{grade}/{margin}")
+    public ResponseEntity updateGradeMargins(@PathVariable String course_id,@PathVariable String academic_year,@PathVariable String grade,@PathVariable double margin)
+    {
+        ResponseDTO response=courseService.updateGradeMargin(course_id,academic_year,grade,margin);
+        if (response.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

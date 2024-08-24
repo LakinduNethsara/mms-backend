@@ -27,4 +27,7 @@ public interface EvaluationCriteriaRepo extends JpaRepository<EvaluationCriteria
 
     @Query(nativeQuery = true , value = "select distinct evaluationcriteria.* from evaluationcriteria inner join marks on marks.evaluation_criteria_id = evaluationcriteria.evaluationcriteria_id where marks.student_id=:student_id and marks.course_id=:course_id and marks.academic_year=:academic_year and evaluationcriteria.type='CA';")
     public List<EvaluationCriteria> getEvaluationCriteriaByStudentIDCourseID(@Param( "student_id")String student_id,@Param( "course_id")String course_id,@Param( "academic_year")String academic_year);
+
+    @Query(nativeQuery = true , value = "select * from evaluationcriteria where course_id=:course_id and type='End'")
+    public List<EvaluationCriteria> getECbyCourseIDEnd(@Param( "course_id")String course_id);
 }

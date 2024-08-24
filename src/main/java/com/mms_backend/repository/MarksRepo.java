@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
-    @Query(nativeQuery = true, value = "select * from marks  where course_id=:course_id ")
-    List<MarksEntity> findStudentMarksByCourseID(@Param("course_id") String course_id);
+    @Query(nativeQuery = true, value = "select * from marks  where course_id=:course_id and academic_year=:academic_year ")
+    List<MarksEntity> findStudentMarksByCourseID(@Param("course_id") String course_id,@Param("academic_year") String academic_year);
 
     @Query(nativeQuery = true, value = "select * from marks where student_id=:student_id")
     List<MarksEntity> getScoreByStudent_ID(@Param("student_id") String student_id);
@@ -45,6 +45,10 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
 
     @Query(nativeQuery=true ,value = "select marks.* from marks inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id = marks.evaluation_criteria_id inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type where marks.student_id=:student_id and marks.course_id=:course_id and marks.academic_year=:academic_year and assessment_type_list.ca_mid_end='Mid'")
     List<MarksEntity> getCurrentMIDValue(@Param("student_id") String student_id,@Param("course_id") String course_id,@Param("academic_year") String academic_year);
+
+
+    @Query(nativeQuery=true ,value = "select * from marks   where student_id='TG-2020-746' and marks.course_id=:course_id and academic_year=:academic_year and evaluation_criteria_id=:evaluation_criteria_id")
+    List<MarksEntity> getMarksByStuIDCourseID_AY_ECID(@Param("course_id") String course_id,@Param("academic_year") String academic_year,@Param("evaluation_criteria_id") String evaluation_criteria_id);
 
 
 

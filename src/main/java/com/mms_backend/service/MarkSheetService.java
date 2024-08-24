@@ -52,42 +52,42 @@ public class MarkSheetService
     Boolean CA=false;
     Boolean end=false;
 
+    String description;
+
     public void getEvaluationCriteria(String course_id)
     {
         evaluationCriteriaList=evaluationCriteriaRepo.getEvaluationCriteria(course_id);
     }
 
 
-    public void getAllScoreByCourseId(String course_id){
-
-        marksEntityList=marksRepo.findStudentMarksByCourseID(course_id);
+    public void getAllScoreByCourseId(String course_id,String academic_year){
+        marksEntityList=marksRepo.findStudentMarksByCourseID(course_id,academic_year);
     }
 
-    public void getMarksCalculations(String course_id)
+    public void getMarksCalculations(String course_id,String academic_year)
     {
-        calculations=calculationsRepo.getCalculationresults(course_id);
+        calculations=calculationsRepo.getStudentsCalculationresults(course_id,academic_year);
     }
 
-    public void getMarksbyC(String course_id)
+    public void getMarksbyC(String course_id,String academic_year)
     {
-        studentMarksList=studentMarksRepo.findMarksByCourse(course_id);
+        studentMarksList=studentMarksRepo.findMarksByCourse(course_id, academic_year);
     }
 
 
-    public void getStudentsByCourseCode(String course_id)
+    public void getStudentsByCourseCode(String course_id,int type,String academicYear)
     {
-        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCode(course_id);
-
+        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type,academicYear);
     }
 
-    public List<StudentData> getData(String course_id) {
+    public List<StudentData> getData(String course_id,int type,String academicYear) {
 
         List<StudentData> list=new ArrayList<>();
         getEvaluationCriteria(course_id);
-        getAllScoreByCourseId(course_id);
-        getMarksCalculations(course_id);
-        getMarksbyC(course_id);
-        getStudentsByCourseCode(course_id);
+        getAllScoreByCourseId(course_id,academicYear);
+        getMarksCalculations(course_id,academicYear);
+        getMarksbyC(course_id,academicYear);
+        getStudentsByCourseCode(course_id,type,academicYear);
 
         for (StudentRegCourses student : studentRegCoursesList) {
             List<ObjectDTO> caMarks = new ArrayList<>();
@@ -105,7 +105,8 @@ public class MarkSheetService
                         }
                         for (Calculations calculation : calculations) {
                             if (calculation.getStudent_id().equals(student.getStudent_id()) && calculation.getEvaluation_criteria_id().equals(object.getEvaluationcriteria_id())) {
-                                caMarks.add(new ObjectDTO(object.getDescription(), calculation.getMark()!=null?calculation.getMark():"-","average"));
+                                description="Best "+object.getNo_of_taken()+" average";
+                                caMarks.add(new ObjectDTO(description, calculation.getMark()!=null?calculation.getMark():"-","average"));
                             }
                         }
                     } else {
@@ -155,6 +156,7 @@ public class MarkSheetService
             newstudent.setCourse_id(course_id);
             newstudent.setCa(caMarks);
             newstudent.setEnd(endMarks);
+            newstudent.setRepeat(student.getRepeat());
 
 
 
