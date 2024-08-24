@@ -20,6 +20,8 @@ public class StudentData
 
     private String course_id;
 
+    private int repeat;
+
     private List<ObjectDTO> ca;
 
     private String total_ca_mark;

@@ -45,10 +45,10 @@ public class GPAController
 
     @Autowired
     private ModelMapper modelMapper;
-    @GetMapping("/GetGPAByLevelSemester/{level},{semester}")
-    public ResponseEntity GetGPAByLevelSemester(@PathVariable("level")String level,@PathVariable("semester")String semester)
+    @GetMapping("/GetGPAByLevelSemester/{level}/{semester}/{approval_level}/{department_id}/{repeat}")
+    public ResponseEntity GetGPAByLevelSemester(@PathVariable("level")String level,@PathVariable("semester")String semester,@PathVariable("department_id")String department_id,@PathVariable("approval_level")String approval_level,@PathVariable("repeat")int repeat)
     {
-       ResponseDTO responseDTO =gpaService.getGPAByLevelSemester(level,semester);
+       ResponseDTO responseDTO =gpaService.getGPAByLevelSemester(level,semester,department_id,approval_level,repeat);
 
         if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
         {
