@@ -3,15 +3,19 @@ package com.mms_backend.service;
 import com.mms_backend.Util.VarList;
 import com.mms_backend.dto.CourseDTO;
 import com.mms_backend.dto.CourseNameIdDTO;
+import com.mms_backend.dto.MarksRangeOfClassDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.entity.CourseEntity;
+import com.mms_backend.entity.MarksRangeOfGrade;
 import com.mms_backend.repository.CourseRepo;
+import com.mms_backend.repository.MarksRangeOfCourseRepo;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,8 @@ public class CourseService {
     @Autowired
     ResponseDTO responseDTO;
 
+    @Autowired
+    MarksRangeOfCourseRepo marksRangeOfCourseRepo;
 
 
     public List<CourseDTO> findCidCnameByLS(String department_id,int level, int sem) {
@@ -40,23 +46,16 @@ public class CourseService {
         return courseDTOList;
     }
 
-    public ResponseDTO findCidCnameByDLS(int level,int sem,String department,String approved_level,String academic_year) {
+    public ResponseDTO findCidCnameByDLS(int level,int sem,String department,String approved_level) {
         try
         {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            List<CourseEntity> list = courseRepo.findApprovedCourses(level,sem,department,approved_level,academic_year);
-            List<CourseNameIdDTO> courseNameIdDTOs = new ArrayList<>();
+            List<Object[]> list = courseRepo.findApprovedCourses(level,sem,department,approved_level);
+
             if(!list.isEmpty())
             {
-                List<CourseDTO> courseDTOList=modelMapper.map(list,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
-                for (CourseDTO courseDTO : courseDTOList) {
-                    CourseNameIdDTO courseNameIdDTO = new CourseNameIdDTO();
-                    courseNameIdDTO.setCourse_name(courseDTO.getCourse_name());
-                    courseNameIdDTO.setCourse_id(courseDTO.getCourse_id());
-                    courseNameIdDTOs.add(courseNameIdDTO);
-                }
                 responseDTO.setCode(VarList.RIP_SUCCESS);
-                responseDTO.setContent(courseNameIdDTOs);
+                responseDTO.setContent(list);
                 responseDTO.setMessage("Successful");
             }
             else
@@ -79,14 +78,12 @@ public class CourseService {
         try
         {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            List<CourseEntity> list = courseRepo.findLecturerCertifiedAssignCourse(lecturer_id);
-            List<CourseNameIdDTO> courseNameIdDTOs = new ArrayList<>();
+            List<Object[]> list = courseRepo.findLecturerCertifiedAssignCourse(lecturer_id);
+
             if(!list.isEmpty())
             {
-                List<CourseDTO> courseDTOList=modelMapper.map(list,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
-
                 responseDTO.setCode(VarList.RIP_SUCCESS);
-                responseDTO.setContent(courseDTOList);
+                responseDTO.setContent(list);
                 responseDTO.setMessage("Successful");
             }
             else
@@ -225,31 +222,72 @@ public class CourseService {
     }
 
     public ResponseDTO getApprovedCourse(String email){
-        List<CourseEntity> courseEntities = courseRepo.findLecturerApprovedCourses(email);
+        List<Object[]> courseEntities = courseRepo.findLecturerApprovedCourses(email);
         if (courseEntities.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
             responseDTO.setMessage("Data Not Found!");
         }else {
-            List<CourseDTO> list=modelMapper.map(courseEntities,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
             responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(list);
+            responseDTO.setContent(courseEntities);
             responseDTO.setMessage("Data Found");
         }
         return responseDTO;
     }
 
     public ResponseDTO getAllRegCourseForCC(String email){
-        List<CourseEntity> courseEntityList = courseRepo.findCCRegCourses(email);
+        List<Object[]> courseEntityList = courseRepo.findCCRegCourses(email);
         if (courseEntityList.isEmpty()){
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
             responseDTO.setMessage("Registered Courses Not Found!");
         }else {
-            List<CourseDTO> courseDTOList = modelMapper.map(courseEntityList,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
+//            List<CourseDTO> courseDTOList = modelMapper.map(courseEntityList,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(courseEntityList);
+            responseDTO.setMessage("Registered Courses Found!");
+        }
+        return responseDTO;
+    }
+
+
+    public ResponseDTO getGradeMargin(String course_id,String academic_year)
+    {
+        List<MarksRangeOfClassDTO> courseDTOList=new ArrayList<>();
+        List<MarksRangeOfGrade> marksRangeOfGrades=marksRangeOfCourseRepo.getMarksRange(course_id,academic_year);
+        if (marksRangeOfGrades.isEmpty()){
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Not Successfull!");
+        }else {
+            for (MarksRangeOfGrade ele : marksRangeOfGrades)
+            {
+                MarksRangeOfClassDTO element = modelMapper.map(ele, MarksRangeOfClassDTO.class);
+                courseDTOList.add(element);
+            }
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(courseDTOList);
-            responseDTO.setMessage("Registered Courses Found!");
+            responseDTO.setMessage("Successful!");
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO updateGradeMargin(String course_id,String academic_year,String grade,double margin)
+    {
+
+        try
+        {
+            MarksRangeOfGrade marksRangeOfGrades=marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,grade);
+            marksRangeOfGrades.setMargin_of_grade(margin);
+            marksRangeOfCourseRepo.save(marksRangeOfGrades);
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(marksRangeOfGrades);
+            responseDTO.setMessage("Successful!");
+        }catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Unsuccessful!");
         }
         return responseDTO;
     }

@@ -46,10 +46,10 @@ public class StudentMarksController
         }
     }
 
-    @GetMapping("/GetApprovedMarksByLS/{level}/{semester}/{approved_level}/{department_id}")
-    public ResponseEntity GetApprovedMarksByLS(@PathVariable String level, @PathVariable String semester,@PathVariable String approved_level,@PathVariable String department_id)
+    @GetMapping("/GetApprovedMarksByLS/{level}/{semester}/{approved_level}/{department_id}/{repeat}")
+    public ResponseEntity GetApprovedMarksByLS(@PathVariable String level, @PathVariable String semester,@PathVariable String approved_level,@PathVariable String department_id,@PathVariable int repeat)
     {
-        ResponseDTO responseDTO=studentMarksService.findApprovedStudentMarksByLevelSem(level,semester,approved_level,department_id);
+        ResponseDTO responseDTO=studentMarksService.findApprovedStudentMarksByLevelSem(level,semester,approved_level,department_id,repeat);
         if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)) {
             return new ResponseEntity(responseDTO,HttpStatus.OK);
         }
@@ -70,18 +70,18 @@ public class StudentMarksController
              return new ResponseEntity(response,HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/getStudentMarksbyCourse/{course_id}")
-    public ResponseEntity getMarksByC(@PathVariable String course_id)
-    {
-        ResponseDTO response=studentMarksService.getMarksbyC(course_id);
-
-        if(response.getCode().equals(VarList.RIP_SUCCESS))
-        {
-            return new ResponseEntity(response,HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity(response,HttpStatus.OK);
-    }
+//    @GetMapping("/getStudentMarksbyCourse/{course_id}")
+//    public ResponseEntity getMarksByC(@PathVariable String course_id)
+//    {
+//        ResponseDTO response=studentMarksService.getMarksbyC(course_id);
+//
+//        if(response.getCode().equals(VarList.RIP_SUCCESS))
+//        {
+//            return new ResponseEntity(response,HttpStatus.OK);
+//        }
+//        else
+//            return new ResponseEntity(response,HttpStatus.OK);
+//    }
 
     @GetMapping("/getStudentMarksbySC/{course_id},{student_id}")
     public ResponseEntity getMarksBySC(@PathVariable String course_id,@PathVariable String student_id)

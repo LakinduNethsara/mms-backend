@@ -23,7 +23,7 @@ public interface ARResultBoardMemberRepo extends JpaRepository<ResultBoardMember
 
     //getAssignedResultBoardforCC---------------------------------
     @Query(nativeQuery = true,value = "select result_board_member.id, result_board_member.course_coordinator_id , result_board_member.course_id , result_board_member.result_board_id , result_board_member.assigned_date_time  from result_board_member inner join result_board on result_board_member.result_board_id=result_board.id where course_coordinator_id=:user_id and status='Started' and  result_board_id=:result_board_id")
-    ResultBoardMember getAssignedResultBoardforCC(@Param("user_id") String user_id,@Param("result_board_id") String result_board_id);
+    List<ResultBoardMember> getAssignedResultBoardforCC(@Param("user_id") String user_id,@Param("result_board_id") String result_board_id);
 
     //------------------------------------------------------------
 }

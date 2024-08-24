@@ -46,10 +46,10 @@ public class StudentMarksService
         return responseDTO;
     }
 
-    public ResponseDTO  findApprovedStudentMarksByLevelSem(String level, String sem,String approved_level,String department_id)
+    public ResponseDTO  findApprovedStudentMarksByLevelSem(String level, String sem,String approved_level,String department_id,int repeat)
     {
 
-        List<StudentMarks> markList=studentMarksRepo.findStudentMarksByLS(level,sem,approved_level,department_id);
+        List<StudentMarks> markList=studentMarksRepo.findStudentMarksByLS(level,sem,approved_level,department_id,repeat);
         if(!markList.isEmpty())
         {
             responseDTO.setCode(VarList.RIP_SUCCESS);
@@ -84,24 +84,24 @@ public class StudentMarksService
             return responseDTO;
     }
 
-    public ResponseDTO getMarksbyC(String course_id)
-    {
-        List<StudentMarks> list=studentMarksRepo.findMarksByCourse(course_id);
-
-        if(!list.isEmpty())
-        {
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(mp.map(list,new TypeToken<ArrayList<StudentMarksDTO>>(){}.getType()));
-            responseDTO.setMessage("Data found");
-        }
-        else
-        {
-            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
-            responseDTO.setContent(null);
-            responseDTO.setMessage("No Data found");
-        }
-        return responseDTO;
-    }
+//    public ResponseDTO getMarksbyC(String course_id)
+//    {
+//        List<StudentMarks> list=studentMarksRepo.findMarksByCourse(course_id);
+//
+//        if(!list.isEmpty())
+//        {
+//            responseDTO.setCode(VarList.RIP_SUCCESS);
+//            responseDTO.setContent(mp.map(list,new TypeToken<ArrayList<StudentMarksDTO>>(){}.getType()));
+//            responseDTO.setMessage("Data found");
+//        }
+//        else
+//        {
+//            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+//            responseDTO.setContent(null);
+//            responseDTO.setMessage("No Data found");
+//        }
+//        return responseDTO;
+//    }
 
     public ResponseDTO getMarksbySC(String course_id,String student_id)
     {

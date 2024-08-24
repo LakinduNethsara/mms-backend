@@ -28,9 +28,9 @@ public class GPAService
     @Autowired
     ModelMapper mp;
 
-    public ResponseDTO getGPAByLevelSemester(String level,String semester)
+    public ResponseDTO getGPAByLevelSemester(String level, String semester, String department_id, String approval_level, int repeat)
     {
-        List<GPA> list=gpaRepo.findGPAByLevelSemester(level,semester);
+        List<GPA> list=gpaRepo.findGPAByLevelSemester(level,semester,department_id,approval_level,repeat);
 
         if(!list.isEmpty())
         {

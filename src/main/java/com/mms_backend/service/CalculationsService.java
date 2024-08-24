@@ -30,42 +30,42 @@ public class CalculationsService
 
 
 
-    public ResponseDTO getMarksCalculations(String course_id)
-    {
-        List<Calculations> calculations=calculationsRepo.getCalculationresults(course_id);
-
-        if(calculations.isEmpty())
-        {
-            responseDTO.setMessage("Not Calculated");
-            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
-            responseDTO.setContent(calculations);
-        }
-        else
-        {
-            responseDTO.setMessage("Successfull");
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(modelMapper.map(calculations,new TypeToken<ArrayList<CalculationsDTO>>(){}.getType()));
-        }
-        return responseDTO;
-    }
-
-    public ResponseDTO getMarksCalculations(String course_id,String student_id)
-    {
-        List<Calculations> calculations=calculationsRepo.getCalculationresults(course_id,student_id);
-
-        if(calculations.isEmpty())
-        {
-            responseDTO.setMessage("Not Calculated");
-            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
-            responseDTO.setContent(calculations);
-        }
-        else
-        {
-            responseDTO.setMessage("Successfull");
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(modelMapper.map(calculations,new TypeToken<ArrayList<CalculationsDTO>>(){}.getType()));
-        }
-        return responseDTO;
-
-    }
+//    public ResponseDTO getMarksCalculations(String course_id,String academic_year)
+//    {
+//        List<Calculations> calculations=calculationsRepo.getStudentsCalculationresults(course_id,academic_year);
+//
+//        if(calculations.isEmpty())
+//        {
+//            responseDTO.setMessage("Not Calculated");
+//            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+//            responseDTO.setContent(calculations);
+//        }
+//        else
+//        {
+//            responseDTO.setMessage("Successfull");
+//            responseDTO.setCode(VarList.RIP_SUCCESS);
+//            responseDTO.setContent(modelMapper.map(calculations,new TypeToken<ArrayList<CalculationsDTO>>(){}.getType()));
+//        }
+//        return responseDTO;
+//    }
+//
+//    public ResponseDTO getMarksCalculations(String course_id,String student_id)
+//    {
+//        List<Calculations> calculations=calculationsRepo.getCalculationresults(course_id,student_id);
+//
+//        if(calculations.isEmpty())
+//        {
+//            responseDTO.setMessage("Not Calculated");
+//            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+//            responseDTO.setContent(calculations);
+//        }
+//        else
+//        {
+//            responseDTO.setMessage("Successfull");
+//            responseDTO.setCode(VarList.RIP_SUCCESS);
+//            responseDTO.setContent(modelMapper.map(calculations,new TypeToken<ArrayList<CalculationsDTO>>(){}.getType()));
+//        }
+//        return responseDTO;
+//
+//    }
 }
