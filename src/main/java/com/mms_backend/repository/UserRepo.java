@@ -24,4 +24,7 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Query(nativeQuery = true,value = "select * from user where role='lecturer'")
     List<User> findAllLecturers();
 
+    @Query(nativeQuery = true,value = "select email from user where department_id=:department_id and role=:role")
+    String getEmail(@Param("department_id") String department_id,@Param("role") String role);
+
 }

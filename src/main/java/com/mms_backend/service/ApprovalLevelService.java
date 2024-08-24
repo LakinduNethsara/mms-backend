@@ -1,16 +1,11 @@
 package com.mms_backend.service;
 
 import com.mms_backend.Util.VarList;
-import com.mms_backend.dto.AssigncertifylecturerDTO;
-import com.mms_backend.dto.CourseDTO;
-import com.mms_backend.dto.Marks_approved_logDTO;
-import com.mms_backend.dto.ResponseDTO;
+import com.mms_backend.dto.*;
 import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Assigncertifylecturer;
 import com.mms_backend.entity.Marks_approved_log;
-import com.mms_backend.repository.ApprovalLevelRepo;
-import com.mms_backend.repository.Approved_user_levelRepo;
-import com.mms_backend.repository.AssignCertifyLecturer;
+import com.mms_backend.repository.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -40,22 +35,51 @@ public class ApprovalLevelService {
     @Autowired
     private AssignCertifyLecturer assignCertifyLecturer;
 
+    @Autowired
+    private MailServerService mailServerService;
 
+    @Autowired
+    private CourseRepo courseRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
 
     public ResponseDTO updateApprovalLevelByDepartment(Marks_approved_logDTO marksApprovedLogDTO) {
-
+        String email;
+        String department;
         try {
 
             approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO, Marks_approved_log.class));
             approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(),marksApprovedLogDTO.getDepartment_id());
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setMessage("Successfully updated approval level");
+            responseDTO.setContent(marksApprovedLogDTO);
+
+            try
+            {
+                MailDetailsDTO mailDetailsDTO=new MailDetailsDTO();
+                mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
+
+                if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer"))
+                {
+                   email= assignCertifyLecturer.getEmail(marksApprovedLogDTO.getCourse_id());
+                }else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("HOD"))
+                {
+                    department=courseRepo.getDepartment(marksApprovedLogDTO.getDepartment_id());
+                     email=userRepo.getEmail(department,marksApprovedLogDTO.getApproval_level());
+                }
+                mailDetailsDTO.setToMail(email);
+
+
+                mailServerService.sendMail(mailDetailsDTO);
+            }
+
             if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer"))
             {
                 assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
             }
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setMessage("Successfully updated approval level");
-            responseDTO.setContent(marksApprovedLogDTO);
+
         } catch (RuntimeException e) {
             responseDTO.setCode(VarList.RIP_ERROR);
             responseDTO.setMessage("Error updating approval level: " + e.getMessage());

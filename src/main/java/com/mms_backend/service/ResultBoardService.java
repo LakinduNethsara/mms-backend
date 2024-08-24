@@ -57,12 +57,11 @@ public class ResultBoardService {
 
     public ResponseDTO getAssignedResultSheetsforDeanCC(String user_id,String result_board_id)
     {
-        ResultBoardMember list=arResultBoardMemberRepo.getAssignedResultBoardforCC(user_id,result_board_id);
+        List<ResultBoardMember> list=arResultBoardMemberRepo.getAssignedResultBoardforCC(user_id,result_board_id);
         if(list!=null)
         {
             responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setContent(modelMapper.map(list,ResultBoardMemberDTO.class));
-
+            responseDTO.setContent(modelMapper.map(list,new TypeToken<ArrayList<ResultBoardMemberDTO>>(){}.getType()));
             responseDTO.setMessage("Data found");
 
         }

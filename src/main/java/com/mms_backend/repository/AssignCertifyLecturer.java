@@ -11,4 +11,7 @@ public interface AssignCertifyLecturer extends JpaRepository<Assigncertifylectur
     @Modifying
     @Query(nativeQuery = true, value ="delete from assigncertifylecturer where course_id=:course_id")
     void returningResultSheet(@Param("course_id") String course_id);
+
+    @Query(nativeQuery = true,value = "select user.email from assigncertifylecturer inner join user on user.user_id=assigncertifylecturer.lecturer_id where course_id=:course_id")
+    String getEmail(@Param("course_id") String course_id);
 }
