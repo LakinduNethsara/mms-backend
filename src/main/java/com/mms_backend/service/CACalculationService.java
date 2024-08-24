@@ -8,12 +8,12 @@ import com.mms_backend.entity.AR.Grade;
 import com.mms_backend.repository.*;
 import com.mms_backend.service.AR.ARService;
 import jakarta.transaction.Transactional;
-import org.hibernate.resource.jdbc.spi.JdbcSessionOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -47,6 +47,9 @@ public class CACalculationService {
 
     @Autowired
     private GradeRepo gradeRepo;
+
+    @Autowired
+    private AssessmentTypeListRepo assessmentTypeListRepo;
 
 
 
@@ -125,13 +128,14 @@ public class CACalculationService {
             System.out.println("student_id :" + student_id);
 
 
-            repeatVal = studentRegCoursesDTO.getRepeat();
+            repeatVal = studentRegCoursesDTO.getRepeat(); //get reap value
             String student_CA_Eligibility = "";
             System.out.println(repeatVal);
+
+            //checking repeat value
             if (repeatVal == 1) {
                 singleStudentMarks.setStudent_id(student_id); //set student id to object
-                // System.out.println("student_id  Repeat:" + student_id);
-               StudentMarks studentMarks= studentMarksRepo.findMarksByCS(course_id,student_id);
+                StudentMarks studentMarks= studentMarksRepo.findMarksByCS(course_id,student_id);
 
                 String ca_eligibility="";
                if (studentMarks!=null){
@@ -140,11 +144,14 @@ public class CACalculationService {
 
                 System.out.println("ca eligibility "+ca_eligibility);
 
+
                 if(ca_eligibility.equals("Eligible")){
 
                     List<EvaluationCriteriaNameEntity> list=evaluationCriteriaNameRepo.getMCMidName(student_id,course_id,prev_AcademicYear);
 
                     List<EvaluationCriteria> midEVList = evaluationCriteriaRepo.getEBMIDbyCourseID(course_id);
+
+
 
                     for (EvaluationCriteriaNameEntity o : list) {
                         for (EvaluationCriteria ev : midEVList) {
@@ -196,10 +203,10 @@ public class CACalculationService {
                         }else {
                             current_mid_mark += Double.parseDouble(mid.getAssignment_score());  //initialization current mid marks
                         }
-                        calculated_old_ca_total += current_mid_mark; //initialization current mid marks
+                        calculated_old_ca_total += current_mid_mark; //initialization current mid-marks
                         System.out.println("current mid marks " + current_mid_mark);
 
-                        singleStudentMarks.setMark(String.valueOf(current_mid_mark)); //set current mid marks to object
+                        singleStudentMarks.setMark(String.valueOf(current_mid_mark)); //set current mid-marks to object
 
                         marksCalculationsList.add(singleStudentMarks); //add object to list
                     }
@@ -227,10 +234,6 @@ public class CACalculationService {
                                 Double percentage = Double.parseDouble(oldCA[1].toString()); // Cast to String first, then parse to Double
 
                                 calculated_old_ca_total += (mark * percentage) / 100;
-
-
-
-
 
                             }
                         }
@@ -260,7 +263,7 @@ public class CACalculationService {
                         }
                     }
 
-                    studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id);
+                    studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
 
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
@@ -273,16 +276,177 @@ public class CACalculationService {
                 }
                 else if(ca_eligibility.equals("Not Eligible")){
 
+//                    String evaluationcriteria_id = "";
+//                    List<MarksEntity> currentMIDMarks = marksRepo.getCurrentMIDValue(student_id,course_id,currentAcademicYear); //getting only mid marks details for calculation
+                    List<EvaluationCriteria> getEV_details_for_EVID = evaluationCriteriaRepo.getEvaluationCriteriaByStudentIDCourseID(student_id,course_id,currentAcademicYear); //getting all evaluation criteria details for calculation
+                    double sumOfCAMarks = 0;
+
+
+                    for (EvaluationCriteria ev : getEV_details_for_EVID) {
+                        int no_present = ev.getPercentage();
+                        int no_take = ev.getNo_of_taken();
+
+                        String ev_ID = ev.getEvaluationcriteria_id(); //get evaluation criteria id
+
+                        List<MarksEntity> currentCAMarks = marksRepo.getCurrentCAByStuIDCourseID_AY(student_id,course_id,currentAcademicYear,ev_ID); //getting all CA's for calculation
+                        List<String> getDetailsAboutMIDFromATL = assessmentTypeListRepo.findStudentMarksByCourseID(student_id,course_id,currentAcademicYear,ev_ID); //getting all details about mid from assessment type list
+
+                        String CA_Sum = ""; //initialization CA sum
+                        String CA_Percentage = ""; //initialization CA percentage
+
+                        ArrayList<Double> CA_Mark = new ArrayList<>(); //create list to store CA marks
+
+                        //get CA marks
+                        for (MarksEntity currentCAMark : currentCAMarks) {
+                            if (currentCAMark.getAssignment_score().equals("AB"))
+                            {
+                                CA_Mark.add(0.0); //add all CA marks to list
+                                if (ev.getAssessment_type().equals(getDetailsAboutMIDFromATL.get(0)))
+                                {
+                                    student_CA_Eligibility = "Not Eligible";
+                                }
+                            }
+                            else {
+                                CA_Mark.add(Double.parseDouble(currentCAMark.getAssignment_score())); //add all CA marks to list
+                            }
+                        }
+                        Collections.sort(CA_Mark, Collections.reverseOrder()); //sort the list as descending order
+
+                        //get CA marks as taken
+                        ArrayList<Double> CA_Take_Marks = new ArrayList<>(); //create list to store CA marks
+                        for (int i = 0; i < no_take; i++) {
+                            CA_Take_Marks.add(CA_Mark.get(i)); //add CA marks to list
+                        }
+
+                        //sum of CA marks
+                        double sum = 0;
+                        for (Double CA_Take_Mark : CA_Take_Marks) {
+                            sum += CA_Take_Mark; //sum of CA marks
+                        }
+
+                        //AVG of CA marks
+                        double AVG_CA = sum / no_take; //AVG of CA marks
+                        CA_Sum = String.valueOf(sum); //set sum of CA marks to string
+                        CA_Percentage = String.valueOf((AVG_CA * no_present) / 100); //set percentage of CA marks to string
+
+                        sumOfCAMarks += Double.parseDouble(CA_Percentage); //sum of CA marks
+
+
+                        singleStudentMarks.setEvaluation_criteria_id(ev_ID); //set evaluation criteria id to object
+                        singleStudentMarks.setMark(String.valueOf(AVG_CA)); //set CA marks to object
+                        singleStudentMarks.setPercentage(CA_Percentage); //set percentage of CA marks to object
+                        singleStudentMarks.setCourse_id(course_id);  //set course id to object
+                        singleStudentMarks.setStudent_id(student_id);  //set student id to object
+                        singleStudentMarks.setAcademic_year(currentAcademicYear);  //set academic year to object
+
+                        marksCalculationsList.add(singleStudentMarks); //add object to list
+
+                    }
+                    if (sumOfCAMarks >= ca_Eli_margin) {
+                        student_CA_Eligibility = "Eligible";
+                    } else {
+                        student_CA_Eligibility = "Not Eligible";
+                    }
+
+                    studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
+
+                    studentGrade.setStudent_id(student_id);
+                    studentGrade.setCourse_id(course_id);
+                    studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
+                    studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                    gradeRepo.save(studentGrade);
+
 
                 }
             }
             else {
+                singleStudentMarks.setStudent_id(student_id); //set student id to object
+                List<EvaluationCriteria> getEV_details_for_EVID = evaluationCriteriaRepo.getEvaluationCriteriaByStudentIDCourseID(student_id,course_id,currentAcademicYear); //getting all evaluation criteria details for calculation
+                double sumOfCAMarks = 0;
+
+                for (EvaluationCriteria ev : getEV_details_for_EVID) {
+
+                    int no_presentage = ev.getPercentage();
+                    int no_take = ev.getNo_of_taken();
+
+                    String ev_ID = ev.getEvaluationcriteria_id(); //get evaluation criteria id
+
+                    List<MarksEntity> currentCAMarks = marksRepo.getCurrentCAByStuIDCourseID_AY(student_id,course_id,currentAcademicYear,ev_ID); //getting all CA's for calculation
+                    List<String> getDetailsAboutMIDFromATL = assessmentTypeListRepo.findStudentMarksByCourseID(student_id,course_id,currentAcademicYear,ev_ID); //getting all details about mid from assessment type list
+
+                    String CA_Sum = ""; //initialization CA sum
+                    String CA_Percentage = ""; //initialization CA percentage
+
+                    ArrayList<Double> CA_Mark = new ArrayList<>(); //create list to store CA marks
+
+                    //get CA marks
+                    for (MarksEntity currentCAMark : currentCAMarks) {
+                        if (currentCAMark.getAssignment_score().equals("AB"))
+                        {
+                            CA_Mark.add(0.0); //add all CA marks to list
+                            if (ev.getAssessment_type().equals(getDetailsAboutMIDFromATL.get(0)))
+                            {
+                                student_CA_Eligibility = "WH";
+                            }
+                        }
+                        else {
+                            CA_Mark.add(Double.parseDouble(currentCAMark.getAssignment_score())); //add all CA marks to list
+                        }
+                    }
+                    Collections.sort(CA_Mark, Collections.reverseOrder()); //sort the list as descending order
+
+                    //get CA marks as taken
+                    ArrayList<Double> CA_Take_Marks = new ArrayList<>(); //create list to store CA marks
+                    for (int i = 0; i < no_take; i++) {
+                        CA_Take_Marks.add(CA_Mark.get(i)); //add CA marks to list
+                    }
+
+                    //sum of CA marks
+                    double sum = 0;
+                    for (Double CA_Take_Mark : CA_Take_Marks) {
+                        sum += CA_Take_Mark; //sum of CA marks
+                    }
+
+                    //AVG of CA marks
+                    double AVG_CA = sum / no_take; //AVG of CA marks
+                    CA_Sum = String.valueOf(sum); //set sum of CA marks to string
+                    CA_Percentage = String.valueOf((AVG_CA * no_presentage) / 100); //set percentage of CA marks to string
+
+                    sumOfCAMarks += Double.parseDouble(CA_Percentage); //sum of CA marks
+
+                    singleStudentMarks.setEvaluation_criteria_id(ev_ID); //set evaluation criteria id to object
+                    singleStudentMarks.setCourse_id(course_id);
+                    singleStudentMarks.setStudent_id(student_id);
+                    singleStudentMarks.setMark(String.valueOf(AVG_CA));
+                    singleStudentMarks.setPercentage(CA_Percentage);
+                    singleStudentMarks.setAcademic_year(currentAcademicYear);
+                    marksCalculationsList.add(singleStudentMarks);
+
+                }
+                if (sumOfCAMarks >= ca_Eli_margin) {
+                    student_CA_Eligibility = "Eligible";
+                } else {
+                    student_CA_Eligibility = "Not Eligible";
+                }
+
+                studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
+
+                String reversed_CID = new StringBuilder(course_id).reverse().toString();
+
+                char level = reversed_CID.charAt(3);
+                char semester = reversed_CID.charAt(2);
+
+                studentGrade.setStudent_id(student_id);
+                studentGrade.setCourse_id(course_id);
+                studentGrade.setLevel(String.valueOf(level));
+                studentGrade.setSemester(String.valueOf(semester));
+                studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
+                studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                gradeRepo.save(studentGrade);
 
             }
-
-
-
-
 
         }
 

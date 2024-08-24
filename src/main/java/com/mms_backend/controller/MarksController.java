@@ -94,10 +94,10 @@ public class MarksController {
             return new ResponseEntity(list,HttpStatus.OK);
     }
 
-    @GetMapping("getEnteredCAMarks/{course_id}")
-    public ResponseEntity getenteredCAMarks(@PathVariable String course_id)
+    @GetMapping("getEnteredCAMarks/{course_id},{academic_year}")
+    public ResponseEntity getenteredCAMarks(@PathVariable String course_id,@PathVariable String academic_year)
     {
-        List<MarksDTO> list=marksService.getenteredCAMarks(course_id);
+        List<MarksDTO> list=marksService.getenteredCAMarks(course_id, academic_year);
         if(list.isEmpty())
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -107,10 +107,10 @@ public class MarksController {
 
     }
 
-    @GetMapping("getEnteredFAMarks/{course_id}")
-    public ResponseEntity getenteredFAMarks(@PathVariable String course_id)
+    @GetMapping("getEnteredFAMarks/{course_id},{academic_year}")
+    public ResponseEntity getenteredFAMarks(@PathVariable String course_id, @PathVariable String academic_year)
     {
-        List<MarksDTO> list=marksService.getenteredFAMarks(course_id);
+        List<MarksDTO> list=marksService.getenteredFAMarks(course_id, academic_year);
         if(list.isEmpty())
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

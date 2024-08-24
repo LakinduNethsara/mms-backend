@@ -99,9 +99,9 @@ public class MarksService {
 
     }
 
-    public List<MarksDTO> getenteredCAMarks(String course_id)
+    public List<MarksDTO> getenteredCAMarks(String course_id,String academic_year)
     {
-        List<MarksEntity> list=marksRepo.getCAMarks(course_id);
+        List<MarksEntity> list=marksRepo.getCAMarks(course_id,academic_year);
         if(list.isEmpty())
         {
             return null;
@@ -110,9 +110,9 @@ public class MarksService {
             return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
     }
 
-    public List<MarksDTO> getenteredFAMarks(String course_id)
+    public List<MarksDTO> getenteredFAMarks(String course_id,String academic_year)
     {
-        List<MarksEntity> list=marksRepo.getFAMarks(course_id);
+        List<MarksEntity> list=marksRepo.getFAMarks(course_id, academic_year);
         if(list.isEmpty())
         {
             return null;
