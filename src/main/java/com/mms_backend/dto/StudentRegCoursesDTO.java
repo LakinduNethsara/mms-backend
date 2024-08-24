@@ -17,5 +17,5 @@ public class StudentRegCoursesDTO
 
     private String academic_year;
 
-    private String repeat;
+    private int repeat;
 }
