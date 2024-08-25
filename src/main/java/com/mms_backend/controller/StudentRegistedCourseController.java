@@ -107,6 +107,17 @@ public class StudentRegistedCourseController
         }
     }
 
+    @GetMapping("getregStudentsbycidanday/{course_id},{academic_year}")
+    public ResponseEntity getRegStudentsByCIDAndAY(@PathVariable String course_id,@PathVariable String academic_year)
+    {
+        ResponseDTO responseDTO=studentRegCoursesServices.getAllStudentsByCID(course_id,academic_year);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(responseDTO,HttpStatus.NOT_FOUND);
+        }
+    }
 
 
 
