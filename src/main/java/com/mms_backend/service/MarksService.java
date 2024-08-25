@@ -3,13 +3,16 @@ package com.mms_backend.service;
 import com.mms_backend.dto.MarksDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.repository.MarksRepo;
 import com.mms_backend.entity.MarksEntity;
+import com.mms_backend.repository.StudentRegCoursesRepo;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,10 @@ public class MarksService {
 
     @Autowired
     private ResponseDTO responseDTO;
+
+    @Autowired
+    private StudentRegCoursesRepo studentRegCoursesRepo;
+
     public List<MarksDTO> getAllScore(){
 
         List<MarksEntity> markList=marksRepo.findAll();
@@ -144,6 +151,25 @@ public class MarksService {
         List<Object> list=marksRepo.getMarksForCA(course_id,academic_year);
 
         return list;
+    }
+
+
+
+
+    //------------------------------------------------Select 1st , 2nd or average of end theory marks and insert
+    public void GenerateFinalMarksFromEnd( String assignment_name,  String course_id,  String selected,  String academic_year){
+        List<StudentRegCourses> studentList = studentRegCoursesRepo.getAllStudentsByCID(course_id,academic_year);
+        for (StudentRegCourses student : studentList) {
+
+            System.out.println(student.getStudent_id());  // Example: print student ID
+            marksRepo.GenerateFinalMarksFromEnd(student.getStudent_id(),assignment_name,course_id,selected,academic_year);
+
+
+        }
+
+
+
+
     }
 
 

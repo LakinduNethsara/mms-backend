@@ -139,4 +139,12 @@ public class MarksController {
         return list;
 
     }
+
+
+
+    //------------------------------------------------Select 1st , 2nd or average of end theory marks and insert
+    @GetMapping("GenerateFinalMarksFromEnd/{assignment_name}/{course_id}/{selected}/{academic_year}")
+    public void GenerateFinalMarksFromEnd(@PathVariable String assignment_name,@PathVariable String course_id,@PathVariable String selected,@PathVariable String academic_year){
+        marksService.GenerateFinalMarksFromEnd(assignment_name,course_id,selected,academic_year);
+    }
 }
