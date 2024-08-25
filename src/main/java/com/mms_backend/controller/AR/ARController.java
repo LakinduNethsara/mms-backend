@@ -127,9 +127,9 @@ public class ARController {
          */
     }
 
-    @GetMapping("/getABDetailsByCourseId/{course_id}")      //Get student id and other details from marks table where grade is E*        This is for view marks table to identify is there E* for the subject
-    public List<Object[]> getABDetailsByCourseId(@PathVariable String course_id){
-        return arService.getABDetailsByCourseId(course_id);
+    @GetMapping("/getABDetailsByCourseId/{course_id}/{academic_year}")      //Get student id and other details from marks table where grade is E*        This is for view marks table to identify is there E* for the subject
+    public List<Object[]> getABDetailsByCourseId(@PathVariable String course_id, @PathVariable String academic_year){
+        return arService.getABDetailsByCourseId(course_id, academic_year);
 
         /*Usage
             ViewMarksTableValidations
@@ -163,6 +163,12 @@ public class ARController {
         /*Usage
             CreateResultsBoard
          */
+    }
+
+
+    @GetMapping ("/getAllAcademicYearList")
+    public List<Object> getAllAcademicYearList(){
+        return arService.getAllAcademicYearList();
     }
 
 
