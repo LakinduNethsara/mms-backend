@@ -2,10 +2,12 @@ package com.mms_backend.service.AR;
 import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.GPADTO;
 import com.mms_backend.dto.MarksDTO;
+import com.mms_backend.dto.StudentRegCoursesDTO;
 import com.mms_backend.dto.UserDTO;
 import com.mms_backend.entity.AR.*;
 import com.mms_backend.entity.GPA;
 import com.mms_backend.entity.MarksEntity;
+import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.entity.User;
 import com.mms_backend.repository.AR.*;
 
@@ -42,7 +44,11 @@ public class ARService {
     private ARResultBoardRepo arResultBoardRepo;
     @Autowired
     private ARResultBoardMemberRepo arResultBoardMemberRepo;
-    @Autowired ARGPARepo arGPARepo;
+    @Autowired
+    private ARGPARepo arGPARepo;
+    @Autowired
+    private ARStudentRegCourses arStudentRegCourses;
+
     @Autowired
     private ModelMapper mp;
 
@@ -87,7 +93,7 @@ public class ARService {
     }
     public int updateStudentScore(UpdateABDTO updateABDTO){      //Update selected student grade with medical submissions
 
-        return arMarksRepo.updateStudentScore(updateABDTO.getNew_score(), updateABDTO.getStudent_id(), updateABDTO.getCourse_id(), updateABDTO.getAcademic_year(), updateABDTO.getExam_type());
+        return arMarksRepo.updateStudentScore(updateABDTO.getNew_score(), updateABDTO.getStudent_id(), updateABDTO.getCourse_id(), updateABDTO.getAcademic_year(),updateABDTO.getExam_type());
 
     }
 
@@ -355,6 +361,23 @@ public class ARService {
 
     /*---------------------------------------------------------------------------------------- Service for result board member table ----------------------------END-------------*/
 
+
+
+
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Service for studentRegCourses table ----------------------------START-------------*/
+
+    public List<StudentRegCoursesDTO> checkStudentRepeatStatus(String student_id, String course_id, String academic_year){        //Check whether student is repeating the course
+        List<StudentRegCourses> studentRegCoursesList = arStudentRegCourses.checkStudentRepeatStatus(student_id, course_id, academic_year);
+        return mp.map(studentRegCoursesList,new TypeToken<ArrayList<StudentRegCoursesDTO>>(){}.getType());
+    }
+
+
+
+    /*---------------------------------------------------------------------------------------- Service for studentRegCourses table ----------------------------END-------------*/
 
 
 

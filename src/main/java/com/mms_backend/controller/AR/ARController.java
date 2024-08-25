@@ -3,14 +3,18 @@ package com.mms_backend.controller.AR;
 import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.GPADTO;
 import com.mms_backend.dto.MarksDTO;
+import com.mms_backend.dto.StudentRegCoursesDTO;
 import com.mms_backend.dto.UserDTO;
+import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.service.AR.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*", allowCredentials = "false")
@@ -128,7 +132,6 @@ public class ARController {
         return arService.getABDetailsByCourseId(course_id);
 
         /*Usage
-            ViewMarksTable
             ViewMarksTableValidations
          */
     }
@@ -428,7 +431,7 @@ public class ARController {
 
 
 
-    /*---------------------------------------------------------------------------------------- Service for result board member table ----------------------------START-------------*/
+    /*---------------------------------------------------------------------------------------- Controller for result board member table ----------------------------START-------------*/
 
     @PostMapping("/saveResultBoardMember")
     public boolean saveResultBoardMember(@RequestBody ResultBoardMemberDTO resultBoardMemberDTO){         //Save result board member
@@ -480,7 +483,25 @@ public class ARController {
 
     }
 
-    /*---------------------------------------------------------------------------------------- Service for result board member table ----------------------------END-------------*/
+    /*---------------------------------------------------------------------------------------- Controller for result board member table ----------------------------END-------------*/
 
+
+
+
+
+
+
+    /*---------------------------------------------------------------------------------------- Controller for studentRegCourses table ----------------------------START-------------*/
+
+    @GetMapping("/checkStudentRepeatStatus/{student_id}/{course_id}/{academic_year}")                //Check student repeat status
+    public List<StudentRegCoursesDTO> checkStudentRepeatStatus(@PathVariable String student_id, @PathVariable String course_id, @PathVariable String academic_year){
+        return arService.checkStudentRepeatStatus(student_id, course_id, academic_year);
+
+        /*Usage
+            UpdateABPage
+        */
+    }
+
+    /*---------------------------------------------------------------------------------------- Controller for studentRegCourses table ----------------------------END-------------*/
 
 }
