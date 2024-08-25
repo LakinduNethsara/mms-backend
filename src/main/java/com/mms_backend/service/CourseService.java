@@ -117,6 +117,21 @@ public class CourseService {
         }
         return responseDTO;
     }
+
+    public ResponseDTO getAllCourseWhoNotRegToCRDept(){
+        List<CourseEntity> courseListData = courseRepo.findNoRegCourseToCRDept();
+        if (courseListData.isEmpty()){
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("Courses not found!");
+        }else {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(modelMapper.map(courseListData,new TypeToken<ArrayList<CourseDTO>>(){}.getType()));
+            responseDTO.setMessage("Courses found!");
+        }
+        return responseDTO;
+    }
+
     public ResponseDTO insertCoursesAsBulk(List<CourseDTO> courseDTOS){
         List<CourseEntity> coursesAsBulk  = modelMapper.map(courseDTOS,new TypeToken<ArrayList<CourseEntity>>(){}.getType());
         try {

@@ -67,6 +67,16 @@ public class CourseController {
         }
     }
 
+    @GetMapping("getallcousrenotregto_crdept")
+    public ResponseEntity<ResponseDTO> getAllCoursesNotRegToCRDept(){
+        ResponseDTO allCoursesData = courseService.getAllCourseWhoNotRegToCRDept();
+        if (allCoursesData.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity<>(allCoursesData, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(allCoursesData,HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @GetMapping("/getcidcnamebyls/{level}/{semester}/{department}/{approved_level}")
     public ResponseEntity getCidCnameByDLS(@PathVariable int level, @PathVariable int semester,@PathVariable String department,@PathVariable String approved_level){
