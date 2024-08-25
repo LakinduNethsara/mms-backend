@@ -15,4 +15,5 @@ public class AssigncertifylecturerDTO
     private String lecturer_id;
 
     private String course_id;
+    private String department_id;
 }

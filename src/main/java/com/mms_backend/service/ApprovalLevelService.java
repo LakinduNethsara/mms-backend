@@ -66,9 +66,12 @@ public class ApprovalLevelService {
             try {
                 MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
                 mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
+                message = "Dear Sir/Madam,\n" +
+                        "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id()+ " has been sent for approval. ";
+
 
                 if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("course_coordinator")) {
-                    email = assignCertifyLecturer.getEmail(marksApprovedLogDTO.getCourse_id());
+                    email = assignCertifyLecturer.getEmail(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
 
                     notificationsRepo.updateNotificationState(marksApprovedLogDTO.getCourse_id());
 
@@ -76,17 +79,14 @@ public class ApprovalLevelService {
                     department = courseRepo.getDepartment(marksApprovedLogDTO.getDepartment_id());
                     email = userRepo.getEmail(department, marksApprovedLogDTO.getApproval_level());}
                 else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("HOD")) {
-                    department = courseRepo.getDepartment(marksApprovedLogDTO.getDepartment_id());
-                    email = userRepo.getEmail(department, marksApprovedLogDTO.getApproval_level());
-                } else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("RB")) {
                     email = userRepo.getEmailByRole("AR");
+                    message = "Dear Sir/Madam,\n" +
+                            "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id() + " has been published from the department. ";
                 }
 
-
-                mailDetailsDTO.setToMail(email);
-                message = "Dear Sir/Madam,\n" +
-                        "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() + " has been sent for approval. ";
                 mailDetailsDTO.setMessage(message);
+                mailDetailsDTO.setToMail(email);
+
                 mailDetailsDTO.setSubject("Marks Return Sheet " + marksApprovedLogDTO.getCourse_id());
 
                 try {
@@ -105,7 +105,7 @@ public class ApprovalLevelService {
             }
 
             if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer")) {
-                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
+                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
             }
 
         } catch (RuntimeException e) {
@@ -135,7 +135,7 @@ public class ApprovalLevelService {
 
             approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(), marksApprovedLogDTO.getDepartment_id());
             approved_user_levelRepo.removeSignature(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id(), marksApprovedLogDTO.getAcademic_year());
-            assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
+            assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);
@@ -183,6 +183,36 @@ public class ApprovalLevelService {
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(null);
+
+            MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
+            mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
+            mailDetailsDTO.setSubject("Returning Marks Return Sheet - "+marksApprovedLogDTO.getCourse_id());
+
+            String email = null;
+            message = "Dear Sir/Madam,\n" +
+                    marksApprovedLogDTO.getDepartment_id() +marksApprovedLogDTO.getLevel() + marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for approval. ";
+
+            if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("RB")) {
+                email = userRepo.getEmailByRole("AR");
+
+            } else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("AR")) {
+                email = userRepo.getEmailByRole("Dean");
+            }
+            else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("VC")) {
+                email = userRepo.getEmailByRole("AR");
+                message="Dear Sir/Madam,\n" +
+                        marksApprovedLogDTO.getDepartment_id() +marksApprovedLogDTO.getLevel() + marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for  Results publishing. ";
+            }
+            mailDetailsDTO.setMessage(String.valueOf(message));
+            mailDetailsDTO.setToMail(email);
+
+            try {
+                // Call the mail server service method
+                mailServerService.sendMail(mailDetailsDTO);
+            } catch (Exception e) {
+                System.out.println("Error sending email: " + e.getMessage());
+            }
+
         } catch (RuntimeException e) {
             responseDTO.setCode(VarList.RIP_ERROR);
             responseDTO.setMessage("Error updating approval level: " + e.getMessage());
@@ -273,6 +303,24 @@ public class ApprovalLevelService {
     {
         MarksApprovalLevel marksApprovalLevel=approvalLevelRepo.getApprovalLevel(course_id,department_id);
         return marksApprovalLevel.getApproval_level();
+    }
+
+    public ResponseDTO getMarkSheetsForHOD(String department_id)
+    {
+        List<Object[]> list=courseRepo.getHODApprovalLevelCourse(department_id);
+        if(!list.isEmpty())
+        {
+            responseDTO.setMessage("Found");
+            responseDTO.setContent(list);
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+        }
+        else
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setMessage("NOT FOUND");
+            responseDTO.setContent(null);
+        }
+        return responseDTO;
     }
 
 }
