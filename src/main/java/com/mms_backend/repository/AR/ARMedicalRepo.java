@@ -21,7 +21,7 @@ public interface ARMedicalRepo extends JpaRepository<Medical,Integer> {
 
 
     //Get medical details of selected one student for one exam in selected year
-    @Query(nativeQuery = true, value = "select * from medical where student_id=:student_id AND course_id = :course_id AND academic_year=:academic_year AND  exam_type= :exam_type")
+    @Query(nativeQuery = true, value = "select * from medical where medical.student_id=:student_id AND medical.course_id = :course_id AND medical.academic_year=:academic_year AND  exam_type= :exam_type")
     List<Medical> getSelectedStudentMedicalDetails(String student_id, String course_id, String academic_year, String exam_type);
 
 }
