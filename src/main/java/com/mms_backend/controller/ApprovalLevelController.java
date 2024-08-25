@@ -116,5 +116,22 @@ public class ApprovalLevelController
 
 
     }
+
+    @GetMapping("/getMarksReturnSheetsForHODCertify/{department_id}")
+    public ResponseEntity getMarksReturnSheetsForHODCertify(@PathVariable String department_id)
+    {
+        ResponseDTO response=approvalLevelService.getMarkSheetsForHOD(department_id);
+
+        if(response.getCode().equals(VarList.RIP_SUCCESS))
+        {
+            return new ResponseEntity(response,HttpStatus.OK);
+        }
+        else if(response.getCode().equals(VarList.RIP_NO_DATA_FOUND))
+        {
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
 

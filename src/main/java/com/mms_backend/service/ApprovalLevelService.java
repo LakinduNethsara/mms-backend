@@ -67,11 +67,11 @@ public class ApprovalLevelService {
                 MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
                 mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
                 message = "Dear Sir/Madam,\n" +
-                        "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() + " has been sent for approval. ";
+                        "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id()+ " has been sent for approval. ";
 
 
                 if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("course_coordinator")) {
-                    email = assignCertifyLecturer.getEmail(marksApprovedLogDTO.getCourse_id());
+                    email = assignCertifyLecturer.getEmail(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
 
                     notificationsRepo.updateNotificationState(marksApprovedLogDTO.getCourse_id());
 
@@ -81,7 +81,7 @@ public class ApprovalLevelService {
                 else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("HOD")) {
                     email = userRepo.getEmailByRole("AR");
                     message = "Dear Sir/Madam,\n" +
-                            "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() + " has been published from the department. ";
+                            "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id() + " has been published from the department. ";
                 }
 
                 mailDetailsDTO.setMessage(message);
@@ -105,7 +105,7 @@ public class ApprovalLevelService {
             }
 
             if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer")) {
-                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
+                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
             }
 
         } catch (RuntimeException e) {
@@ -135,7 +135,7 @@ public class ApprovalLevelService {
 
             approvalLevelRepo.updateApprovedLevel(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getApproval_level(), marksApprovedLogDTO.getDepartment_id());
             approved_user_levelRepo.removeSignature(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id(), marksApprovedLogDTO.getAcademic_year());
-            assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id());
+            assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);
@@ -303,6 +303,24 @@ public class ApprovalLevelService {
     {
         MarksApprovalLevel marksApprovalLevel=approvalLevelRepo.getApprovalLevel(course_id,department_id);
         return marksApprovalLevel.getApproval_level();
+    }
+
+    public ResponseDTO getMarkSheetsForHOD(String department_id)
+    {
+        List<Object[]> list=courseRepo.getHODApprovalLevelCourse(department_id);
+        if(!list.isEmpty())
+        {
+            responseDTO.setMessage("Found");
+            responseDTO.setContent(list);
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+        }
+        else
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setMessage("NOT FOUND");
+            responseDTO.setContent(null);
+        }
+        return responseDTO;
     }
 
 }

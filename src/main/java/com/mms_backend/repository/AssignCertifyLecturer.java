@@ -9,9 +9,9 @@ import org.springframework.data.repository.query.Param;
 public interface AssignCertifyLecturer extends JpaRepository<Assigncertifylecturer,Integer> {
 
     @Modifying
-    @Query(nativeQuery = true, value ="delete from assigncertifylecturer where course_id=:course_id")
-    void returningResultSheet(@Param("course_id") String course_id);
+    @Query(nativeQuery = true, value ="delete from assigncertifylecturer where course_id=:course_id and department_id=:department_id")
+    void returningResultSheet(@Param("course_id") String course_id, @Param("department_id") String department_id);
 
-    @Query(nativeQuery = true,value = "select user.email from assigncertifylecturer inner join user on user.email=assigncertifylecturer.lecturer_id  where course_id=:course_id")
-    String getEmail(@Param("course_id") String course_id);
+    @Query(nativeQuery = true,value = "select user.email from assigncertifylecturer inner join user on user.email=assigncertifylecturer.lecturer_id  where course_id=:course_id and department_id=:department_id")
+    String getEmail(@Param("course_id") String course_id,@Param("department_id") String department_id);
 }

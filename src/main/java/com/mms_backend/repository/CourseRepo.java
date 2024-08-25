@@ -1,6 +1,7 @@
 package com.mms_backend.repository;
 
 import com.mms_backend.dto.CourseNameIdDTO;
+import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.CourseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,4 +31,7 @@ public interface CourseRepo extends JpaRepository<CourseEntity,Integer> {
 
     @Query(nativeQuery = true,value = "select department_id from course where course_id=:course_id")
     String getDepartment(@Param("course_id") String course_id);
+
+    @Query(nativeQuery = true,value = "select a.level , a.semester, a.course_id ,a.course_name ,b.department_id, b.academic_year from course a inner join mark_approved_level b on a.course_id=b.course_id where b.department_id=:department_id and approval_level='lecturer'")
+    List<Object[]> getHODApprovalLevelCourse(@Param("department_id")String department_id);
 }
