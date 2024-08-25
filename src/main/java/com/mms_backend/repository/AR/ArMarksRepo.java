@@ -17,8 +17,8 @@ public interface ArMarksRepo extends JpaRepository<MarksEntity,Integer> {
 
 
     //get E* details by selected course id
-    @Query(nativeQuery = true, value="select distinct course.level, course.semester, course.course_id, course.course_name, marks.student_id, marks.assignment_score, evaluationcriteria.assessment_type, mark_approved_level.approval_level, marks.academic_year from (((((marks inner join mark_approved_level on marks.course_id=mark_approved_level.course_id AND marks.academic_year =mark_approved_level.academic_year ) inner join course on course.course_id=marks.course_id) inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id=marks.evaluation_criteria_id) inner join evaluationcriteria_name on evaluationcriteria_name.evaluationcriteria_id= marks.evaluation_criteria_id) inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type) WHERE ((marks.assignment_score='AB' AND marks.course_id=:course_id) AND (assessment_type_list.ca_mid_end = 'Mid' or assessment_type_list.ca_mid_end='End')) order by course.level, course.semester, course.course_id, marks.student_id")
-    List<Object[]> getABDetailsByCourseId(String course_id);
+    @Query(nativeQuery = true, value="select distinct course.level, course.semester, course.course_id, course.course_name, marks.student_id, marks.assignment_score, evaluationcriteria.assessment_type, mark_approved_level.approval_level, marks.academic_year from (((((marks inner join mark_approved_level on marks.course_id=mark_approved_level.course_id AND marks.academic_year =mark_approved_level.academic_year ) inner join course on course.course_id=marks.course_id) inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id=marks.evaluation_criteria_id) inner join evaluationcriteria_name on evaluationcriteria_name.evaluationcriteria_id= marks.evaluation_criteria_id) inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type) WHERE ((marks.assignment_score='AB' AND marks.course_id=:course_id AND marks.academic_year=:academic_year) AND (assessment_type_list.ca_mid_end = 'Mid' or assessment_type_list.ca_mid_end='End')) order by course.level, course.semester, course.course_id, marks.student_id")
+    List<Object[]> getABDetailsByCourseId(String course_id, String academic_year);
 
     //Update E* details of selected student--------
     @Modifying
@@ -35,4 +35,7 @@ public interface ArMarksRepo extends JpaRepository<MarksEntity,Integer> {
     //Check whether there are any absence students in the selected department, selected level, selected semester, selected academic year for end or mid
     @Query(nativeQuery = true, value="select marks.* from ((((marks inner join courses_related_departments on marks.course_id=courses_related_departments.course_id) inner join evaluationcriteria on marks.evaluation_criteria_id = evaluationcriteria.evaluationcriteria_id) inner join course on courses_related_departments.course_id = course.course_id) inner join assessment_type_list on assessment_type_list.assessment_type_name= evaluationcriteria.assessment_type)  where marks.academic_year=:academic_year AND course.semester=:semester AND course.level=:level AND courses_related_departments.department_id=:department_id AND marks.assignment_score='AB' AND (assessment_type_list.ca_mid_end='End' OR assessment_type_list.ca_mid_end='Mid')")
     List<MarksEntity> isABStudentAvailable(String academic_year, String semester, String level, String department_id );
+
+    @Query(nativeQuery = true, value = "select distinct marks.academic_year from marks order by marks.academic_year desc ")
+    List<Object> getAllAcademicYearList();
 }

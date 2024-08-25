@@ -104,6 +104,11 @@ public class ARService {
     }
 
 
+    public List<Object> getAllAcademicYearList(){
+        return arMarksRepo.getAllAcademicYearList();
+    }
+
+
     /*---------------------------------------------------------------------------------------- Service for marks table ----------------------------END-------------*/
 
 
@@ -389,8 +394,8 @@ public class ARService {
         return eStarList;
     }
 
-    public List<Object[]> getABDetailsByCourseId(String course_id){        //Get student id and other details from marks table where grade is E* by selected course........
-        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id);
+    public List<Object[]> getABDetailsByCourseId(String course_id, String academic_year){        //Get student id and other details from marks table where grade is E* by selected course........
+        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id, academic_year);
         return abList;
     }
 }
