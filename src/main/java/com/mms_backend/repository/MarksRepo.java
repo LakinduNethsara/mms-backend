@@ -4,6 +4,7 @@ import com.mms_backend.entity.MarksEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -51,5 +52,13 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
     List<MarksEntity> getMarksByStuIDCourseID_AY_ECID(@Param("course_id") String course_id,@Param("academic_year") String academic_year,@Param("evaluation_criteria_id") String evaluation_criteria_id);
 
 
+    @Procedure(procedureName = "STORE_ENDTHEORYMARKS")
+    void GenerateFinalMarksFromEnd(
+            @Param("p_student_id") String student_id,
+            @Param("p_assignment_name") String assignment_name,
+            @Param("p_course_id") String course_id,
+            @Param("selected") String selected,
+            @Param("p_academic_year") String academic_year
+    );
 
 }
