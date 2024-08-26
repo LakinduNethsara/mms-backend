@@ -97,27 +97,27 @@ public class MarksController {
     @GetMapping("getEnteredCAMarks/{course_id},{academic_year}")
     public ResponseEntity getenteredCAMarks(@PathVariable String course_id,@PathVariable String academic_year)
     {
-        List<MarksDTO> list=marksService.getenteredCAMarks(course_id, academic_year);
-        if(list.isEmpty())
+        ResponseDTO responseDTO=marksService.getenteredCAMarks(course_id, academic_year);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
         {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(responseDTO,HttpStatus.OK);
         }
         else
-            return new ResponseEntity(list,HttpStatus.OK);
+            return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND);
+
 
     }
 
     @GetMapping("getEnteredFAMarks/{course_id},{academic_year}")
     public ResponseEntity getenteredFAMarks(@PathVariable String course_id, @PathVariable String academic_year)
     {
-        List<MarksDTO> list=marksService.getenteredFAMarks(course_id, academic_year);
-        if(list.isEmpty())
+        ResponseDTO responseDTO=marksService.getenteredFAMarks(course_id, academic_year);
+        if(responseDTO.getCode().equals(VarList.RIP_SUCCESS))
         {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(responseDTO,HttpStatus.OK);
         }
         else
-            return new ResponseEntity(list,HttpStatus.OK);
-
+            return new ResponseEntity(responseDTO,HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("inputCAMarks")
