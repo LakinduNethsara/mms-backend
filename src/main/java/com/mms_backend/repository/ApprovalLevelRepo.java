@@ -21,5 +21,7 @@ public interface ApprovalLevelRepo extends JpaRepository<MarksApprovalLevel,Inte
     MarksApprovalLevel getApprovalLevel(@Param("course_id")String course_id,@Param("department_id")String department_id);
 
 
+
+
 }
 

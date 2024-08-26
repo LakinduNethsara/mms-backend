@@ -10,7 +10,7 @@ public interface ARGradeRepo extends JpaRepository<Grade,Integer> {
 
 
 
-    @Query(nativeQuery = true, value = "select grade.* from grade" +     //Get all student grades of selected course module
+    @Query(nativeQuery = true, value = "select grade.* from grade " +     //Get all student grades of selected course module
             " where grade.course_id=:course_id ")
     List<Grade> findAllStudentGrade (String course_id);
 
