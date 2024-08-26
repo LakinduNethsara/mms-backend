@@ -50,12 +50,12 @@ public class LecturersRegService {
                 lecturersRegRepo.save(lecturersRegEntity);
                 responseDTO.setCode(VarList.RIP_SUCCESS);
                 responseDTO.setContent(lecturersRegEntity);
-                responseDTO.setMessage("Lecturer saved Successfully");
+                responseDTO.setMessage("User saved Successfully");
             }catch (Exception e)
             {
                 responseDTO.setCode(VarList.RIP_ERROR);
                 responseDTO.setContent(lecturersRegEntity);
-                responseDTO.setMessage("Lecturer can not be saved ");
+                responseDTO.setMessage("User can not be saved ");
             }
         }
         return responseDTO;

@@ -52,8 +52,6 @@ public class CACalculationService {
     private AssessmentTypeListRepo assessmentTypeListRepo;
 
 
-
-
     private String currentAcademicYear;
     private String prev_AcademicYear;
     private String prev_prev_AcademicYear;
