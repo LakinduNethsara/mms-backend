@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*", allowCredentials = "false")
 @RestController
 @RequestMapping("api/coursedept")
@@ -21,7 +23,7 @@ public class CourseRelatedDeptController {
     private ResponseDTO responseDTO;
 
     @PostMapping("insertacoursetocrdept")
-    public ResponseEntity insertACourseToCRDept(@RequestBody CourseRelatedDeptDTO courseRelatedDeptDTO) {
+    public ResponseEntity insertACourseToCRDept(@RequestBody List<CourseRelatedDeptDTO> courseRelatedDeptDTO) {
         ResponseDTO insertOneCourse = courseRelatedDeptService.insertACourseToCRDept(courseRelatedDeptDTO);
         if (insertOneCourse.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(insertOneCourse, HttpStatus.OK);

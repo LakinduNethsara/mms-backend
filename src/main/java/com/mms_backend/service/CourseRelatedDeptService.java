@@ -7,8 +7,12 @@ import com.mms_backend.entity.CourseRelatedDeptEntity;
 import com.mms_backend.repository.CourseRelatedDeptRepo;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -20,10 +24,10 @@ public class CourseRelatedDeptService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ResponseDTO insertACourseToCRDept(CourseRelatedDeptDTO courseRelatedDeptDTO) {
-        CourseRelatedDeptEntity insertOneCourse = modelMapper.map(courseRelatedDeptDTO, CourseRelatedDeptEntity.class);
+    public ResponseDTO insertACourseToCRDept(List<CourseRelatedDeptDTO> courseRelatedDeptDTO) {
+        List<CourseRelatedDeptEntity> insertOneCourse = modelMapper.map(courseRelatedDeptDTO,new TypeToken<ArrayList<CourseRelatedDeptEntity>>(){}.getType());
         try{
-            courseRelatedDeptRepo.save(insertOneCourse);
+            courseRelatedDeptRepo.saveAll(insertOneCourse);
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Course Inserted Successfully");
             responseDTO.setContent(courseRelatedDeptDTO);
