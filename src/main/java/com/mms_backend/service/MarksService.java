@@ -3,7 +3,11 @@ package com.mms_backend.service;
 import com.mms_backend.dto.MarksDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.entity.Calculations;
+import com.mms_backend.entity.EvaluationCriteria;
 import com.mms_backend.entity.StudentRegCourses;
+import com.mms_backend.repository.CalculationsRepo;
+import com.mms_backend.repository.EvaluationCriteriaRepo;
 import com.mms_backend.repository.MarksRepo;
 import com.mms_backend.entity.MarksEntity;
 import com.mms_backend.repository.StudentRegCoursesRepo;
@@ -33,6 +37,13 @@ public class MarksService {
 
     @Autowired
     private StudentRegCoursesRepo studentRegCoursesRepo;
+
+    @Autowired
+    private EvaluationCriteriaRepo evaluationCriteriaRepo;
+
+    @Autowired
+    private CalculationsRepo calculationsRepo;
+
 
     public List<MarksDTO> getAllScore(){
 
@@ -106,33 +117,104 @@ public class MarksService {
 
     }
 
-    public List<MarksDTO> getenteredCAMarks(String course_id,String academic_year)
+    public ResponseDTO getenteredCAMarks(String course_id,String academic_year)
     {
         List<MarksEntity> list=marksRepo.getCAMarks(course_id,academic_year);
         if(list.isEmpty())
         {
-            return null;
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
         }
-        else
-            return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
+        else{
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType()));
+            responseDTO.setMessage("Data found");
+        }
+            return responseDTO;
     }
 
-    public List<MarksDTO> getenteredFAMarks(String course_id,String academic_year)
+    public ResponseDTO getenteredFAMarks(String course_id,String academic_year)
     {
         List<MarksEntity> list=marksRepo.getFAMarks(course_id, academic_year);
         if(list.isEmpty())
         {
-            return null;
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
         }
-        else
-            return modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType());
+        else{
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(modelMapper.map(list,new TypeToken<ArrayList<MarksDTO>>(){}.getType()));
+            responseDTO.setMessage("Data found");
+        }
+        return responseDTO;
     }
 
     public ResponseDTO saveCAMarks(List<MarksDTO> list)
     {
+         List<Calculations> marksCalculationsList=new ArrayList<>(); //create list to all students marks calculations
+
         try {
             List<MarksEntity> marks=modelMapper.map(list,new TypeToken<ArrayList<MarksEntity>>(){}.getType());
+            String course_id = "";
+            String M_evaluationCriteriaID = "";
+
+            for (MarksEntity mark : marks) {
+                String cid = mark.getCourse_id();
+                course_id = cid; //get course id
+
+                String MeID = mark.getEvaluation_criteria_id();
+                M_evaluationCriteriaID = MeID; //get evaluation criteria id
+
+            }
+
+            List<EvaluationCriteria> getDetails = evaluationCriteriaRepo.getNotETEDetails(course_id);
+            String evaluationCriteriaID = "";
+            int percentage = 0;
+
+            for (EvaluationCriteria item : getDetails) {
+                String evID = item.getEvaluationcriteria_id();
+                evaluationCriteriaID = evID;
+
+                int per = item.getPercentage();
+                percentage = per;
+            }
+
+            if (M_evaluationCriteriaID.equals(evaluationCriteriaID)){
+                for (MarksEntity mark : marks) {
+                    double score = 0;
+                    double avg = 0;
+                    if (mark.getAssignment_score() == "AB") {
+                        score = 0;
+                        avg = 0;
+                    }else {
+                        score = Double.parseDouble((mark.getAssignment_score()));
+                        avg = (score * percentage) / 100;
+                    }
+
+
+                    Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+
+                    singleStudentMarks.setEvaluation_criteria_id(evaluationCriteriaID);
+                    singleStudentMarks.setStudent_id(mark.getStudent_id());
+                    singleStudentMarks.setCourse_id(course_id);
+                    singleStudentMarks.setMark(String.valueOf(score));
+                    singleStudentMarks.setPercentage(String.valueOf(avg));
+                    singleStudentMarks.setAcademic_year(mark.getAcademic_year());
+
+                    marksCalculationsList.add(singleStudentMarks);
+                    System.out.println("singleStudentMarks " + singleStudentMarks);
+
+                }
+                calculationsRepo.saveAll(marksCalculationsList);
+
+                System.out.println("Marks Calculations " + marksCalculationsList);
+
+            }
+
             marksRepo.saveAll(marks);
+
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(null);
             responseDTO.setMessage("Successfully");
