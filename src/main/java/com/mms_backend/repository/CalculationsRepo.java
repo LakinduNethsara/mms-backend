@@ -17,4 +17,7 @@ public interface CalculationsRepo extends JpaRepository<Calculations,Integer>
 
     @Query(nativeQuery = true, value = "select markcalculations.mark, evaluationcriteria.percentage from markcalculations inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id = markcalculations.evaluation_criteria_id inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type where markcalculations.student_id=:student_id and markcalculations.course_id=:course_id and markcalculations.academic_year=:academic_year and assessment_type_list.ca_mid_end='CA';")
     public List<Object[]> getOLDCAByStuIDCourseID_AY(@Param("student_id") String student_id,@Param("course_id") String course_id,@Param("academic_year") String academic_year);
+
+    @Query (nativeQuery = true, value = "select markcalculations.* from markcalculations where evaluation_criteria_id in (select evaluationcriteria_id from evaluationcriteria where course_id=:course_id) and student_id=:student_id")
+    public List<Calculations> getStudentMarkPercentageList(String course_id, String student_id);
 }
