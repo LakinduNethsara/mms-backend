@@ -17,6 +17,8 @@ public class StudentCourseId implements Serializable
 
     private String course_id;
 
+    private  String academic_year;
+
 
     @Override
     public boolean equals(Object o)
@@ -25,7 +27,7 @@ public class StudentCourseId implements Serializable
         if(o==null || getClass() != o.getClass()) return false;
 
         StudentCourseId that= (StudentCourseId) o;
-        return student_id.equals(that.student_id)&&course_id.equals(that.course_id);
+        return student_id.equals(that.student_id)&&course_id.equals(that.course_id)&&academic_year.equals(that.academic_year);
 
 
     }
@@ -34,6 +36,6 @@ public class StudentCourseId implements Serializable
 
     @Override
     public int hashCode() {
-        return Objects.hash(student_id,course_id);
+        return Objects.hash(student_id,course_id,academic_year);
     }
 }

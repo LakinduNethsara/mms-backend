@@ -77,14 +77,14 @@ public class StudentRegCoursesServices
         return responseDTO;
     }
 
-    public ResponseDTO insertAllStudents(List<StudentRegisteredCourses> list)
+    public ResponseDTO insertAllStudents(List<StudentRegCoursesDTO> list)
     {
         ResponseDTO responseDTO=new ResponseDTO();
         List<StudentRegCourses> list1=modelMapper.map(list,new TypeToken<ArrayList<StudentRegCourses>>(){}.getType());
         studentRegCoursesRepo.saveAll(list1);
 
         responseDTO.setCode(VarList.RIP_SUCCESS);
-        responseDTO.setContent(list1);
+        responseDTO.setContent(list);
         responseDTO.setMessage("Successfull");
         return responseDTO;
     }

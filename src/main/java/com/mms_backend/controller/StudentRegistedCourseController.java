@@ -73,7 +73,7 @@ public class StudentRegistedCourseController
         }
     }
     @PostMapping("insert_allRegisteredStudents")
-    public ResponseEntity insert_allRegisteredStudents(@RequestBody List<StudentRegisteredCourses> list){
+    public ResponseEntity insert_allRegisteredStudents(@RequestBody List<StudentRegCoursesDTO> list){
         ResponseDTO AllStudents = studentRegCoursesServices.insertAllStudents(list);
         if (AllStudents.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(AllStudents,HttpStatus.CREATED);

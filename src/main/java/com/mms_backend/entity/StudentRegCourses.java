@@ -14,12 +14,14 @@ import lombok.NoArgsConstructor;
 @IdClass(StudentCourseId.class)
 public class StudentRegCourses
 {
+
     @Id
     private String student_id;
     @Id
     private String course_id;
-
+    @Id
     private String academic_year;
 
+    @Column(name = "is_repeat")
     private int repeat;
 }

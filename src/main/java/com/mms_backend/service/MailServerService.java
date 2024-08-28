@@ -34,6 +34,7 @@ public class MailServerService {
             SimpleMailMessage message = new SimpleMailMessage();
 
 
+
             message.setFrom(mailDetailsDTO.getFromMail()); // Set from mail
 
             message.setTo(mailDetailsDTO.getToMail()); // Set to mail

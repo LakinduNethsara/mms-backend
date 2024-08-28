@@ -62,7 +62,6 @@ public class ApprovalLevelService {
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(marksApprovedLogDTO);
-
             try {
                 MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
                 mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
@@ -88,6 +87,7 @@ public class ApprovalLevelService {
                 mailDetailsDTO.setToMail(email);
 
                 mailDetailsDTO.setSubject("Marks Return Sheet " + marksApprovedLogDTO.getCourse_id());
+
 
                 try {
                     // Call the mail server service method
