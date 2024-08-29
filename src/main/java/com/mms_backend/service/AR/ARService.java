@@ -230,6 +230,19 @@ public class ARService {
     }
 
 
+
+    public AcademicYearDetailsDTO updateAcademicYearDetailsByYear(AcademicYearDetailsDTO academicYearDetailsDTO){         //Update academic year details by year
+        if(arAcademicYearDetailsRepo.existsById(academicYearDetailsDTO.getId())) {
+            AcademicYearDetails academicYearDetails = mp.map(academicYearDetailsDTO, AcademicYearDetails.class);
+            arAcademicYearDetailsRepo.save(academicYearDetails);
+            return academicYearDetailsDTO;
+        }else{
+            return null;
+        }
+
+    }
+
+
     /*---------------------------------------------------------------------------------------- Service for academic_year_details table ----------------------------END-------------*/
 
 
