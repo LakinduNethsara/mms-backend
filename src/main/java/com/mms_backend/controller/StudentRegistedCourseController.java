@@ -2,7 +2,6 @@ package com.mms_backend.controller;
 
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentRegCoursesDTO;
-import com.mms_backend.dto.StudentRegisteredCourses;
 import com.mms_backend.Util.VarList;
 import com.mms_backend.service.MarkSheetService;
 import com.mms_backend.service.StudentRegCoursesServices;
