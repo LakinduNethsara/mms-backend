@@ -172,8 +172,8 @@ public class ARService {
 
 
     /*---------------------------------------------------------------------------------------- Service for course table ----------------------------START-------------*/
-    public List<CourseDTO> getViewMarksCourseList(String level, String semester, String department_id){      //Get all course details of selected department by level and semester
-        List<Course> courseList= arCourseRepo.getViewMarksCourseList(level, semester, department_id);
+    public List<CourseDTO> getViewMarksCourseList(String level, String semester, String department_id , String academic_year){      //Get all course details of selected department by level and semester
+        List<Course> courseList= arCourseRepo.getViewMarksCourseList(level, semester, department_id,academic_year);
         return mp.map(courseList,new TypeToken<ArrayList<CourseDTO>>(){}.getType());
     }
 

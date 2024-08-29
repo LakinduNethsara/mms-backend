@@ -10,8 +10,8 @@ public interface ARCourseRepo extends JpaRepository<Course,Integer> {
 
 
     @Query(nativeQuery = true,value = "select  DISTINCT course.id, course.course_id , course.course_name , course.hours ,course.type ,\n" +               // Get all courses of selected department by level and semester
-            "course.department_id ,course.level ,course.semester from course inner join courses_related_departments on course.course_id = courses_related_departments.course_id where course.level=:level AND course.semester=:semester AND courses_related_departments.department_id=:department_id")
-    List <Course> getViewMarksCourseList(String level, String semester,String department_id);
+            "course.department_id ,course.level ,course.semester from course inner join courses_related_departments on course.course_id = courses_related_departments.course_id inner join mark_approved_level on courses_related_departments.course_id=mark_approved_level.course_id and courses_related_departments.department_id= mark_approved_level.department_id where course.level=:level AND course.semester=:semester AND courses_related_departments.department_id=:department_id and (mark_approved_level.approval_level!='finalized' and mark_approved_level.approval_level!='course_coordinator' and mark_approved_level.approval_level!='lecturer') and mark_approved_level.academic_year=:academic_year")
+    List <Course> getViewMarksCourseList(String level, String semester,String department_id, String academic_year);
 
 
     //Get all the courses not added to the result board

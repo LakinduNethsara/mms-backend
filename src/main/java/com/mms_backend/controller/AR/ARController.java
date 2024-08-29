@@ -29,10 +29,10 @@ public class ARController {
 
 
     /*---------------------------------------------------------------------------------------- Controller for course table ----------------------------START-------------*/
-    @GetMapping("/getViewMarksCourseList/{level}/{semester}/{department_id}")           //Get all course details of selected department by level and semester
-    public List<CourseDTO> getViewMarksCourseList (@PathVariable String level, @PathVariable String semester, @PathVariable String department_id){
+    @GetMapping("/getViewMarksCourseList/{level}/{semester}/{department_id}/{academic_year}")           //Get all course details of selected department by level and semester
+    public List<CourseDTO> getViewMarksCourseList (@PathVariable String level, @PathVariable String semester, @PathVariable String department_id, @PathVariable String academic_year){
 
-        return arService.getViewMarksCourseList(level, semester,department_id);
+        return arService.getViewMarksCourseList(level, semester,department_id, academic_year);
 
 
         /*Usage
