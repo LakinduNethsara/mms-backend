@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "marks_range_of_grade")
 public class MarksRangeOfGrade {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String course_id;
@@ -28,5 +28,7 @@ public class MarksRangeOfGrade {
     private String user_id;
 
     private Date datetime;
+
+    
 }
 

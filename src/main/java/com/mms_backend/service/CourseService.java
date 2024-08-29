@@ -160,100 +160,100 @@ public class CourseService {
     public ResponseDTO insertACourse(CourseDTO courseDTO){
         CourseEntity insertOneCourse = modelMapper.map(courseDTO,CourseEntity.class);
         try {
-//            String currentAY="";
-//
-//            List<AcademicYearDetails> academicYearDetails= arAcademicYearDetailsRepo.findAll();
-//            for(AcademicYearDetails acY: academicYearDetails){
-//                currentAY = acY.getCurrent_academic_year();
-//            }
-//
-//            List<MarksRangeOfGrade> marksRangeOfGrades=new ArrayList<>();
-//
-//            MarksRangeOfGrade marksRangeOfAPlus = new MarksRangeOfGrade();
-//            marksRangeOfAPlus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfAPlus.setAcademic_year(currentAY);
-//            marksRangeOfAPlus.setGrade("A+");
-//            marksRangeOfAPlus.setMargin_of_grade(84.0);
-//            marksRangeOfGrades.add(marksRangeOfAPlus);
-//
-//            MarksRangeOfGrade marksRangeOfA = new MarksRangeOfGrade();
-//            marksRangeOfA.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfA.setAcademic_year(currentAY);
-//            marksRangeOfA.setGrade("A");
-//            marksRangeOfA.setMargin_of_grade(69.5);
-//            marksRangeOfGrades.add(marksRangeOfA);
-//
-//            MarksRangeOfGrade marksRangeOfAMinus = new MarksRangeOfGrade();
-//            marksRangeOfAMinus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfAMinus.setAcademic_year(currentAY);
-//            marksRangeOfAMinus.setGrade("A-");
-//            marksRangeOfAMinus.setMargin_of_grade(64.5);
-//            marksRangeOfGrades.add(marksRangeOfAMinus);
-//
-//            MarksRangeOfGrade marksRangeOfBPlus = new MarksRangeOfGrade();
-//            marksRangeOfBPlus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfBPlus.setAcademic_year(currentAY);
-//            marksRangeOfBPlus.setGrade("B+");
-//            marksRangeOfBPlus.setMargin_of_grade(59.5);
-//            marksRangeOfGrades.add(marksRangeOfBPlus);
-//
-//            MarksRangeOfGrade marksRangeOfB = new MarksRangeOfGrade();
-//            marksRangeOfB.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfB.setAcademic_year(currentAY);
-//            marksRangeOfB.setGrade("B");
-//            marksRangeOfB.setMargin_of_grade(54.5);
-//            marksRangeOfGrades.add(marksRangeOfB);
-//
-//            MarksRangeOfGrade marksRangeOfBMinus = new MarksRangeOfGrade();
-//            marksRangeOfBMinus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfBMinus.setAcademic_year(currentAY);
-//            marksRangeOfBMinus.setGrade("B-");
-//            marksRangeOfBMinus.setMargin_of_grade(49.5);
-//            marksRangeOfGrades.add(marksRangeOfBMinus);
-//
-//            MarksRangeOfGrade marksRangeOfCPlus = new MarksRangeOfGrade();
-//            marksRangeOfCPlus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfCPlus.setAcademic_year(currentAY);
-//            marksRangeOfCPlus.setGrade("C+");
-//            marksRangeOfCPlus.setMargin_of_grade(44.5);
-//            marksRangeOfGrades.add(marksRangeOfCPlus);
-//
-//            MarksRangeOfGrade marksRangeOfC = new MarksRangeOfGrade();
-//            marksRangeOfC.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfC.setAcademic_year(currentAY);
-//            marksRangeOfC.setGrade("C");
-//            marksRangeOfC.setMargin_of_grade(39.5);
-//            marksRangeOfGrades.add(marksRangeOfC);
-//
-//            MarksRangeOfGrade marksRangeOfCMinus = new MarksRangeOfGrade();
-//            marksRangeOfCMinus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfCMinus.setAcademic_year(currentAY);
-//            marksRangeOfCMinus.setGrade("C-");
-//            marksRangeOfCMinus.setMargin_of_grade(34.5);
-//            marksRangeOfGrades.add(marksRangeOfCMinus);
-//
-//            MarksRangeOfGrade marksRangeOfDPlus = new MarksRangeOfGrade();
-//            marksRangeOfDPlus.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfDPlus.setAcademic_year(currentAY);
-//            marksRangeOfDPlus.setGrade("D+");
-//            marksRangeOfDPlus.setMargin_of_grade(29.5);
-//            marksRangeOfGrades.add(marksRangeOfDPlus);
-//
-//            MarksRangeOfGrade marksRangeOfD = new MarksRangeOfGrade();
-//            marksRangeOfD.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfD.setAcademic_year(currentAY);
-//            marksRangeOfD.setGrade("D");
-//            marksRangeOfD.setMargin_of_grade(24.5);
-//            marksRangeOfGrades.add(marksRangeOfD);
-//
-//            MarksRangeOfGrade marksRangeOfE = new MarksRangeOfGrade();
-//            marksRangeOfE.setCourse_id(courseDTO.getCourse_id());
-//            marksRangeOfE.setAcademic_year(currentAY);
-//            marksRangeOfE.setGrade("E");
-//            marksRangeOfE.setMargin_of_grade(0.0);
-//            marksRangeOfGrades.add(marksRangeOfE);
-//
-//            marksRangeOfCourseRepo.saveAll(marksRangeOfGrades);
+            String currentAY="";
+
+            List<AcademicYearDetails> academicYearDetails= arAcademicYearDetailsRepo.findAll();
+            for(AcademicYearDetails acY: academicYearDetails){
+                currentAY = acY.getCurrent_academic_year();
+            }
+
+            List<MarksRangeOfGrade> marksRangeOfGrades=new ArrayList<>();
+
+            MarksRangeOfGrade marksRangeOfAPlus = new MarksRangeOfGrade();
+            marksRangeOfAPlus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfAPlus.setAcademic_year(currentAY);
+            marksRangeOfAPlus.setGrade("A+");
+            marksRangeOfAPlus.setMargin_of_grade(84.0);
+            marksRangeOfGrades.add(marksRangeOfAPlus);
+
+            MarksRangeOfGrade marksRangeOfA = new MarksRangeOfGrade();
+            marksRangeOfA.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfA.setAcademic_year(currentAY);
+            marksRangeOfA.setGrade("A");
+            marksRangeOfA.setMargin_of_grade(69.5);
+            marksRangeOfGrades.add(marksRangeOfA);
+
+            MarksRangeOfGrade marksRangeOfAMinus = new MarksRangeOfGrade();
+            marksRangeOfAMinus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfAMinus.setAcademic_year(currentAY);
+            marksRangeOfAMinus.setGrade("A-");
+            marksRangeOfAMinus.setMargin_of_grade(64.5);
+            marksRangeOfGrades.add(marksRangeOfAMinus);
+
+            MarksRangeOfGrade marksRangeOfBPlus = new MarksRangeOfGrade();
+            marksRangeOfBPlus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfBPlus.setAcademic_year(currentAY);
+            marksRangeOfBPlus.setGrade("B+");
+            marksRangeOfBPlus.setMargin_of_grade(59.5);
+            marksRangeOfGrades.add(marksRangeOfBPlus);
+
+            MarksRangeOfGrade marksRangeOfB = new MarksRangeOfGrade();
+            marksRangeOfB.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfB.setAcademic_year(currentAY);
+            marksRangeOfB.setGrade("B");
+            marksRangeOfB.setMargin_of_grade(54.5);
+            marksRangeOfGrades.add(marksRangeOfB);
+
+            MarksRangeOfGrade marksRangeOfBMinus = new MarksRangeOfGrade();
+            marksRangeOfBMinus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfBMinus.setAcademic_year(currentAY);
+            marksRangeOfBMinus.setGrade("B-");
+            marksRangeOfBMinus.setMargin_of_grade(49.5);
+            marksRangeOfGrades.add(marksRangeOfBMinus);
+
+            MarksRangeOfGrade marksRangeOfCPlus = new MarksRangeOfGrade();
+            marksRangeOfCPlus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfCPlus.setAcademic_year(currentAY);
+            marksRangeOfCPlus.setGrade("C+");
+            marksRangeOfCPlus.setMargin_of_grade(44.5);
+            marksRangeOfGrades.add(marksRangeOfCPlus);
+
+            MarksRangeOfGrade marksRangeOfC = new MarksRangeOfGrade();
+            marksRangeOfC.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfC.setAcademic_year(currentAY);
+            marksRangeOfC.setGrade("C");
+            marksRangeOfC.setMargin_of_grade(39.5);
+            marksRangeOfGrades.add(marksRangeOfC);
+
+            MarksRangeOfGrade marksRangeOfCMinus = new MarksRangeOfGrade();
+            marksRangeOfCMinus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfCMinus.setAcademic_year(currentAY);
+            marksRangeOfCMinus.setGrade("C-");
+            marksRangeOfCMinus.setMargin_of_grade(34.5);
+            marksRangeOfGrades.add(marksRangeOfCMinus);
+
+            MarksRangeOfGrade marksRangeOfDPlus = new MarksRangeOfGrade();
+            marksRangeOfDPlus.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfDPlus.setAcademic_year(currentAY);
+            marksRangeOfDPlus.setGrade("D+");
+            marksRangeOfDPlus.setMargin_of_grade(29.5);
+            marksRangeOfGrades.add(marksRangeOfDPlus);
+
+            MarksRangeOfGrade marksRangeOfD = new MarksRangeOfGrade();
+            marksRangeOfD.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfD.setAcademic_year(currentAY);
+            marksRangeOfD.setGrade("D");
+            marksRangeOfD.setMargin_of_grade(24.5);
+            marksRangeOfGrades.add(marksRangeOfD);
+
+            MarksRangeOfGrade marksRangeOfE = new MarksRangeOfGrade();
+            marksRangeOfE.setCourse_id(courseDTO.getCourse_id());
+            marksRangeOfE.setAcademic_year(currentAY);
+            marksRangeOfE.setGrade("E");
+            marksRangeOfE.setMargin_of_grade(0.0);
+            marksRangeOfGrades.add(marksRangeOfE);
+
+            marksRangeOfCourseRepo.saveAll(marksRangeOfGrades);
 
             courseRepo.save(insertOneCourse);
             responseDTO.setCode(VarList.RIP_SUCCESS);
@@ -380,7 +380,8 @@ public class CourseService {
             responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
             responseDTO.setContent(null);
             responseDTO.setMessage("Not Successfull!");
-        }else {
+        }else
+        {
             for (MarksRangeOfGrade ele : marksRangeOfGrades)
             {
                 MarksRangeOfClassDTO element = modelMapper.map(ele, MarksRangeOfClassDTO.class);
