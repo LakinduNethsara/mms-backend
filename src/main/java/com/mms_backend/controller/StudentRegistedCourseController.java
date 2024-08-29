@@ -2,7 +2,6 @@ package com.mms_backend.controller;
 
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentRegCoursesDTO;
-import com.mms_backend.dto.StudentRegisteredCourses;
 import com.mms_backend.Util.VarList;
 import com.mms_backend.service.MarkSheetService;
 import com.mms_backend.service.StudentRegCoursesServices;
@@ -73,7 +72,7 @@ public class StudentRegistedCourseController
         }
     }
     @PostMapping("insert_allRegisteredStudents")
-    public ResponseEntity insert_allRegisteredStudents(@RequestBody List<StudentRegisteredCourses> list){
+    public ResponseEntity insert_allRegisteredStudents(@RequestBody List<StudentRegCoursesDTO> list){
         ResponseDTO AllStudents = studentRegCoursesServices.insertAllStudents(list);
         if (AllStudents.getCode().equals(VarList.RIP_SUCCESS)){
             return new ResponseEntity(AllStudents,HttpStatus.CREATED);
