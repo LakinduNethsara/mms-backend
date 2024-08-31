@@ -33,7 +33,7 @@ public class EndSemesterCalculationService
         for(StudentRegCourses student:list)
         {
             //calculate ESA for student
-            if(student.getRepeat()==0)
+            if(student.getIs_repeat()==0)
             {
                 //calculate ESA for proper student
                 for(EvaluationCriteria item:evaluationCriteriaList)

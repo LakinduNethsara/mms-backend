@@ -21,7 +21,5 @@ public class StudentRegCourses
 
     private String academic_year;
 
-
-    @Column(name = "is_repeat")
-    private int repeat;
+    private int is_repeat;
 }
