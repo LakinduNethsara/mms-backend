@@ -126,7 +126,7 @@ public class CACalculationService {
             System.out.println("student_id :" + student_id);
 
 
-            repeatVal = studentRegCoursesDTO.getRepeat(); //get reap value
+            repeatVal = studentRegCoursesDTO.getIs_repeat(); //get reap value
             String student_CA_Eligibility = "";
             System.out.println(repeatVal);
 
