@@ -3,7 +3,6 @@ package com.mms_backend.service;
 import com.mms_backend.dto.RegStudentsObject;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentRegCoursesDTO;
-import com.mms_backend.dto.StudentRegisteredCourses;
 import com.mms_backend.Util.VarList;
 import com.mms_backend.repository.StudentRegCoursesRepo;
 import com.mms_backend.entity.StudentRegCourses;
@@ -77,7 +76,7 @@ public class StudentRegCoursesServices
         return responseDTO;
     }
 
-    public ResponseDTO insertAllStudents(List<StudentRegisteredCourses> list)
+    public ResponseDTO insertAllStudents(List<StudentRegCoursesDTO> list)
     {
         ResponseDTO responseDTO=new ResponseDTO();
         List<StudentRegCourses> list1=modelMapper.map(list,new TypeToken<ArrayList<StudentRegCourses>>(){}.getType());
