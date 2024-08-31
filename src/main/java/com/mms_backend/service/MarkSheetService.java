@@ -156,7 +156,7 @@ public class MarkSheetService
             newstudent.setCourse_id(course_id);
             newstudent.setCa(caMarks);
             newstudent.setEnd(endMarks);
-            newstudent.setRepeat(student.getRepeat());
+            newstudent.setRepeat(student.getIs_repeat());
 
 
 

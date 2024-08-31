@@ -5,6 +5,7 @@ import com.mms_backend.dto.*;
 import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Assigncertifylecturer;
 import com.mms_backend.entity.Marks_approved_log;
+import com.mms_backend.entity.NotificationsEntity;
 import com.mms_backend.repository.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -64,9 +65,7 @@ public class ApprovalLevelService {
             responseDTO.setContent(marksApprovedLogDTO);
             try {
                 MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
-                mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
-                message = "Dear Sir/Madam,\n" +
-                        "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id()+ " has been sent for approval. ";
+                message = "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +"-"+marksApprovedLogDTO.getDepartment_id()+" Department " +" has been sent for your approval. ";
 
 
                 if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("course_coordinator")) {
@@ -75,12 +74,13 @@ public class ApprovalLevelService {
                     notificationsRepo.updateNotificationState(marksApprovedLogDTO.getCourse_id());
 
                 } else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer")) {
-                    department = courseRepo.getDepartment(marksApprovedLogDTO.getDepartment_id());
-                    email = userRepo.getEmail(department, marksApprovedLogDTO.getApproval_level());}
+                    department = courseRepo.getDepartment(marksApprovedLogDTO.getCourse_id());
+                    email = userRepo.getEmail(department, "hod");
+                    System.out.println(department+email);
+                }
                 else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("HOD")) {
-                    email = userRepo.getEmailByRole("AR");
-                    message = "Dear Sir/Madam,\n" +
-                            "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id() +marksApprovedLogDTO.getDepartment_id() + " has been published from the department. ";
+                    email = userRepo.getEmailByRole("ar");
+                    message = "Marks Return Sheet of " + marksApprovedLogDTO.getCourse_id()+"-" +marksApprovedLogDTO.getDepartment_id()+" Department " + " has been published from the department. ";
                 }
 
                 mailDetailsDTO.setMessage(message);
@@ -91,7 +91,7 @@ public class ApprovalLevelService {
 
                 try {
                     // Call the mail server service method
-                   mailServerService.sendMail(mailDetailsDTO);
+                   mailServerService.sendEmail(mailDetailsDTO);
                 } catch (Exception e) {
                     System.out.println("Error sending email: " + e.getMessage());
                 }
@@ -104,9 +104,9 @@ public class ApprovalLevelService {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
 
-            if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer")) {
-                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
-            }
+//            if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("lecturer")) {
+//                assignCertifyLecturer.returningResultSheet(marksApprovedLogDTO.getCourse_id(),marksApprovedLogDTO.getDepartment_id());
+//            }
 
         } catch (RuntimeException e) {
             responseDTO.setCode(VarList.RIP_ERROR);
@@ -142,25 +142,20 @@ public class ApprovalLevelService {
 
 
             MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
-            mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
+
             mailDetailsDTO.setToMail(courseCoordinatorRepo.getCourseCoordinatorEmail(marksApprovedLogDTO.getCourse_id()));
             mailDetailsDTO.setSubject("Returning Marks Return Sheet - "+marksApprovedLogDTO.getCourse_id());
             // Fetch notifications from the database
-            List<Object[]> notifications = notificationsRepo.getReturningReasons(marksApprovedLogDTO.getCourse_id());
+            List<NotificationsEntity> notifications = notificationsRepo.getReturningReasons(marksApprovedLogDTO.getCourse_id());
+            mailDetailsDTO.setNotificationsDTOList(notifications);
 
             // Construct the email message
-            StringBuilder message = new StringBuilder("Dear Sir/Madam,\n");
-            message.append("The Marks Return Sheet for Course code ").append(marksApprovedLogDTO.getCourse_id()).append(" has been sent for the following corrections:\n\n Student ID\t\tReason\n");
-
-            for (Object[] notification : notifications) {
-                String studentId = (String) notification[0];
-                String remark = (String) notification[1];
-                message.append(studentId).append("\t").append(remark).append("\n");
-            }
+            StringBuilder message = new StringBuilder("");
+            message.append("The Marks Return Sheet for Course code ").append(marksApprovedLogDTO.getCourse_id()).append(" has been returned for the following corrections.");
             mailDetailsDTO.setMessage(String.valueOf(message));
             try {
                 // Call the mail server service method
-                mailServerService.sendMail(mailDetailsDTO);
+                mailServerService.sendEmail(mailDetailsDTO);
             } catch (Exception e) {
                 System.out.println("Error sending email: " + e.getMessage());
             }
@@ -185,30 +180,28 @@ public class ApprovalLevelService {
             responseDTO.setContent(null);
 
             MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
-            mailDetailsDTO.setFromMail("ganidusahan@gmail.com");
-            mailDetailsDTO.setSubject("Returning Marks Return Sheet - "+marksApprovedLogDTO.getCourse_id());
+            mailDetailsDTO.setSubject("Marks Return Sheet - Level : "+marksApprovedLogDTO.getLevel()+" Semester : "+marksApprovedLogDTO.getSemester()+" Department of "+marksApprovedLogDTO.getDepartment_id()+" Academic Year :"+marksApprovedLogDTO.getAcademic_year());
 
             String email = null;
-            message = "Dear Sir/Madam,\n" +
-                    marksApprovedLogDTO.getDepartment_id() +marksApprovedLogDTO.getLevel() + marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for approval. ";
-
+            message = "Department of "+marksApprovedLogDTO.getDepartment_id() +", Level "+marksApprovedLogDTO.getLevel() +", Semester "+ marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for approval. ";
+            System.out.println(marksApprovedLogDTO.getApproval_level());
             if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("RB")) {
-                email = userRepo.getEmailByRole("AR");
+                email = userRepo.getEmailByRole("ar");
 
             } else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("AR")) {
-                email = userRepo.getEmailByRole("Dean");
+                email = userRepo.getEmailByRole("dean");
             }
-            else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("VC")) {
-                email = userRepo.getEmailByRole("AR");
-                message="Dear Sir/Madam,\n" +
-                        marksApprovedLogDTO.getDepartment_id() +marksApprovedLogDTO.getLevel() + marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for  Results publishing. ";
+            else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("Dean")) {
+                email = userRepo.getEmailByRole("ar");
+                message="Department of "+marksApprovedLogDTO.getDepartment_id() +", Level "+marksApprovedLogDTO.getLevel() +", Semester "+ marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for  Results publishing. ";
             }
             mailDetailsDTO.setMessage(String.valueOf(message));
             mailDetailsDTO.setToMail(email);
 
             try {
+
                 // Call the mail server service method
-                mailServerService.sendMail(mailDetailsDTO);
+                mailServerService.sendEmail(mailDetailsDTO);
             } catch (Exception e) {
                 System.out.println("Error sending email: " + e.getMessage());
             }

@@ -18,7 +18,7 @@ public interface StudentMarksRepo extends JpaRepository<StudentMarks,Integer> {
             " inner join mark_approved_level on course.course_id=mark_approved_level.course_id\n" +
             " inner join courses_related_departments on course.course_id=courses_related_departments.course_id\n" +
             " inner join studentregcourses on studentregcourses.student_id=s.student_id\n" +
-            " where course.level=:level and course.semester=:semester and mark_approved_level.approval_level=:approved_level and courses_related_departments.department_id=:department_id and mark_approved_level.academic_year=studentregcourses.academic_year and studentregcourses.repeat=:repeat")
+            " where course.level=:level and course.semester=:semester and mark_approved_level.approval_level=:approved_level and courses_related_departments.department_id=:department_id and mark_approved_level.academic_year=studentregcourses.academic_year and studentregcourses.is_repeat=:repeat")
     List<StudentMarks> findStudentMarksByLS(@Param("level") String level, @Param("semester") String semester,@Param("approved_level")String approved_level,@Param("department_id")String department_id,@Param("repeat")int repeat);
 
 
