@@ -21,5 +21,5 @@ public class StudentRegCourses
 
     private String academic_year;
 
-    private int repeat;
+    private int is_repeat;
 }

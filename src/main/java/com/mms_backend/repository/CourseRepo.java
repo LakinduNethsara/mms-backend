@@ -38,4 +38,7 @@ public interface CourseRepo extends JpaRepository<CourseEntity,Integer> {
     @Query(nativeQuery = true,value = "select a.level , a.semester, a.course_id ,a.course_name ,b.department_id, b.academic_year from course a inner join mark_approved_level b on a.course_id=b.course_id where b.department_id=:department_id and approval_level='lecturer'")
     List<Object[]> getHODApprovalLevelCourse(@Param("department_id")String department_id);
 
+    @Query(nativeQuery = true,value = "select * from course where course_id not in (select course_id from coursecoordinator where academic_year=:academic_year ) and semester=:semester;")
+    List<CourseEntity> getAllCIDsNotAssignToLecOnCurrentAcademicYear(@Param("academic_year")String academic_year,@Param("semester")String semester);
+
 }

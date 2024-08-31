@@ -2,7 +2,6 @@ package com.mms_backend.service;
 
 import com.mms_backend.Util.VarList;
 import com.mms_backend.dto.CourseDTO;
-import com.mms_backend.dto.CourseNameIdDTO;
 import com.mms_backend.dto.MarksRangeOfClassDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.entity.AR.AcademicYearDetails;
@@ -17,7 +16,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -319,14 +317,16 @@ public class CourseService {
         return responseDTO;
     }
 
-    public ResponseDTO getAllCIDs(){
+    public ResponseDTO getAllCIDs(String academic_year,String semester){
         ArrayList<String> allCIDs = new ArrayList<>();
-        List<CourseEntity> list=courseRepo.findAll();
+        List<CourseEntity> list = courseRepo.getAllCIDsNotAssignToLecOnCurrentAcademicYear(academic_year,semester);
         if(!list.isEmpty())
         {
             for (CourseEntity courseEntity : list) {
                 allCIDs.add(courseEntity.getCourse_id());
+                System.out.println(courseEntity.getCourse_id());
             }
+            System.out.println(list);
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(allCIDs);
             responseDTO.setMessage("get all Course IDs");

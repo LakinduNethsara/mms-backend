@@ -15,13 +15,13 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     @Query(nativeQuery = true,value = "select * from user where user_id=:student_id")
     User getStudentDetailsByStudentID(@Param("student_id") String student_id);
 
-    @Query(nativeQuery = true,value = "select * from user where role='lecturer' and department_id=:department_id")
+    @Query(nativeQuery = true,value = "select * from user where role='lecturer' and department_id=:department_id and is_deleted=false")
     List<User> findAllLecturersOfDepartment(@Param("department_id") String department_id);
 
-    @Query(nativeQuery = true,value = "select * from user where role NOT IN ('student')")
+    @Query(nativeQuery = true,value = "select * from user where role NOT IN ('student') and is_deleted=false order by id desc")
     List<User> findStaff();
 
-    @Query(nativeQuery = true,value = "select * from user where role='lecturer'")
+    @Query(nativeQuery = true,value = "select * from user where role='lecturer' and is_deleted=false order by id desc")
     List<User> findAllLecturers();
 
     @Query(nativeQuery = true,value = "select email from user where department_id=:department_id and role=:role")

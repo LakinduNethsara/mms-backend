@@ -1,12 +1,10 @@
 package com.mms_backend.service;
 
 import com.mms_backend.entity.AR.Grade;
+import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Calculations;
 import com.mms_backend.entity.StudentRegCourses;
-import com.mms_backend.repository.CalculationsRepo;
-import com.mms_backend.repository.GradeRepo;
-import com.mms_backend.repository.StudentRegCoursesRepo;
-import com.mms_backend.repository.StudentRepo;
+import com.mms_backend.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,9 @@ public class GradeService {
     private StudentRegCoursesRepo studentRegCoursesRepo;
     @Autowired
     private CalculationsRepo calculationsRepo;
+
+    @Autowired
+    private ApprovalLevelRepo approvalLevelRepo;
 
 
     public void calculateRoundedMark(String course_id, String academic_year) {
@@ -48,9 +49,17 @@ public class GradeService {
 
                 gradeRepo.save(grade);
 
-
-
             }
+
+//            MarksApprovalLevel marksApprovalLevel = new MarksApprovalLevel();
+//            marksApprovalLevel.setCourse_id(course_id);
+//            marksApprovalLevel.setAcademic_year(academic_year);
+//            marksApprovalLevel.setApproval_level("");
+//            marksApprovalLevel.setDepartment_id("");
+//
+//                    approvalLevelRepo.save()
+
+
 
         }catch (Exception e){
             System.out.println(e.getMessage());
