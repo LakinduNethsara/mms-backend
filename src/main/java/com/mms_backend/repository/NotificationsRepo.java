@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface NotificationsRepo extends JpaRepository<NotificationsEntity,Integer>
 {
-    @Query(nativeQuery = true,value = "SELECT student_id,remark FROM scoredb.notifications where course_id=:course_id and status='send'")
-    List<Object[]> getReturningReasons(@Param("course_id") String course_id);
+    @Query(nativeQuery = true,value = "SELECT * FROM scoredb.notifications where course_id=:course_id and status='send'")
+    List<NotificationsEntity> getReturningReasons(@Param("course_id") String course_id);
 
     @Modifying
     @Query(nativeQuery = true,value = "update notifications set status='sent' where course_id=:course_id and status='send'")

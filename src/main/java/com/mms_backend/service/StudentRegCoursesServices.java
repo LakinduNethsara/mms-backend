@@ -113,7 +113,7 @@ public class StudentRegCoursesServices
         {
             RegStudentsObject regStudentsObject=new RegStudentsObject();
             regStudentsObject.setStudent_id(studentRegCourses.getStudent_id());
-            regStudentsObject.setRepeat(studentRegCourses.getRepeat());
+            regStudentsObject.setRepeat(studentRegCourses.getIs_repeat());
             list.add(regStudentsObject);
         }
         if(allstudent_list!=null)
