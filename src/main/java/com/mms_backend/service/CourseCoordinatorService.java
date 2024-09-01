@@ -53,6 +53,7 @@ public class CourseCoordinatorService {
                     lecturerCoursRegDTO.setCourse_id(courseCoordinatorDTO.getCourse_id());
                     lecturerCoursRegDTO.setUser_id(lecturer_id);
                     list.add(lecturerCoursRegDTO);
+                    System.out.println("lecturer DTO : "+list);
                     lecturerCourseRegService.addLecturersToCourse(list);
                 System.out.println(lecturer_id);
 
