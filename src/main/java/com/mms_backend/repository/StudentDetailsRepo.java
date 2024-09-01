@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface StudentDetailsRepo extends JpaRepository<User,Integer> {
 
-    @Query(nativeQuery = true,value = "select * from user where role='student'")
+    @Query(nativeQuery = true,value = "select * from user where role='student' and is_deleted=false")
     List<User> findAllStudents();
 }

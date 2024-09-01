@@ -150,9 +150,9 @@ public class CourseController {
         }
     }
 
-    @GetMapping("allcoursesids")
-    public ResponseEntity getAllCoursesIDs(){
-        ResponseDTO responses = courseService.getAllCIDs();
+    @GetMapping("allcoursesids/{academic_year}/{semester}")
+    public ResponseEntity getAllCoursesIDs(@PathVariable String academic_year,@PathVariable String semester){
+        ResponseDTO responses = courseService.getAllCIDs(academic_year,semester);;
         if(responses.getCode().equals(VarList.RIP_SUCCESS))
         {
             return new ResponseEntity(responses,HttpStatus.OK);

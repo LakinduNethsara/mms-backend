@@ -68,8 +68,8 @@ public class CACalculationService {
     private String prev_prev_MidMarks;
     private int current_mid_mark_percentage;
     private List<Calculations> marksCalculationsList=new ArrayList<>(); //create list to all students marks calculations
-    private Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
-    private Grade studentGrade = new Grade(); //create object from grade entity
+//    private Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+//    private Grade studentGrade = new Grade(); //create object from grade entity
 
 
     @Autowired
@@ -80,7 +80,9 @@ public class CACalculationService {
     public void calculateCA(String course_id) {
 
         this.course_id = course_id;          // get course id
-        singleStudentMarks.setCourse_id(course_id);  //set course id to object
+
+
+
 
         List<AcademicYearDetailsDTO> acYears = arService.getAcademicYearDetails();
         // get academic years data
@@ -89,7 +91,7 @@ public class CACalculationService {
             prev_AcademicYear=acYear.getPrevious_academic_year(); //get previous academic year
         }
 
-        singleStudentMarks.setAcademic_year(currentAcademicYear); //set academic year to object
+
 
         ResponseDTO studentRegDetails = studentRegCoursesServices.getAllStudentsByCID(course_id, currentAcademicYear);
 
@@ -120,6 +122,8 @@ public class CACalculationService {
 
         for (StudentRegCoursesDTO studentRegCoursesDTO : studentRegCoursesDTOS) {    // iterate through the list
 
+            System.out.println("-----------studentRegCoursesDTO--------- :" + studentRegCoursesDTO);
+
 
 
             student_id = studentRegCoursesDTO.getStudent_id();            // get student id
@@ -132,7 +136,7 @@ public class CACalculationService {
 
             //checking repeat value
             if (repeatVal == 1) {
-                singleStudentMarks.setStudent_id(student_id); //set student id to object
+
                 StudentMarks studentMarks= studentMarksRepo.findMarksByCS(course_id,student_id);
 
                 String ca_eligibility="";
@@ -144,6 +148,13 @@ public class CACalculationService {
 
 
                 if(ca_eligibility.equals("Eligible")){
+
+
+
+                    Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+                    singleStudentMarks.setStudent_id(student_id); //set student id to object
+
+
 
                     List<EvaluationCriteriaNameEntity> list=evaluationCriteriaNameRepo.getMCMidName(student_id,course_id,prev_AcademicYear);
 
@@ -206,7 +217,7 @@ public class CACalculationService {
 
                         singleStudentMarks.setMark(String.valueOf(current_mid_mark)); //set current mid-marks to object
 
-                        marksCalculationsList.add(singleStudentMarks); //add object to list
+//                        marksCalculationsList.add(singleStudentMarks); //add object to list
                     }
 
                     percentage_of_current_mid_mark = (calculated_old_ca_total * current_mid_mark_percentage) / 100;
@@ -217,6 +228,11 @@ public class CACalculationService {
 
                     System.out.println("calculated current mid mark as percentage : " +calculated_current_mid_mark_as_percentage);
 
+                    singleStudentMarks.setCourse_id(course_id);  //set course id to object
+                    singleStudentMarks.setAcademic_year(currentAcademicYear); //set academic year to object
+
+
+                    marksCalculationsList.add(singleStudentMarks); //add object to list
 
 
 
@@ -260,6 +276,7 @@ public class CACalculationService {
                             student_CA_Eligibility = "Not Eligible";
                         }
                     }
+                    Grade studentGrade = new Grade(); //create object from grade entity
 
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
 
@@ -289,6 +306,13 @@ public class CACalculationService {
                         List<MarksEntity> currentCAMarks = marksRepo.getCurrentCAByStuIDCourseID_AY(student_id,course_id,currentAcademicYear,ev_ID); //getting all CA's for calculation
                         List<String> getDetailsAboutMIDFromATL = assessmentTypeListRepo.findStudentMarksByCourseID(student_id,course_id,currentAcademicYear,ev_ID); //getting all details about mid from assessment type list
 
+                        String assessmentTypeName ="";
+                        for (String s : getDetailsAboutMIDFromATL) {
+                            if (s != null && !s.isEmpty() ) {
+                                assessmentTypeName = s;
+                            }
+                        }
+
                         String CA_Sum = ""; //initialization CA sum
                         String CA_Percentage = ""; //initialization CA percentage
 
@@ -299,7 +323,7 @@ public class CACalculationService {
                             if (currentCAMark.getAssignment_score().equals("AB"))
                             {
                                 CA_Mark.add(0.0); //add all CA marks to list
-                                if (ev.getAssessment_type().equals(getDetailsAboutMIDFromATL.get(0)))
+                                if (ev.getAssessment_type().equals(assessmentTypeName))
                                 {
                                     student_CA_Eligibility = "Not Eligible";
                                 }
@@ -330,6 +354,8 @@ public class CACalculationService {
                         sumOfCAMarks += Double.parseDouble(CA_Percentage); //sum of CA marks
 
 
+                        Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+
                         singleStudentMarks.setEvaluation_criteria_id(ev_ID); //set evaluation criteria id to object
                         singleStudentMarks.setMark(String.valueOf(AVG_CA)); //set CA marks to object
                         singleStudentMarks.setPercentage(CA_Percentage); //set percentage of CA marks to object
@@ -346,6 +372,8 @@ public class CACalculationService {
                         student_CA_Eligibility = "Not Eligible";
                     }
 
+                    Grade studentGrade = new Grade(); //create object from grade entity
+
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
 
                     studentGrade.setStudent_id(student_id);
@@ -359,9 +387,18 @@ public class CACalculationService {
                 }
             }
             else {
-                singleStudentMarks.setStudent_id(student_id); //set student id to object
+
+//                Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+
+//                singleStudentMarks.setStudent_id(student_id); //set student id to object
+
+                System.out.println("----student-----" +student_id);
+
+//                System.out.println("---------" +course_id);
                 List<EvaluationCriteria> getEV_details_for_EVID = evaluationCriteriaRepo.getEvaluationCriteriaByStudentIDCourseID(student_id,course_id,currentAcademicYear); //getting all evaluation criteria details for calculation
                 double sumOfCAMarks = 0;
+
+                System.out.println("---------" +getEV_details_for_EVID);
 
                 for (EvaluationCriteria ev : getEV_details_for_EVID) {
 
@@ -372,6 +409,15 @@ public class CACalculationService {
 
                     List<MarksEntity> currentCAMarks = marksRepo.getCurrentCAByStuIDCourseID_AY(student_id,course_id,currentAcademicYear,ev_ID); //getting all CA's for calculation
                     List<String> getDetailsAboutMIDFromATL = assessmentTypeListRepo.findStudentMarksByCourseID(student_id,course_id,currentAcademicYear,ev_ID); //getting all details about mid from assessment type list
+                    System.out.println("------------getDetailsAboutMIDFromATL--------------- : "+getDetailsAboutMIDFromATL);
+                    String assessmentTypeName ="";
+                    for (String s : getDetailsAboutMIDFromATL) {
+                        if (s != null && !s.isEmpty() ) {
+                            assessmentTypeName = s;
+                        }
+                    }
+
+                    System.out.println("------------assessmentTypeName--------------- : "+assessmentTypeName);
 
                     String CA_Sum = ""; //initialization CA sum
                     String CA_Percentage = ""; //initialization CA percentage
@@ -383,9 +429,11 @@ public class CACalculationService {
                         if (currentCAMark.getAssignment_score().equals("AB"))
                         {
                             CA_Mark.add(0.0); //add all CA marks to list
-                            if (ev.getAssessment_type().equals(getDetailsAboutMIDFromATL.get(0)))
+//                            if (ev.getAssessment_type().equals(getDetailsAboutMIDFromATL.get(0)))
+                            if (ev.getAssessment_type().equals(assessmentTypeName))
                             {
                                 student_CA_Eligibility = "WH";
+                                System.out.println("------------student_CA_Eligibility--------------- : "+student_CA_Eligibility);
                             }
                         }
                         else {
@@ -393,10 +441,11 @@ public class CACalculationService {
                         }
                     }
                     Collections.sort(CA_Mark, Collections.reverseOrder()); //sort the list as descending order
-
+                    System.out.println("------------CA_Mark--------------- : "+CA_Mark);
                     //get CA marks as taken
                     ArrayList<Double> CA_Take_Marks = new ArrayList<>(); //create list to store CA marks
                     for (int i = 0; i < no_take; i++) {
+                        System.out.println("------------CA_Mark.get(i)--------------- : "+CA_Mark.get(i));
                         CA_Take_Marks.add(CA_Mark.get(i)); //add CA marks to list
                     }
 
@@ -405,13 +454,17 @@ public class CACalculationService {
                     for (Double CA_Take_Mark : CA_Take_Marks) {
                         sum += CA_Take_Mark; //sum of CA marks
                     }
+                    System.out.println("------------sum--------------- : "+sum);
 
                     //AVG of CA marks
                     double AVG_CA = sum / no_take; //AVG of CA marks
                     CA_Sum = String.valueOf(sum); //set sum of CA marks to string
                     CA_Percentage = String.valueOf((AVG_CA * no_presentage) / 100); //set percentage of CA marks to string
+                    System.out.println("------------CA_Percentage--------------- : "+CA_Percentage);
 
                     sumOfCAMarks += Double.parseDouble(CA_Percentage); //sum of CA marks
+
+                    Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
 
                     singleStudentMarks.setEvaluation_criteria_id(ev_ID); //set evaluation criteria id to object
                     singleStudentMarks.setCourse_id(course_id);
@@ -421,6 +474,9 @@ public class CACalculationService {
                     singleStudentMarks.setAcademic_year(currentAcademicYear);
                     marksCalculationsList.add(singleStudentMarks);
 
+                    System.out.println("------------singleStudentMarks--------------- : "+singleStudentMarks);
+                    System.out.println("---------in loop---marksCalculationsList--------------- : "+marksCalculationsList);
+
                 }
                 if (sumOfCAMarks >= ca_Eli_margin) {
                     student_CA_Eligibility = "Eligible";
@@ -428,28 +484,35 @@ public class CACalculationService {
                     student_CA_Eligibility = "Not Eligible";
                 }
 
-                studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
+                System.out.println("hi---------------");
+
 
                 String reversed_CID = new StringBuilder(course_id).reverse().toString();
 
                 char level = reversed_CID.charAt(3);
                 char semester = reversed_CID.charAt(2);
 
-                studentGrade.setStudent_id(student_id);
-                studentGrade.setCourse_id(course_id);
-                studentGrade.setLevel(String.valueOf(level));
-                studentGrade.setSemester(String.valueOf(semester));
-                studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
-                studentGrade.setCa_eligibility(student_CA_Eligibility);
+                    Grade studentGrade = new Grade(); //create object from grade entity
 
+                    studentGrade.setStudent_id(student_id);
+                    studentGrade.setCourse_id(course_id);
+                    studentGrade.setLevel(String.valueOf(level));
+                    studentGrade.setSemester(String.valueOf(semester));
+                    studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
+                    studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                System.out.println("assign value to grade"+studentGrade);
+
+                System.out.println("------student id above of save ---------"+student_id);
                 gradeRepo.save(studentGrade);
 
             }
 
         }
 
-        System.out.println("Total calculation records :" + marksCalculationsList);
+        System.out.println("Total calculation records ----------:" + marksCalculationsList);
         calculationsRepo.saveAll(marksCalculationsList);
+        System.out.println("Total calculation records ----after------:" + marksCalculationsList);
 
     }
 

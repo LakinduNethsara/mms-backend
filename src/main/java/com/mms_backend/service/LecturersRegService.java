@@ -13,9 +13,11 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -167,8 +169,10 @@ public class LecturersRegService {
             LecturersRegDTO lec=null;
             try
             {
-                 lec=modelMapper.map(lecturersRegRepo.findById(id),LecturersRegDTO.class);
-                lecturersRegRepo.deleteById(id);
+                Optional<LecturersRegEntity> lecturersRegEntity=lecturersRegRepo.findById(id);
+                 lec=modelMapper.map(lecturersRegEntity,LecturersRegDTO.class);
+                 lecturersRegEntity.get().setIs_deleted(true);
+                lecturersRegRepo.save(lecturersRegEntity.get());
                 responseDTO.setCode(VarList.RIP_SUCCESS);
                 responseDTO.setContent(lec);
                 responseDTO.setMessage("Lecturer deleted Successfully");
@@ -211,25 +215,42 @@ public class LecturersRegService {
         return responseDTO;
     }
 
-    public ResponseDTO insertALLUsersDetailsAsBulk(List<LecturersRegDTO> lecturersRegDTOList){
-        if (lecturersRegDTOList.isEmpty())
-        {
+    public ResponseDTO insertALLUsersDetailsAsBulk(List<LecturersRegDTO> lecturersRegDTOList) {
+        if (lecturersRegDTOList.isEmpty()) {
             responseDTO.setCode(VarList.RIP_ERROR);
             responseDTO.setContent(null);
             responseDTO.setMessage("Empty");
             return responseDTO;
-        }else {
-            List<LecturersRegEntity> lecturersRegEntityList = modelMapper.map(lecturersRegDTOList,new TypeToken<ArrayList<LecturersRegEntity>>(){}.getType());
+        } else {
+            List<LecturersRegEntity> lecturersRegEntityList = modelMapper.map(lecturersRegDTOList, new TypeToken<ArrayList<LecturersRegEntity>>(){}.getType());
+
+            List<LecturersRegEntity> entitiesToSave = new ArrayList<>();
+            for (LecturersRegEntity entity : lecturersRegEntityList) {
+                if (!lecturersRegRepo.existsById(entity.getId())){
+                    entitiesToSave.add(entity);
+                    responseDTO.setCode(VarList.RIP_SUCCESS);
+                    responseDTO.setContent(null);
+                    responseDTO.setMessage("Successfully saved");
+                } else {
+                    responseDTO.setCode(VarList.RIP_ERROR);
+                    responseDTO.setContent(null);
+                    responseDTO.setMessage("Duplicate user_id: " + entity.getUser_id());
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    return responseDTO;
+
+                }
+            }
+
             try {
-                lecturersRegRepo.saveAll(lecturersRegEntityList);
+                lecturersRegRepo.saveAll(entitiesToSave);
                 responseDTO.setCode(VarList.RIP_SUCCESS);
                 responseDTO.setContent(lecturersRegDTOList);
                 responseDTO.setMessage("Details have been uploaded");
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 responseDTO.setCode(VarList.RIP_ERROR);
                 responseDTO.setContent(null);
-                responseDTO.setMessage("Can not save");
+                responseDTO.setMessage("Cannot save: " + e.getMessage());
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
         }
         return responseDTO;

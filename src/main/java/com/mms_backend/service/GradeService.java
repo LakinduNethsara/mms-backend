@@ -1,7 +1,9 @@
 package com.mms_backend.service;
 
 import com.mms_backend.entity.AR.Grade;
+import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Calculations;
+import com.mms_backend.entity.CourseRelatedDeptEntity;
 import com.mms_backend.entity.MarksEntity;
 import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.repository.*;
@@ -25,6 +27,8 @@ public class GradeService {
     private MarksRepo marksRepo;
     @Autowired
     private ArMarksRepo arMarksRepo;
+    @Autowired
+    private CourseRelatedDeptRepo courseRelatedDeptRepo;
 
     public static String reduceYear(String years){
 
@@ -33,6 +37,9 @@ public class GradeService {
         int year2 = Integer.parseInt(temp_Years_part[1]) -1;
         return year1+"-"+year2;
     }
+
+    @Autowired
+    private ApprovalLevelRepo approvalLevelRepo;
 
 
     public void calculateRoundedMark(String course_id, String academic_year) {
@@ -428,6 +435,21 @@ public class GradeService {
                     }
                 }
             }
+
+            List<CourseRelatedDeptEntity> courseRelatedDeptEntityList = courseRelatedDeptRepo.getDeptByCourse(course_id);
+
+            for(CourseRelatedDeptEntity courseRelatedDeptEntity : courseRelatedDeptEntityList){
+
+                MarksApprovalLevel marksApprovalLevel = new MarksApprovalLevel();
+                marksApprovalLevel.setCourse_id(course_id);
+                marksApprovalLevel.setAcademic_year(academic_year);
+                marksApprovalLevel.setApproval_level("finalized");
+                marksApprovalLevel.setDepartment_id(courseRelatedDeptEntity.getDepartment_id());
+
+                approvalLevelRepo.save(marksApprovalLevel);
+            }
+
+
 
         }catch (Exception e){
             System.out.println(e.getMessage());
