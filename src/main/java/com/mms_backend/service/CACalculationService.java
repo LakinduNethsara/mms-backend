@@ -122,6 +122,8 @@ public class CACalculationService {
 
         for (StudentRegCoursesDTO studentRegCoursesDTO : studentRegCoursesDTOS) {    // iterate through the list
 
+            System.out.println("-----------studentRegCoursesDTO--------- :" + studentRegCoursesDTO);
+
 
 
             student_id = studentRegCoursesDTO.getStudent_id();            // get student id
@@ -499,6 +501,8 @@ public class CACalculationService {
                     studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
 
+                System.out.println("assign value to grade"+studentGrade);
+
                 System.out.println("------student id above of save ---------"+student_id);
                 gradeRepo.save(studentGrade);
 
@@ -508,6 +512,7 @@ public class CACalculationService {
 
         System.out.println("Total calculation records ----------:" + marksCalculationsList);
         calculationsRepo.saveAll(marksCalculationsList);
+        System.out.println("Total calculation records ----after------:" + marksCalculationsList);
 
     }
 

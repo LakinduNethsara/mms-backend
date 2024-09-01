@@ -3,6 +3,7 @@ package com.mms_backend.service;
 import com.mms_backend.entity.AR.Grade;
 import com.mms_backend.entity.AR.MarksApprovalLevel;
 import com.mms_backend.entity.Calculations;
+import com.mms_backend.entity.CourseRelatedDeptEntity;
 import com.mms_backend.entity.MarksEntity;
 import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.repository.*;
@@ -26,6 +27,8 @@ public class GradeService {
     private MarksRepo marksRepo;
     @Autowired
     private ArMarksRepo arMarksRepo;
+    @Autowired
+    private CourseRelatedDeptRepo courseRelatedDeptRepo;
 
     public static String reduceYear(String years){
 
@@ -433,13 +436,18 @@ public class GradeService {
                 }
             }
 
-//            MarksApprovalLevel marksApprovalLevel = new MarksApprovalLevel();
-//            marksApprovalLevel.setCourse_id(course_id);
-//            marksApprovalLevel.setAcademic_year(academic_year);
-//            marksApprovalLevel.setApproval_level("");
-//            marksApprovalLevel.setDepartment_id("");
-//
-//                    approvalLevelRepo.save()
+            List<CourseRelatedDeptEntity> courseRelatedDeptEntityList = courseRelatedDeptRepo.getDeptByCourse(course_id);
+
+            for(CourseRelatedDeptEntity courseRelatedDeptEntity : courseRelatedDeptEntityList){
+
+                MarksApprovalLevel marksApprovalLevel = new MarksApprovalLevel();
+                marksApprovalLevel.setCourse_id(course_id);
+                marksApprovalLevel.setAcademic_year(academic_year);
+                marksApprovalLevel.setApproval_level("finalized");
+                marksApprovalLevel.setDepartment_id(courseRelatedDeptEntity.getDepartment_id());
+
+                approvalLevelRepo.save(marksApprovalLevel);
+            }
 
 
 
