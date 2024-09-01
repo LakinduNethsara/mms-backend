@@ -26,8 +26,10 @@ public class GradeService {
 
     public void calculateRoundedMark(String course_id, String academic_year) {
         try {
+            //Get registered student for the course in the academic year (proper and repeat)
             List<StudentRegCourses> studentList = studentRegCoursesRepo.getAllStudentsByCID(course_id,academic_year);
 
+            //Map students
             for (StudentRegCourses student : studentList) {
 
                 Grade grade= gradeRepo.getGradeDetailsBY_SIID_CID(student.getStudent_id(),course_id);
