@@ -35,7 +35,7 @@ public class GradeService {
                 Grade grade= gradeRepo.getGradeDetailsBY_SIID_CID(student.getStudent_id(),course_id);
                 System.out.println("Grade : "+grade.getStudent_id());
 
-                List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id());
+                List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
                 double sum=0.0 ;
                 double roundedSum = 0.0 ;
                 for (Calculations mark : markList) {
