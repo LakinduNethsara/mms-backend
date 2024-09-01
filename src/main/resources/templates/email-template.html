@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<p>Dear Sir/Madam,</p>
+
+<p th:text="${message}"></p>
+
+
+<!-- Conditional display of the notifications table -->
+<div th:if="${notifications != null && !notifications.isEmpty()}">
+    <h3>Notifications:</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Reason</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each=" ${notifications}">
+            <td th:text="${notification.student_id}"></td>
+            <td th:text="${notification.remark}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>Link: <a href="http://192.248.50.155:5173">Marks Management System</a></p>
+
+<p>Best regards,</p>
+<p>Marks Management System,<br/> Faculty of Technology,<br/> University of Ruhuna.</p>
+</body>
+</html>
