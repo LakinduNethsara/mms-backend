@@ -144,6 +144,74 @@ public class GradeService {
                                     List<Calculations> mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"Mid");
 
                                     if((!ca_CalculationList.isEmpty()) && (!mid_CalculationList.isEmpty())){
+
+                                        if(grade.getCa_eligibility().equals("Eligible")){
+
+                                            for(Calculations ca_Calculation : ca_CalculationList){
+                                                sum = sum + Double.parseDouble(ca_Calculation.getPercentage());
+                                            }
+
+
+                                            for(Calculations mid_Calculation : mid_CalculationList){
+                                                sum = sum + Double.parseDouble(mid_Calculation.getPercentage());
+                                            }
+
+                                            roundedSum = Math.round(sum*100)/100.00 ;
+
+                                            grade.setTotal_final_mark(String.valueOf(sum));
+                                            grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                                            gradeRepo.save(grade);
+
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
+                    }else if (grade.getGrade().equals("E*")){
+
+                        List<Calculations> endCalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"End");
+                        List<Calculations> pre_ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"CA");
+                        List<Calculations> pre_mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"Mid");
+
+                        double sum = 0.0 ;
+                        double roundedSum = 0.0;
+//
+                        if(!endCalculationList.isEmpty()){
+
+                            for(Calculations endCalculation : endCalculationList){
+                                sum = sum + Double.parseDouble(endCalculation.getPercentage());
+                            }
+
+                            if((!pre_ca_CalculationList.isEmpty()) && (!pre_mid_CalculationList.isEmpty())){
+
+                                for(Calculations pre_mid_Calculation : pre_mid_CalculationList){
+                                    sum = sum + Double.parseDouble(pre_mid_Calculation.getPercentage());
+                                }
+
+
+                                for(Calculations pre_ca_Calculation : pre_ca_CalculationList){
+                                    sum = sum + Double.parseDouble(pre_ca_Calculation.getPercentage());
+                                }
+
+                                roundedSum = Math.round(sum*100)/100.00 ;
+
+                                grade.setTotal_final_mark(String.valueOf(sum));
+                                grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                                gradeRepo.save(grade);
+
+                            } else{
+
+                                List<Calculations> ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"CA");
+                                List<Calculations> mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"Mid");
+
+                                if((!ca_CalculationList.isEmpty()) && (!mid_CalculationList.isEmpty())){
+
+                                    if(grade.getCa_eligibility().equals("Eligible")){
+
                                         for(Calculations ca_Calculation : ca_CalculationList){
                                             sum = sum + Double.parseDouble(ca_Calculation.getPercentage());
                                         }
@@ -161,19 +229,55 @@ public class GradeService {
                                         gradeRepo.save(grade);
 
                                     }
+
                                 }
+
                             }
 
                         }
-                    }else if (grade.getGrade().equals("E*")){
+
+
+                    }else if (grade.getGrade().equals("F")){
 
                         List<Calculations> endCalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"End");
-                        List<Calculations> pre_ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"CA");
-                        List<Calculations> pre_mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"Mid");
+                        List<Calculations> ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"CA");
+                        List<Calculations> mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"Mid");
 
+
+                        double sum = 0.0 ;
+                        double roundedSum = 0.0;
+
+                        if(grade.getCa_eligibility().equals("Eligible")){
+                            if(!endCalculationList.isEmpty()){
+
+                                for(Calculations endCalculation : endCalculationList){
+                                    sum = sum + Double.parseDouble(endCalculation.getPercentage());
+                                }
+                            }
+
+                            if(!ca_CalculationList.isEmpty()){
+                                for(Calculations ca_Calculation : ca_CalculationList){
+                                    sum = sum + Double.parseDouble(ca_Calculation.getPercentage());
+                                }
+                            }
+
+                            if(!mid_CalculationList.isEmpty()){
+                                for(Calculations mid_Calculation : mid_CalculationList){
+                                    sum = sum + Double.parseDouble(mid_Calculation.getPercentage());
+                                }
+                            }
+
+                            roundedSum = Math.round(sum*100)/100.00 ;
+
+                            grade.setTotal_final_mark(String.valueOf(sum));
+                            grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                            gradeRepo.save(grade);
+
+                        }
+
+                    }else if (grade.getGrade().equals("MC")){
                         
-
-
                     }
                 }
             }
