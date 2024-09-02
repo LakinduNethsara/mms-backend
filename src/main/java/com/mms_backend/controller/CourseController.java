@@ -210,6 +210,16 @@ public class CourseController {
         }
     }
 
+    @GetMapping("getRepeatersRegCourse/{level}/{semester}/{department}/{academic_year}")
+    public ResponseEntity getRepeatersRegCourse(@PathVariable String level, @PathVariable String semester,@PathVariable String department,@PathVariable String academic_year){
+
+        ResponseDTO responseDTO = courseService.getRepeatersRegisteredCourses(level,semester,department,academic_year);
+        if (responseDTO.getCode().equals(VarList.RIP_SUCCESS)){
+            return new ResponseEntity(responseDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(responseDTO, HttpStatus.OK);
+        }
+    }
 
 
 }
