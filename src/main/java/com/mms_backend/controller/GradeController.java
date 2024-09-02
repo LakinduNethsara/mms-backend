@@ -16,4 +16,9 @@ public class GradeController {
         gradeService.calculateRoundedMark(course_id,academic_year);
     }
 
+    @GetMapping("/isFinalized/{course_id}/{academic_year}")
+    public boolean isFinalized(@PathVariable String course_id,@PathVariable String academic_year) {
+        return gradeService.isFinalized(course_id,academic_year);
+    }
+
 }

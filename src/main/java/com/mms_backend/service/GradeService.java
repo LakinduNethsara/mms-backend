@@ -455,4 +455,14 @@ public class GradeService {
             System.out.println(e.getMessage());
         }
     }
+
+
+    public boolean isFinalized (String course_id, String academic_year){
+        List<Grade> markList = gradeRepo.isFinalized(course_id,academic_year);
+        if(markList.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
