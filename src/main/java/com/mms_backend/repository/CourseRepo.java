@@ -41,4 +41,10 @@ public interface CourseRepo extends JpaRepository<CourseEntity,Integer> {
     @Query(nativeQuery = true,value = "select * from course where course_id not in (select course_id from coursecoordinator where academic_year=:academic_year ) and semester=:semester;")
     List<CourseEntity> getAllCIDsNotAssignToLecOnCurrentAcademicYear(@Param("academic_year")String academic_year,@Param("semester")String semester);
 
+    @Query(nativeQuery = true,value = "SELECT distinct a.course_id , a.course_name FROM scoredb.course a\n" +
+            "inner join courses_related_departments c on a.course_id=c.course_id\n" +
+            " inner join studentregcourses b on a.course_id=b.course_id\n" +
+            " where a.level=:level and a.semester=:semester and c.department_id=:department and b.is_repeat=1 and b.academic_year=:academic_year")
+    List<Object[]> getRepeatersRegidteredCourses (@Param("level") String level,@Param("semester") String semester,@Param("department") String department,@Param("academic_year") String academic_year);
+
 }

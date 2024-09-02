@@ -414,6 +414,34 @@ public class CourseService {
         return responseDTO;
     }
 
+    public ResponseDTO getRepeatersRegisteredCourses(String level,String semester,String department,String academic_year){
+        try
+        {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            List<Object[]> list = courseRepo.getRepeatersRegidteredCourses(level,semester,department,academic_year);
+
+            if(!list.isEmpty())
+            {
+                responseDTO.setCode(VarList.RIP_SUCCESS);
+                responseDTO.setContent(list);
+                responseDTO.setMessage("Successful");
+            }
+            else
+            {
+                responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+                responseDTO.setContent(null);
+                responseDTO.setMessage("No data found");
+            }
+        }
+        catch (Exception e)
+        {
+            responseDTO.setCode(VarList.RIP_ERROR);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
+        }
+        return responseDTO;
+    }
+
 
 
 }

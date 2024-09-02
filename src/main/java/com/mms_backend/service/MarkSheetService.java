@@ -38,6 +38,9 @@ public class MarkSheetService
 
     @Autowired
     private StudentRegCoursesRepo studentRegCoursesRepo;
+
+    @Autowired
+    private FinalSelectionRepo finalSelectionRepo;
     List<EvaluationCriteria> evaluationCriteriaList;
     List<ObjectDTO> dataList=new ArrayList<>();
     List<MarksEntity> marksEntityList;
@@ -183,22 +186,60 @@ public class MarkSheetService
         return list;
     }
 
-    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog,String academic_year)
-    {
-        try
-        {
-            for (ObjectDTO object:studentData.getEnd()) {
-                if(object.getDescription().equals("score"))
-                {
-                    marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey(),academic_year);
+    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog, String academicYear) {
+        double firstMark = 0;
+        double secondMark = 0;
 
+        try {
+            for (ObjectDTO object : studentData.getEnd()) {
+                if ("score".equals(object.getDescription())) {
+                    if ("1st Marking".equalsIgnoreCase(object.getKey()) ||
+                            "2nd Marking".equalsIgnoreCase(object.getKey()) ||
+                            "Final Marks".equalsIgnoreCase(object.getKey())) {
+
+                        String selected = finalSelectionRepo.getSelected(studentData.getCourse_id(), academicYear);
+                        System.out.println("Selected Criteria: " + selected);
+
+                        if ("1st Marking".equalsIgnoreCase(object.getKey())) {
+
+                            marksRepo.updateEndMarks(object.getValue(), studentData.getStudent_id(),
+                                    studentData.getCourse_id(), object.getKey(), academicYear);
+                            firstMark = Double.parseDouble(object.getValue());
+                            System.out.println(object.getKey() + ": " + firstMark);
+
+                            if ("1st Marking".equalsIgnoreCase(selected)) {
+                                marksRepo.updateEndMarks(String.valueOf(firstMark), studentData.getStudent_id(),
+                                        studentData.getCourse_id(), "Final Marks", academicYear);
+                            }
+                        } else if ("2nd Marking".equalsIgnoreCase(object.getKey())) {
+                            secondMark = Double.parseDouble(object.getValue());
+                            System.out.println(object.getKey() + ": " + secondMark);
+
+                            marksRepo.updateEndMarks(object.getValue(), studentData.getStudent_id(),
+                                    studentData.getCourse_id(), object.getKey(), academicYear);
+
+                            if ("2nd Marking".equalsIgnoreCase(selected)) {
+                                marksRepo.updateEndMarks(String.valueOf(secondMark), studentData.getStudent_id(),
+                                        studentData.getCourse_id(), "Final Marks", academicYear);
+                            }
+                        } else if ("Final Marks".equalsIgnoreCase(object.getKey())) {
+                            if ("average".equalsIgnoreCase(selected)) {
+                                double averageMark = (firstMark + secondMark) / 2;
+                                marksRepo.updateEndMarks(String.valueOf(averageMark), studentData.getStudent_id(),
+                                        studentData.getCourse_id(), "Final Marks", academicYear);
+                            }
+                        }
+
+                    } else {
+                        marksRepo.updateEndMarks(object.getValue(), studentData.getStudent_id(),
+                                studentData.getCourse_id(), object.getKey(), academicYear);
+                    }
                 }
             }
-            marksEditLogRepo.save(modelMapper.map(marksEditLog,Marks_edit_log.class));
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+            marksEditLogRepo.save(modelMapper.map(marksEditLog, Marks_edit_log.class));
+        } catch (Exception e) {
+            System.err.println("Error updating marks: " + e.getMessage());
         }
-
     }
+
 }
