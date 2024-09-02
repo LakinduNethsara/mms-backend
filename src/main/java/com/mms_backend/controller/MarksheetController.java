@@ -32,7 +32,10 @@ public class MarksheetController
     @PutMapping("updateMarks")
     public void updateStudentMarks(@RequestBody UpdateMarksDTO updateMarksDTO)
     {
-        markSheetService.updateEndMarks(updateMarksDTO.getStudentData(),updateMarksDTO.getMarksEditLogDTO());
+        System.out.println(
+                updateMarksDTO
+        );
+        markSheetService.updateEndMarks(updateMarksDTO.getStudentData(),updateMarksDTO.getMarksEditLogDTO(),updateMarksDTO.getAcademic_year());
     }
 
 

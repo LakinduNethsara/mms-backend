@@ -183,14 +183,14 @@ public class MarkSheetService
         return list;
     }
 
-    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog)
+    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog,String academic_year)
     {
         try
         {
             for (ObjectDTO object:studentData.getEnd()) {
                 if(object.getDescription().equals("score"))
                 {
-                    marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey());
+                    marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey(),academic_year);
 
                 }
             }
