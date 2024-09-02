@@ -3,6 +3,8 @@ package com.mms_backend.service;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.dto.StudentMarksDTO;
 import com.mms_backend.Util.VarList;
+import com.mms_backend.entity.Marks_edit_log;
+import com.mms_backend.repository.MarksEditLogRepo;
 import com.mms_backend.repository.StudentMarksRepo;
 import com.mms_backend.entity.StudentMarks;
 import jakarta.transaction.Transactional;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +29,9 @@ public class StudentMarksService
 
     @Autowired
     private ResponseDTO responseDTO;
+
+    @Autowired
+    private MarksEditLogRepo marksEditLogRepo;
 
  public ResponseDTO  findStudentMarksByLevelSem(String level, String sem)
     {
@@ -150,6 +156,58 @@ public class StudentMarksService
             responseDTO.setCode(VarList.RIP_ERROR);
             responseDTO.setContent(null);
             responseDTO.setMessage("Successfull");
+        }
+        return responseDTO;
+    }
+
+    public ResponseDTO updateAGrade(String student_id, String course_id, String newgrade, String reason)
+    {
+        StudentMarks studentMarks=studentMarksRepo.findMarksByCS(course_id,student_id);
+
+        if(studentMarks==null)
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
+        }
+        else
+        {
+            Marks_edit_log marksEditLog=new Marks_edit_log();
+            marksEditLog.setStudent_id(student_id);
+            marksEditLog.setCurrent_mark(newgrade);
+            marksEditLog.setCourse_id(course_id);
+            marksEditLog.setPre_mark(studentMarks.getGrade());
+            marksEditLog.setType("Grade");
+            marksEditLog.setReason(reason);
+            marksEditLog.setDate_time(new Date());
+            marksEditLogRepo.save(marksEditLog);
+            studentMarks.setGrade(newgrade);
+            studentMarksRepo.save(studentMarks);
+
+
+
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(studentMarks);
+            responseDTO.setMessage("Updated");
+        }
+        return responseDTO;
+    }
+
+
+    public ResponseDTO getEditLogs(String course_id,String student_id)
+    {
+        List<Marks_edit_log> marksEditLog=marksEditLogRepo.getEditLogsforaStudentCourse(course_id,student_id);
+        if(marksEditLog.isEmpty())
+        {
+            responseDTO.setCode(VarList.RIP_NO_DATA_FOUND);
+            responseDTO.setContent(null);
+            responseDTO.setMessage("No data found");
+        }
+        else
+        {
+            responseDTO.setCode(VarList.RIP_SUCCESS);
+            responseDTO.setContent(marksEditLog);
+            responseDTO.setMessage("Data found");
         }
         return responseDTO;
     }

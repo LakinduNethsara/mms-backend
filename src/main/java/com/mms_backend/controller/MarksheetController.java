@@ -17,22 +17,25 @@ public class MarksheetController
     @Autowired
     MarkSheetService markSheetService;
 
-    @GetMapping("getMarks/{course_id}/{type}/{academicYear}")
-    public List<StudentData> getMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear)
+    @GetMapping("getMarks/{course_id}/{type}/{academicYear}/{department}")
+    public List<StudentData> getMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear,@PathVariable String department)
     {
-        return markSheetService.getData(course_id,type,academicYear);
+        return markSheetService.getData(course_id,type,academicYear,department);
     }
 
-    @GetMapping("getStudentMarks/{course_id}/{type}/{academicYear}")
-    public List<StudentData> getStudentMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear)
+    @GetMapping("getStudentMarks/{course_id}/{type}/{academicYear}/{department}")
+    public List<StudentData> getStudentMarks(@PathVariable String course_id ,@PathVariable int type,@PathVariable String academicYear,@PathVariable String department)
     {
-        return markSheetService.getData(course_id,type,academicYear);
+        return markSheetService.getData(course_id,type,academicYear,department);
     }
 
     @PutMapping("updateMarks")
     public void updateStudentMarks(@RequestBody UpdateMarksDTO updateMarksDTO)
     {
-        markSheetService.updateEndMarks(updateMarksDTO.getStudentData(),updateMarksDTO.getMarksEditLogDTO());
+        System.out.println(
+                updateMarksDTO
+        );
+        markSheetService.updateEndMarks(updateMarksDTO.getStudentData(),updateMarksDTO.getMarksEditLogDTO(),updateMarksDTO.getAcademic_year());
     }
 
 

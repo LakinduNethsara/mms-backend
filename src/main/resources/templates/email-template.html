@@ -19,7 +19,6 @@
 
 <p th:text="${message}"></p>
 
-
 <!-- Conditional display of the notifications table -->
 <div th:if="${notifications != null && !notifications.isEmpty()}">
     <h3>Notifications:</h3>
@@ -31,7 +30,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each=" ${notifications}">
+        <!-- Loop through each notification -->
+        <tr th:each="notification : ${notifications}">
             <td th:text="${notification.student_id}"></td>
             <td th:text="${notification.remark}"></td>
         </tr>

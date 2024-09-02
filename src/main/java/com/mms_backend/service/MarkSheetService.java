@@ -75,19 +75,19 @@ public class MarkSheetService
     }
 
 
-    public void getStudentsByCourseCode(String course_id,int type,String academicYear)
+    public void getStudentsByCourseCode(String course_id,int type,String academicYear,String department)
     {
-        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type,academicYear);
+        studentRegCoursesList=studentRegCoursesRepo.getStudentsbyCourseCodeandRepeat(course_id,type,academicYear,department);
     }
 
-    public List<StudentData> getData(String course_id,int type,String academicYear) {
+    public List<StudentData> getData(String course_id,int type,String academicYear,String department) {
 
         List<StudentData> list=new ArrayList<>();
         getEvaluationCriteria(course_id);
         getAllScoreByCourseId(course_id,academicYear);
         getMarksCalculations(course_id,academicYear);
         getMarksbyC(course_id,academicYear);
-        getStudentsByCourseCode(course_id,type,academicYear);
+        getStudentsByCourseCode(course_id,type,academicYear,department);
 
         for (StudentRegCourses student : studentRegCoursesList) {
             List<ObjectDTO> caMarks = new ArrayList<>();
@@ -183,14 +183,14 @@ public class MarkSheetService
         return list;
     }
 
-    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog)
+    public void updateEndMarks(StudentData studentData, MarksEditLogDTO marksEditLog,String academic_year)
     {
         try
         {
             for (ObjectDTO object:studentData.getEnd()) {
                 if(object.getDescription().equals("score"))
                 {
-                    marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey());
+                    marksRepo.updateEndMarks(object.getValue(),studentData.getStudent_id(),studentData.getCourse_id(),object.getKey(),academic_year);
 
                 }
             }

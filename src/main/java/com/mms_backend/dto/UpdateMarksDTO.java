@@ -12,4 +12,5 @@ public class UpdateMarksDTO
 {
     private StudentData studentData;
     private MarksEditLogDTO marksEditLogDTO;
+    private String academic_year;
 }
