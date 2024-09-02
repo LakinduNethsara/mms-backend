@@ -167,6 +167,44 @@ public class CourseService {
 
             List<MarksRangeOfGrade> marksRangeOfGrades=new ArrayList<>();
 
+
+            if (courseDTO.getCourse_name().equals("Industrial Training") || courseDTO.getCourse_id().equals("BST3216") || courseDTO.getCourse_id().equals("ICT4225") || courseDTO.getCourse_id().equals("ENT3216")){
+
+                MarksRangeOfGrade marksRangeOfH = new MarksRangeOfGrade();
+                marksRangeOfH.setCourse_id(courseDTO.getCourse_id());
+                marksRangeOfH.setAcademic_year(currentAY);
+                marksRangeOfH.setGrade("H");
+                marksRangeOfH.setMargin_of_grade(64.45);
+                marksRangeOfGrades.add(marksRangeOfH);
+
+                MarksRangeOfGrade marksRangeOfM = new MarksRangeOfGrade();
+                marksRangeOfM.setCourse_id(courseDTO.getCourse_id());
+                marksRangeOfM.setAcademic_year(currentAY);
+                marksRangeOfM.setGrade("M");
+                marksRangeOfM.setMargin_of_grade(54.45);
+                marksRangeOfGrades.add(marksRangeOfM);
+
+                MarksRangeOfGrade marksRangeOfS = new MarksRangeOfGrade();
+                marksRangeOfS.setCourse_id(courseDTO.getCourse_id());
+                marksRangeOfS.setAcademic_year(currentAY);
+                marksRangeOfS.setGrade("S");
+                marksRangeOfS.setMargin_of_grade(39.45);
+                marksRangeOfGrades.add(marksRangeOfS);
+
+
+                MarksRangeOfGrade marksRangeOfF = new MarksRangeOfGrade();
+                marksRangeOfF.setCourse_id(courseDTO.getCourse_id());
+                marksRangeOfF.setAcademic_year(currentAY);
+                marksRangeOfF.setGrade("F");
+                marksRangeOfF.setMargin_of_grade(0);
+                marksRangeOfGrades.add(marksRangeOfF);
+
+
+            }else {
+
+
+
+
             MarksRangeOfGrade marksRangeOfAPlus = new MarksRangeOfGrade();
             marksRangeOfAPlus.setCourse_id(courseDTO.getCourse_id());
             marksRangeOfAPlus.setAcademic_year(currentAY);
@@ -251,6 +289,7 @@ public class CourseService {
             marksRangeOfE.setMargin_of_grade(0.0);
             marksRangeOfGrades.add(marksRangeOfE);
 
+            }
             marksRangeOfCourseRepo.saveAll(marksRangeOfGrades);
 
             courseRepo.save(insertOneCourse);
