@@ -106,4 +106,28 @@ public class StudentMarksController
         else
             return new ResponseEntity(response,HttpStatus.OK);
     }
+
+    @PutMapping("updateAGrade/{student_id}/{course_id}/{newgrade}/{reason}")
+    public ResponseEntity updateAGrade(@PathVariable String student_id,@PathVariable String course_id,@PathVariable String newgrade,@PathVariable String reason)
+    {
+        ResponseDTO response=studentMarksService.updateAGrade(student_id,course_id,newgrade,reason);
+        if(response.getCode().equals(VarList.RIP_NO_DATA_FOUND))
+        {
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/getEditLogs/{course_id}/{student_id}")
+    public ResponseEntity getEditLogs(@PathVariable String course_id,@PathVariable String student_id)
+    {
+        ResponseDTO response=studentMarksService.getEditLogs(course_id,student_id);
+        if(response.getCode().equals(VarList.RIP_NO_DATA_FOUND))
+        {
+            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity(response,HttpStatus.OK);
+    }
 }
