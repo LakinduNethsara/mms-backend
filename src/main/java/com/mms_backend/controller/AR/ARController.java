@@ -312,6 +312,15 @@ public class ARController {
          */
     }
 
+    @PutMapping("/updateAcademicYearDetailsBySA")
+    public void updateAcademicYearDetailsBySA(@RequestBody AcademicYearDetailsDTO academicYearDetailsDTO){
+        arService.updateAcademicYearDetailsByYear(academicYearDetailsDTO);
+
+        /*Usage
+            UpdateABPage
+         */
+    }
+
     /*---------------------------------------------------------------------------------------- Controller for academic_year_details table ----------------------------END-------------*/
 
 

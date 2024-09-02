@@ -18,6 +18,15 @@ public interface CalculationsRepo extends JpaRepository<Calculations,Integer>
     @Query(nativeQuery = true, value = "select markcalculations.mark, evaluationcriteria.percentage from markcalculations inner join evaluationcriteria on evaluationcriteria.evaluationcriteria_id = markcalculations.evaluation_criteria_id inner join assessment_type_list on assessment_type_list.assessment_type_name = evaluationcriteria.assessment_type where markcalculations.student_id=:student_id and markcalculations.course_id=:course_id and markcalculations.academic_year=:academic_year and assessment_type_list.ca_mid_end='CA';")
     public List<Object[]> getOLDCAByStuIDCourseID_AY(@Param("student_id") String student_id,@Param("course_id") String course_id,@Param("academic_year") String academic_year);
 
-    @Query (nativeQuery = true, value = "select markcalculations.* from markcalculations where evaluation_criteria_id in (select evaluationcriteria_id from evaluationcriteria where course_id=:course_id) and student_id=:student_id")
-    public List<Calculations> getStudentMarkPercentageList(String course_id, String student_id);
+    @Query (nativeQuery = true, value = "select markcalculations.* from markcalculations where evaluation_criteria_id in (select evaluationcriteria_id from evaluationcriteria where course_id=:course_id) and student_id=:student_id and academic_year=:academic_year")
+    public List<Calculations> getStudentMarkPercentageList(String course_id, String student_id, String academic_year);
+
+    @Query(nativeQuery = true, value = "select * from markcalculations mc where\n" +
+            "mc.evaluation_criteria_id in (select ec.evaluationcriteria_id from evaluationcriteria ec inner join assessment_type_list atl on atl.assessment_type_name=ec.assessment_type  where atl.ca_mid_end=:ca_mid_end and ec.course_id=:course_id)\n" +
+            "and mc.academic_year=:academic_year and mc.student_id=:student_id")
+    public List<Calculations> getCalculationData(String student_id, String course_id, String academic_year ,String ca_mid_end);
+
+    @Query(nativeQuery = true, value = "select markcalculations.* from markcalculations where markcalculations.course_id=:course_id and markcalculations.academic_year=:academic_year")
+    public List<Calculations> isCalculationDetailsAvailable(String course_id, String academic_year);
+
 }

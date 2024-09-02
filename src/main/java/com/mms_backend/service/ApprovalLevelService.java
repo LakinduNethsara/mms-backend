@@ -240,10 +240,10 @@ public class ApprovalLevelService {
         return responseDTO;
     }
 
-    public ResponseDTO getSignatures( String course_id,String academic_year)
+    public ResponseDTO getSignatures(String course_id, String academic_year, String department)
     {
         try {
-            List<Marks_approved_log> marksApprovedLog=approved_user_levelRepo.getSignatures(course_id,academic_year);
+            List<Marks_approved_log> marksApprovedLog=approved_user_levelRepo.getSignatures(course_id,academic_year,department);
             if(marksApprovedLog!=null)
             {
                 responseDTO.setCode(VarList.RIP_SUCCESS);
