@@ -26,4 +26,7 @@ public interface CalculationsRepo extends JpaRepository<Calculations,Integer>
             "and mc.academic_year=:academic_year and mc.student_id=:student_id")
     public List<Calculations> getCalculationData(String student_id, String course_id, String academic_year ,String ca_mid_end);
 
+    @Query(nativeQuery = true, value = "select markcalculations.* from markcalculations where markcalculations.course_id=:course_id and markcalculations.academic_year=:academic_year")
+    public List<Calculations> isCalculationDetailsAvailable(String course_id, String academic_year);
+
 }

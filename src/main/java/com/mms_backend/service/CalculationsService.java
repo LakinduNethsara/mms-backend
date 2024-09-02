@@ -68,4 +68,13 @@ public class CalculationsService
 //        return responseDTO;
 //
 //    }
+
+    public boolean isCalculationDetailsAvailable(String course_id, String academic_year){
+        List<Calculations> calculationsList = calculationsRepo.isCalculationDetailsAvailable(course_id, academic_year);
+        if(!calculationsList.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

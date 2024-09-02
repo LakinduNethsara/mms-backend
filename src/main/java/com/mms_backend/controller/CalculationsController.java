@@ -48,6 +48,11 @@ public class CalculationsController
 //            return new ResponseEntity(list.getContent(),HttpStatus.OK);
 //    }
 
+    @GetMapping("/isCalculationDetailsAvailable/{course_id}/{academic_year}")
+    public boolean isCalculationDetailsAvailable(@PathVariable String course_id, @PathVariable String academic_year){
+        return calculationsService.isCalculationDetailsAvailable(course_id,academic_year);
+    }
+
 
 
 }
