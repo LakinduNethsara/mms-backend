@@ -16,4 +16,14 @@ public class GradeController {
         gradeService.calculateRoundedMark(course_id,academic_year);
     }
 
+    @GetMapping("/isFinalized/{course_id}/{academic_year}")
+    public boolean isFinalized(@PathVariable String course_id,@PathVariable String academic_year) {
+        return gradeService.isFinalized(course_id,academic_year);
+    }
+
+    @GetMapping("/calculateRoundedMarkOfSelectedStudent/{course_id}/{academic_id}/{student_id}")
+    public void calculateRoundedMarkOfSelectedStudent(@PathVariable String course_id,@PathVariable String academic_id,@PathVariable String student_id) {
+        gradeService.calculateRoundedMarkOfSelectedStudent(course_id,academic_id,student_id);
+    }
+
 }
