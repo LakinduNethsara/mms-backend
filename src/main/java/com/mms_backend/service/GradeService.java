@@ -74,7 +74,7 @@ public class GradeService {
 
                 }else{
                     //Scenario for repeat-----------------------------------------------------------------------------------------
-                    if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D-")) || (grade.getGrade().equals("E"))){
+                    if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D+")) || (grade.getGrade().equals("E"))){
 ////                        List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
 ////                        double sum=0.0 ;
 ////                        double roundedSum = 0.0 ;
@@ -489,7 +489,7 @@ public class GradeService {
 
             }else{
                 //Scenario for repeat-----------------------------------------------------------------------------------------
-                if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D-")) || (grade.getGrade().equals("E"))){
+                if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D+")) || (grade.getGrade().equals("E"))){
 ////                        List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
 ////                        double sum=0.0 ;
 ////                        double roundedSum = 0.0 ;
