@@ -511,7 +511,7 @@ public class CACalculationService {
                     studentGrade.setSemester(String.valueOf(semester));
                     studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
-                    
+
                     if(student_CA_Eligibility.equals("WH")){
                         studentGrade.setGrade("WH");
                     }
