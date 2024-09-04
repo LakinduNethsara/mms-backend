@@ -237,8 +237,15 @@ public class MarkSheetService
                 }
             }
             marksEditLogRepo.save(modelMapper.map(marksEditLog, Marks_edit_log.class));
+
         } catch (Exception e) {
             System.err.println("Error updating marks: " + e.getMessage());
+        }
+
+
+        public void updateCalculations()
+        {
+
         }
     }
 
