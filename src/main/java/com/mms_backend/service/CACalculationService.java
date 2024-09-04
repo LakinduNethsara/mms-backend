@@ -280,10 +280,18 @@ public class CACalculationService {
 
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
 
+                    calculated_old_ca_total = Math.round(calculated_old_ca_total * 100.0) / 100.0;
+
+
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
                     studentGrade.setTotal_ca_mark(String.valueOf(calculated_old_ca_total));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                    if(student_CA_Eligibility.equals("WH")){
+                        studentGrade.setGrade("WH");
+
+                    }
 
                     gradeRepo.save(studentGrade);
 
@@ -375,6 +383,8 @@ public class CACalculationService {
                     Grade studentGrade = new Grade(); //create object from grade entity
 
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
+
+                    sumOfCAMarks = Math.round(sumOfCAMarks * 100.0) / 100.0;
 
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
@@ -478,11 +488,17 @@ public class CACalculationService {
                     System.out.println("---------in loop---marksCalculationsList--------------- : "+marksCalculationsList);
 
                 }
-                if (sumOfCAMarks >= ca_Eli_margin) {
-                    student_CA_Eligibility = "Eligible";
-                } else {
-                    student_CA_Eligibility = "Not Eligible";
+
+                if (student_CA_Eligibility.equals("WH")) {
+                    student_CA_Eligibility = "WH";
+                }else{
+                    if (sumOfCAMarks >= ca_Eli_margin) {
+                        student_CA_Eligibility = "Eligible";
+                    } else {
+                        student_CA_Eligibility = "Not Eligible";
+                    }
                 }
+
 
                 System.out.println("hi---------------");
 
@@ -494,12 +510,18 @@ public class CACalculationService {
 
                     Grade studentGrade = new Grade(); //create object from grade entity
 
+                sumOfCAMarks = Math.round(sumOfCAMarks * 100.0) / 100.0;
+
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
                     studentGrade.setLevel(String.valueOf(level));
                     studentGrade.setSemester(String.valueOf(semester));
                     studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                    if(student_CA_Eligibility.equals("WH")){
+                        studentGrade.setGrade("WH");
+                    }
 
                 System.out.println("assign value to grade"+studentGrade);
 

@@ -3,14 +3,8 @@ package com.mms_backend.service;
 import com.mms_backend.dto.MarksDTO;
 import com.mms_backend.dto.ResponseDTO;
 import com.mms_backend.Util.VarList;
-import com.mms_backend.entity.Calculations;
-import com.mms_backend.entity.EvaluationCriteria;
-import com.mms_backend.entity.StudentRegCourses;
-import com.mms_backend.repository.CalculationsRepo;
-import com.mms_backend.repository.EvaluationCriteriaRepo;
-import com.mms_backend.repository.MarksRepo;
-import com.mms_backend.entity.MarksEntity;
-import com.mms_backend.repository.StudentRegCoursesRepo;
+import com.mms_backend.entity.*;
+import com.mms_backend.repository.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -43,6 +37,9 @@ public class MarksService {
 
     @Autowired
     private CalculationsRepo calculationsRepo;
+
+    @Autowired
+    private FinalSelectionRepo finalSelectionRepo;
 
 
     public List<MarksDTO> getAllScore(){
@@ -241,6 +238,20 @@ public class MarksService {
     //------------------------------------------------Select 1st , 2nd or average of end theory marks and insert
     public void GenerateFinalMarksFromEnd( String assignment_name,  String course_id,  String selected,  String academic_year){
         List<StudentRegCourses> studentList = studentRegCoursesRepo.getAllStudentsByCID(course_id,academic_year);
+
+//        FinalMarksselection finalMarksselection = new FinalMarksselection();
+//
+//        finalMarksselection.setCourseId(course_id);
+//        finalMarksselection.setSelected(selected);
+//        finalMarksselection.setAssessmentType(assignment_name);
+//        finalMarksselection.setAcademicYear(academic_year);
+//
+//        try{
+//            finalSelectionRepo.save(finalMarksselection);
+//        }catch (Exception e){
+//            System.out.println(e.getMessage());
+//        }
+
         for (StudentRegCourses student : studentList) {
 
             System.out.println(student.getStudent_id());  // Example: print student ID
