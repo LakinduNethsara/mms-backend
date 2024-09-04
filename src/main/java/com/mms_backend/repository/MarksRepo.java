@@ -61,4 +61,6 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
             @Param("p_academic_year") String academic_year
     );
 
+
+
 }
