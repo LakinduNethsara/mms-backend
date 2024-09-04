@@ -1,10 +1,11 @@
 package com.mms_backend.controller.AR;
 
+import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.*;
 import com.mms_backend.dto.AR.*;
-import com.mms_backend.dto.GPADTO;
-import com.mms_backend.dto.MarksDTO;
-import com.mms_backend.dto.StudentRegCoursesDTO;
-import com.mms_backend.dto.UserDTO;
+import com.mms_backend.dto.AR.CourseDTO;
+import com.mms_backend.dto.AR.MedicalDTO;
+import com.mms_backend.entity.AR.AcademicYearDetails;
 import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.service.AR.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -312,14 +315,21 @@ public class ARController {
          */
     }
 
-    @PutMapping("/updateAcademicYearDetailsBySA")
-    public void updateAcademicYearDetailsBySA(@RequestBody AcademicYearDetailsDTO academicYearDetailsDTO){
-        arService.updateAcademicYearDetailsByYear(academicYearDetailsDTO);
-
-        /*Usage
-            UpdateABPage
-         */
+    @PutMapping("/updateAcademicYearDetailsBySA/{id}")
+    public AcademicYearDetails updateAcademicYearDetailsBySA(
+            @PathVariable int id,
+            @RequestBody AcademicYearDetialsYCDTO request){
+        System.out.println("id: "+id);
+        System.out.println("current_academic_year request: "+request.getCurrent_academic_year());
+        System.out.println("current_semester request: "+request.getCurrent_semester());
+            return arService.updateAcademicYearDetailsByYear(id, request.getCurrent_academic_year(), request.getCurrent_semester());
     }
+
+
+//    public static class AcademicYearUpdateRequest {
+//        private String current_academic_year;
+//        private String current_semester;
+//    }
 
     /*---------------------------------------------------------------------------------------- Controller for academic_year_details table ----------------------------END-------------*/
 
