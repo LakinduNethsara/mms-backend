@@ -280,6 +280,9 @@ public class CACalculationService {
 
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
 
+                    calculated_old_ca_total = Math.round(calculated_old_ca_total * 100.0) / 100.0;
+
+
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
                     studentGrade.setTotal_ca_mark(String.valueOf(calculated_old_ca_total));
@@ -380,6 +383,8 @@ public class CACalculationService {
                     Grade studentGrade = new Grade(); //create object from grade entity
 
                     studentGrade = gradeRepo.getGradeDetailsBY_SIID_CID(student_id,course_id); //get grade details by student id and course id
+
+                    sumOfCAMarks = Math.round(sumOfCAMarks * 100.0) / 100.0;
 
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
@@ -504,6 +509,8 @@ public class CACalculationService {
                 char semester = reversed_CID.charAt(2);
 
                     Grade studentGrade = new Grade(); //create object from grade entity
+
+                sumOfCAMarks = Math.round(sumOfCAMarks * 100.0) / 100.0;
 
                     studentGrade.setStudent_id(student_id);
                     studentGrade.setCourse_id(course_id);
