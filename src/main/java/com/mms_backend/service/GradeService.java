@@ -1,19 +1,18 @@
 package com.mms_backend.service;
 
+import com.mms_backend.entity.*;
 import com.mms_backend.entity.AR.Grade;
 import com.mms_backend.entity.AR.MarksApprovalLevel;
-import com.mms_backend.entity.Calculations;
-import com.mms_backend.entity.CourseRelatedDeptEntity;
-import com.mms_backend.entity.MarksEntity;
-import com.mms_backend.entity.StudentRegCourses;
 import com.mms_backend.repository.*;
 import com.mms_backend.repository.AR.ArMarksRepo;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class GradeService {
@@ -29,6 +28,8 @@ public class GradeService {
     private ArMarksRepo arMarksRepo;
     @Autowired
     private CourseRelatedDeptRepo courseRelatedDeptRepo;
+    @Autowired
+    private MarksRangeOfCourseRepo marksRangeOfCourseRepo;
 
     public static String reduceYear(String years){
 
@@ -70,7 +71,29 @@ public class GradeService {
                     grade.setTotal_final_mark(String.valueOf(sum));
                     grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
+                    List<MarksRangeOfGrade> marginList = null;
+                    try{
+                        marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                        if(!marginList.isEmpty()){
+                            if(grade.getCa_eligibility().equals("Eligible")){
+                                grade.setGrade(marginList.get(0).getGrade());
+
+                            }else if (grade.getCa_eligibility().equals("Not eligible")){
+                                grade.setGrade("F");
+                            }else if(grade.getCa_eligibility().equals("WH")){
+                                grade.setGrade("WH");
+                            }
+                        }
+
+                    }catch (Exception e){
+                        log.error("e: ", e);
+                    }
+
+
+
+
                     gradeRepo.save(grade);
+
 
                 }else{
                     //Scenario for repeat-----------------------------------------------------------------------------------------
@@ -120,6 +143,42 @@ public class GradeService {
                                 grade.setTotal_final_mark(String.valueOf(sum));
                                 grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
+                                MarksRangeOfGrade marksRangeOfGrade = null;
+                                try{
+                                    marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                    if(grade.getCa_eligibility().equals("Eligible")){
+
+                                        if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                            grade.setGrade("C");
+                                        } else{
+                                            List<MarksRangeOfGrade> marginList = null;
+                                            try{
+                                                marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                                if(!marginList.isEmpty()){
+                                                    grade.setGrade(marginList.get(0).getGrade());
+
+                                                }
+
+                                            }catch (Exception e){
+                                                log.error("e: ", e);
+                                            }
+                                        }
+
+                                    } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                        grade.setGrade("F");
+
+                                    } else if (grade.getCa_eligibility().equals("WH")) {
+                                        grade.setGrade("WH");
+                                    }
+
+
+                                }catch (Exception ex){
+                                    log.error("e: ", ex);
+                                }
+
+
                                 gradeRepo.save(grade);
 
 
@@ -146,6 +205,42 @@ public class GradeService {
                                     grade.setTotal_final_mark(String.valueOf(sum));
                                     grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
+
+                                    MarksRangeOfGrade marksRangeOfGrade = null;
+                                    try{
+                                        marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                        if(grade.getCa_eligibility().equals("Eligible")){
+
+                                            if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                                grade.setGrade("C");
+                                            } else{
+                                                List<MarksRangeOfGrade> marginList = null;
+                                                try{
+                                                    marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                                    if(!marginList.isEmpty()){
+                                                        grade.setGrade(marginList.get(0).getGrade());
+
+                                                    }
+
+                                                }catch (Exception e){
+                                                    log.error("e: ", e);
+                                                }
+                                            }
+
+                                        } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                            grade.setGrade("F");
+
+                                        } else if (grade.getCa_eligibility().equals("WH")) {
+                                            grade.setGrade("WH");
+                                        }
+
+
+                                    }catch (Exception ex){
+                                        log.error("e: ", ex);
+                                    }
+
                                     gradeRepo.save(grade);
 
                                 }else{
@@ -170,6 +265,41 @@ public class GradeService {
 
                                             grade.setTotal_final_mark(String.valueOf(sum));
                                             grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                                            MarksRangeOfGrade marksRangeOfGrade = null;
+                                            try{
+                                                marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                                if(grade.getCa_eligibility().equals("Eligible")){
+
+                                                    if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                                        grade.setGrade("C");
+                                                    } else{
+                                                        List<MarksRangeOfGrade> marginList = null;
+                                                        try{
+                                                            marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                                            if(!marginList.isEmpty()){
+                                                                grade.setGrade(marginList.get(0).getGrade());
+
+                                                            }
+
+                                                        }catch (Exception e){
+                                                            log.error("e: ", e);
+                                                        }
+                                                    }
+
+                                                } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                                    grade.setGrade("F");
+
+                                                } else if (grade.getCa_eligibility().equals("WH")) {
+                                                    grade.setGrade("WH");
+                                                }
+
+
+                                            }catch (Exception ex){
+                                                log.error("e: ", ex);
+                                            }
 
                                             gradeRepo.save(grade);
 
@@ -211,6 +341,41 @@ public class GradeService {
                                 grade.setTotal_final_mark(String.valueOf(sum));
                                 grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
+                                MarksRangeOfGrade marksRangeOfGrade = null;
+                                try{
+                                    marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                    if(grade.getCa_eligibility().equals("Eligible")){
+
+                                        if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                            grade.setGrade("C");
+                                        } else{
+                                            List<MarksRangeOfGrade> marginList = null;
+                                            try{
+                                                marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                                if(!marginList.isEmpty()){
+                                                    grade.setGrade(marginList.get(0).getGrade());
+
+                                                }
+
+                                            }catch (Exception e){
+                                                log.error("e: ", e);
+                                            }
+                                        }
+
+                                    } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                        grade.setGrade("F");
+
+                                    } else if (grade.getCa_eligibility().equals("WH")) {
+                                        grade.setGrade("WH");
+                                    }
+
+
+                                }catch (Exception ex){
+                                    log.error("e: ", ex);
+                                }
+
                                 gradeRepo.save(grade);
 
                             } else{
@@ -235,6 +400,41 @@ public class GradeService {
 
                                         grade.setTotal_final_mark(String.valueOf(sum));
                                         grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                                        MarksRangeOfGrade marksRangeOfGrade = null;
+                                        try{
+                                            marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                            if(grade.getCa_eligibility().equals("Eligible")){
+
+                                                if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                                    grade.setGrade("C");
+                                                } else{
+                                                    List<MarksRangeOfGrade> marginList = null;
+                                                    try{
+                                                        marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                                        if(!marginList.isEmpty()){
+                                                            grade.setGrade(marginList.get(0).getGrade());
+
+                                                        }
+
+                                                    }catch (Exception e){
+                                                        log.error("e: ", e);
+                                                    }
+                                                }
+
+                                            } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                                grade.setGrade("F");
+
+                                            } else if (grade.getCa_eligibility().equals("WH")) {
+                                                grade.setGrade("WH");
+                                            }
+
+
+                                        }catch (Exception ex){
+                                            log.error("e: ", ex);
+                                        }
 
                                         gradeRepo.save(grade);
 
@@ -281,6 +481,42 @@ public class GradeService {
 
                             grade.setTotal_final_mark(String.valueOf(sum));
                             grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+
+                            MarksRangeOfGrade marksRangeOfGrade = null;
+                            try{
+                                marksRangeOfGrade = marksRangeOfCourseRepo.getMarkRangeofGrade(course_id,academic_year,"C");
+
+                                if(grade.getCa_eligibility().equals("Eligible")){
+
+                                    if(marksRangeOfGrade.getMargin_of_grade() <= roundedSum){
+
+                                        grade.setGrade("C");
+                                    } else{
+                                        List<MarksRangeOfGrade> marginList = null;
+                                        try{
+                                            marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                            if(!marginList.isEmpty()){
+                                                grade.setGrade(marginList.get(0).getGrade());
+
+                                            }
+
+                                        }catch (Exception e){
+                                            log.error("e: ", e);
+                                        }
+                                    }
+
+                                } else if (grade.getCa_eligibility().equals("Not eligible")) {
+                                    grade.setGrade("F");
+
+                                } else if (grade.getCa_eligibility().equals("WH")) {
+                                    grade.setGrade("WH");
+                                }
+
+
+                            }catch (Exception ex){
+                                log.error("e: ", ex);
+                            }
 
                             gradeRepo.save(grade);
 
@@ -343,6 +579,25 @@ public class GradeService {
                                 grade.setTotal_final_mark(String.valueOf(sum));
                                 grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
+
+                                List<MarksRangeOfGrade> marginList = null;
+                                try{
+                                    marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                    if(!marginList.isEmpty()){
+                                        if(grade.getCa_eligibility().equals("Eligible")){
+                                            grade.setGrade(marginList.get(0).getGrade());
+
+                                        }else if (grade.getCa_eligibility().equals("Not eligible")){
+                                            grade.setGrade("F");
+                                        }else if(grade.getCa_eligibility().equals("WH")){
+                                            grade.setGrade("WH");
+                                        }
+                                    }
+
+                                }catch (Exception e){
+                                    log.error("e: ", e);
+                                }
+
                                 gradeRepo.save(grade);
 
                             }
@@ -381,6 +636,24 @@ public class GradeService {
 
                                     grade.setTotal_final_mark(String.valueOf(sum));
                                     grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+                                    List<MarksRangeOfGrade> marginList = null;
+                                    try{
+                                        marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                        if(!marginList.isEmpty()){
+                                            if(grade.getCa_eligibility().equals("Eligible")){
+                                                grade.setGrade(marginList.get(0).getGrade());
+
+                                            }else if (grade.getCa_eligibility().equals("Not eligible")){
+                                                grade.setGrade("F");
+                                            }else if(grade.getCa_eligibility().equals("WH")){
+                                                grade.setGrade("WH");
+                                            }
+                                        }
+
+                                    }catch (Exception e){
+                                        log.error("e: ", e);
+                                    }
 
                                     gradeRepo.save(grade);
 
@@ -421,6 +694,25 @@ public class GradeService {
 
                                         grade.setTotal_final_mark(String.valueOf(sum));
                                         grade.setTotal_rounded_mark(String.valueOf(roundedSum));
+
+
+                                        List<MarksRangeOfGrade> marginList = null;
+                                        try{
+                                            marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
+                                            if(!marginList.isEmpty()){
+                                                if(grade.getCa_eligibility().equals("Eligible")){
+                                                    grade.setGrade(marginList.get(0).getGrade());
+
+                                                }else if (grade.getCa_eligibility().equals("Not eligible")){
+                                                    grade.setGrade("F");
+                                                }else if(grade.getCa_eligibility().equals("WH")){
+                                                    grade.setGrade("WH");
+                                                }
+                                            }
+
+                                        }catch (Exception e){
+                                            log.error("e: ", e);
+                                        }
 
                                         gradeRepo.save(grade);
                                     }
