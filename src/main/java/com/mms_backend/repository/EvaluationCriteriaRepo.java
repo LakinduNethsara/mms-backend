@@ -33,4 +33,6 @@ public interface EvaluationCriteriaRepo extends JpaRepository<EvaluationCriteria
 
     @Query(nativeQuery = true , value = "select distinct * from evaluationcriteria where type='End' and assessment_type !='End theory exam' and course_id=:course_id;")
     public List<EvaluationCriteria> getNotETEDetails(@Param( "course_id")String course_id);
+
+
 }
