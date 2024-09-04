@@ -210,6 +210,7 @@ public class MarkSheetService
                             if ("1st Marking".equalsIgnoreCase(selected)) {
                                 marksRepo.updateEndMarks(String.valueOf(firstMark), studentData.getStudent_id(),
                                         studentData.getCourse_id(), "Final Marks", academicYear);
+                                marksEditLogRepo.updateEndMarksProcedure("End theory exam",studentData.getCourse_id(),academicYear,String.valueOf(firstMark),studentData.getStudent_id());
                             }
                         } else if ("2nd Marking".equalsIgnoreCase(object.getKey())) {
                             secondMark = Double.parseDouble(object.getValue());
@@ -218,21 +219,27 @@ public class MarkSheetService
                             marksRepo.updateEndMarks(object.getValue(), studentData.getStudent_id(),
                                     studentData.getCourse_id(), object.getKey(), academicYear);
 
+
                             if ("2nd Marking".equalsIgnoreCase(selected)) {
                                 marksRepo.updateEndMarks(String.valueOf(secondMark), studentData.getStudent_id(),
                                         studentData.getCourse_id(), "Final Marks", academicYear);
+                                marksEditLogRepo.updateEndMarksProcedure("End theory exam",studentData.getCourse_id(),academicYear,String.valueOf(secondMark),studentData.getStudent_id());
                             }
                         } else if ("Final Marks".equalsIgnoreCase(object.getKey())) {
                             if ("average".equalsIgnoreCase(selected)) {
                                 double averageMark = (firstMark + secondMark) / 2;
                                 marksRepo.updateEndMarks(String.valueOf(averageMark), studentData.getStudent_id(),
                                         studentData.getCourse_id(), "Final Marks", academicYear);
+                                marksEditLogRepo.updateEndMarksProcedure("End theory exam",studentData.getCourse_id(),academicYear,String.valueOf(averageMark),studentData.getStudent_id());
+
                             }
+
                         }
 
                     } else {
                         marksRepo.updateEndMarks(object.getValue(), studentData.getStudent_id(),
                                 studentData.getCourse_id(), object.getKey(), academicYear);
+                        marksEditLogRepo.updateEndMarksProcedure(object.getKey(),studentData.getCourse_id(),academicYear,String.valueOf(object.getValue()),studentData.getStudent_id());
                     }
                 }
             }
@@ -243,10 +250,7 @@ public class MarkSheetService
         }
 
 
-        public void updateCalculations()
-        {
 
-        }
     }
 
 }
