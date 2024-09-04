@@ -16,6 +16,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Transactional
@@ -169,50 +170,67 @@ public class ApprovalLevelService {
         return responseDTO;
     }
 
-    public ResponseDTO updateApprovalLevelByDeanOffice(Marks_approved_logDTO marksApprovedLogDTO) {
-        //TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        try {
-            System.out.print(marksApprovedLogDTO.getLevel()+""+marksApprovedLogDTO.getSemester()+""+marksApprovedLogDTO.getDepartment_id()+""+marksApprovedLogDTO.getApproval_level()+""+marksApprovedLogDTO.getAcademic_year());
-            approvalLevelRepo.updateApprovedLevelByDean(marksApprovedLogDTO.getLevel(),marksApprovedLogDTO.getSemester(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getDepartment_id(),marksApprovedLogDTO.getApproval_level());
-            approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO,Marks_approved_log.class));
-            responseDTO.setCode(VarList.RIP_SUCCESS);
-            responseDTO.setMessage("Successfully updated approval level");
-            responseDTO.setContent(null);
+//
+public ResponseDTO updateApprovalLevelByDeanOffice(Marks_approved_logDTO marksApprovedLogDTO) {
+    try {
+        // Update approval level in the database
+        approvalLevelRepo.updateApprovedLevelByDean(
+                marksApprovedLogDTO.getLevel(),
+                marksApprovedLogDTO.getSemester(),
+                marksApprovedLogDTO.getAcademic_year(),
+                marksApprovedLogDTO.getDepartment_id(),
+                marksApprovedLogDTO.getApproval_level()
+        );
 
-            MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
-            mailDetailsDTO.setSubject("Marks Return Sheet - Level : "+marksApprovedLogDTO.getLevel()+" Semester : "+marksApprovedLogDTO.getSemester()+" Department of "+marksApprovedLogDTO.getDepartment_id()+" Academic Year :"+marksApprovedLogDTO.getAcademic_year());
+        // Save the approval log
+        approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO, Marks_approved_log.class));
 
-            String email = null;
-            message = "Department of "+marksApprovedLogDTO.getDepartment_id() +", Level "+marksApprovedLogDTO.getLevel() +", Semester "+ marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for approval. ";
-            System.out.println(marksApprovedLogDTO.getApproval_level());
-            if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("RB")) {
-                email = userRepo.getEmailByRole("ar");
+        // Prepare email details
+        MailDetailsDTO mailDetailsDTO = new MailDetailsDTO();
+        mailDetailsDTO.setSubject("Marks Return Sheet - Level : " + marksApprovedLogDTO.getLevel() +
+                " Semester : " + marksApprovedLogDTO.getSemester() +
+                " Department of " + marksApprovedLogDTO.getDepartment_id() +
+                " Academic Year :" + marksApprovedLogDTO.getAcademic_year());
 
-            } else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("AR")) {
-                email = userRepo.getEmailByRole("dean");
-            }
-            else if(marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("Dean")) {
-                email = userRepo.getEmailByRole("ar");
-                message="Department of "+marksApprovedLogDTO.getDepartment_id() +", Level "+marksApprovedLogDTO.getLevel() +", Semester "+ marksApprovedLogDTO.getSemester() +" Result Sheet " + " has been sent for  Results publishing. ";
-            }
-            mailDetailsDTO.setMessage(String.valueOf(message));
-            mailDetailsDTO.setToMail(email);
+        String email = null;
+        String message = "Department of " + marksApprovedLogDTO.getDepartment_id() + ", Level " +
+                marksApprovedLogDTO.getLevel() + ", Semester " +
+                marksApprovedLogDTO.getSemester() + " Result Sheet has been sent for approval.";
 
-            try {
-
-                // Call the mail server service method
-                mailServerService.sendEmail(mailDetailsDTO);
-            } catch (Exception e) {
-                System.out.println("Error sending email: " + e.getMessage());
-            }
-
-        } catch (RuntimeException e) {
-            responseDTO.setCode(VarList.RIP_ERROR);
-            responseDTO.setMessage("Error updating approval level: " + e.getMessage());
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        if (marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("RB")) {
+            email = userRepo.getEmailByRole("ar");
+        } else if (marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("AR")) {
+            email = userRepo.getEmailByRole("dean");
+        } else if (marksApprovedLogDTO.getApproval_level().equalsIgnoreCase("Dean")) {
+            email = userRepo.getEmailByRole("ar");
+            message = "Department of " + marksApprovedLogDTO.getDepartment_id() + ", Level " +
+                    marksApprovedLogDTO.getLevel() + ", Semester " +
+                    marksApprovedLogDTO.getSemester() + " Result Sheet has been sent for Results publishing.";
         }
-        return responseDTO;
+
+        mailDetailsDTO.setMessage(message);
+        mailDetailsDTO.setToMail(email);
+
+        // Send email asynchronously
+        CompletableFuture.runAsync(() -> {
+            try {
+                mailServerService.sendEmail(mailDetailsDTO);
+                System.out.println("Email sent successfully");
+            } catch (Exception e) {
+                System.err.println("Error sending email: " + e.getMessage());
+            }
+        });
+
+        responseDTO.setCode(VarList.RIP_SUCCESS);
+        responseDTO.setMessage("Successfully updated approval level and email sent.");
+    } catch (RuntimeException e) {
+        responseDTO.setCode(VarList.RIP_ERROR);
+        responseDTO.setMessage("Error updating approval level: " + e.getMessage());
+        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
     }
+    return responseDTO;
+}
+
 
     public ResponseDTO getSignature( String course_id, String approval_level,String academic_year)
     {
