@@ -175,6 +175,7 @@ public class ApprovalLevelService {
             System.out.print(marksApprovedLogDTO.getLevel()+""+marksApprovedLogDTO.getSemester()+""+marksApprovedLogDTO.getDepartment_id()+""+marksApprovedLogDTO.getApproval_level()+""+marksApprovedLogDTO.getAcademic_year());
             approvalLevelRepo.updateApprovedLevelByDean(marksApprovedLogDTO.getLevel(),marksApprovedLogDTO.getSemester(),marksApprovedLogDTO.getAcademic_year(),marksApprovedLogDTO.getDepartment_id(),marksApprovedLogDTO.getApproval_level());
             approved_user_levelRepo.save(modelMapper.map(marksApprovedLogDTO,Marks_approved_log.class));
+
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setMessage("Successfully updated approval level");
             responseDTO.setContent(null);
@@ -202,8 +203,11 @@ public class ApprovalLevelService {
 
                 // Call the mail server service method
                 mailServerService.sendEmail(mailDetailsDTO);
+                responseDTO.setMessage("Approved Level Updated and Mail has sent");
+
             } catch (Exception e) {
                 System.out.println("Error sending email: " + e.getMessage());
+                responseDTO.setMessage("Approved Level Updated and Mail has not sent");
             }
 
         } catch (RuntimeException e) {
