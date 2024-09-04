@@ -285,6 +285,11 @@ public class CACalculationService {
                     studentGrade.setTotal_ca_mark(String.valueOf(calculated_old_ca_total));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
 
+                    if(student_CA_Eligibility.equals("WH")){
+                        studentGrade.setGrade("WH");
+
+                    }
+
                     gradeRepo.save(studentGrade);
 
 
@@ -478,11 +483,17 @@ public class CACalculationService {
                     System.out.println("---------in loop---marksCalculationsList--------------- : "+marksCalculationsList);
 
                 }
-                if (sumOfCAMarks >= ca_Eli_margin) {
-                    student_CA_Eligibility = "Eligible";
-                } else {
-                    student_CA_Eligibility = "Not Eligible";
+
+                if (student_CA_Eligibility.equals("WH")) {
+                    student_CA_Eligibility = "WH";
+                }else{
+                    if (sumOfCAMarks >= ca_Eli_margin) {
+                        student_CA_Eligibility = "Eligible";
+                    } else {
+                        student_CA_Eligibility = "Not Eligible";
+                    }
                 }
+
 
                 System.out.println("hi---------------");
 
@@ -500,6 +511,10 @@ public class CACalculationService {
                     studentGrade.setSemester(String.valueOf(semester));
                     studentGrade.setTotal_ca_mark(String.valueOf(sumOfCAMarks));
                     studentGrade.setCa_eligibility(student_CA_Eligibility);
+
+                    if(student_CA_Eligibility.equals("WH")){
+                        studentGrade.setGrade("WH");
+                    }
 
                 System.out.println("assign value to grade"+studentGrade);
 
