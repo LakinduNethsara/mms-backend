@@ -1,9 +1,9 @@
 package com.mms_backend.service.AR;
+import com.mms_backend.Util.VarList;
+import com.mms_backend.dto.*;
 import com.mms_backend.dto.AR.*;
-import com.mms_backend.dto.GPADTO;
-import com.mms_backend.dto.MarksDTO;
-import com.mms_backend.dto.StudentRegCoursesDTO;
-import com.mms_backend.dto.UserDTO;
+import com.mms_backend.dto.AR.CourseDTO;
+import com.mms_backend.dto.AR.MedicalDTO;
 import com.mms_backend.entity.AR.*;
 import com.mms_backend.entity.GPA;
 import com.mms_backend.entity.MarksEntity;
@@ -51,6 +51,8 @@ public class ARService {
 
     @Autowired
     private ModelMapper mp;
+    @Autowired
+    private ResponseDTO responseDTO;
 
 
 
@@ -231,16 +233,32 @@ public class ARService {
 
 
 
-    public AcademicYearDetailsDTO updateAcademicYearDetailsByYear(AcademicYearDetailsDTO academicYearDetailsDTO){         //Update academic year details by year
-        if(arAcademicYearDetailsRepo.existsById(academicYearDetailsDTO.getId())) {
-            AcademicYearDetails academicYearDetails = mp.map(academicYearDetailsDTO, AcademicYearDetails.class);
-            arAcademicYearDetailsRepo.save(academicYearDetails);
-            return academicYearDetailsDTO;
-        }else{
-            return null;
+    public AcademicYearDetails updateAcademicYearDetailsByYear(int id, String current_academic_year, String current_semester) {
+        // Retrieve the existing academic year details by ID
+        AcademicYearDetails details = arAcademicYearDetailsRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Academic year details not found"));
+
+        // Update previous academic year if current academic year changes
+        if (current_academic_year != null && !current_academic_year.equals(details.getCurrent_academic_year())) {
+            System.out.println("Set previous academic year: " + details.getCurrent_academic_year());
+            details.setPrevious_academic_year(details.getCurrent_academic_year());
+
+            System.out.println("Set current academic year: " + current_academic_year);
+            details.setCurrent_academic_year(current_academic_year);
         }
 
+        // Update current semester
+        if (current_semester != null) {
+            System.out.println("Set current semester: " + current_semester);
+            details.setCurrent_semester(current_semester);
+        }
+
+        // Save the updated details back to the database
+        return arAcademicYearDetailsRepo.save(details);
+//        System.out.println("all details "+details);
+
     }
+
 
 
     /*---------------------------------------------------------------------------------------- Service for academic_year_details table ----------------------------END-------------*/
