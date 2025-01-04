@@ -22,6 +22,7 @@ public class Grade {
     private String semester;
     private String total_ca_mark;
     private String ca_eligibility;
+    private String overall_ca_eligibility;
     private String total_final_mark;
     private String total_rounded_mark;
     private String grade;
