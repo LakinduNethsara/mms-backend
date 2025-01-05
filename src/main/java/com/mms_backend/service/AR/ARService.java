@@ -110,6 +110,16 @@ public class ARService {
         return arMarksRepo.getAllAcademicYearList();
     }
 
+    public List<Object[]> getABDetails(String approved_level){        //Get all  students records to list down from marks table having AB s for valid exams
+        List<Object[]> eStarList= arMarksRepo.getABDetails(approved_level);
+        return eStarList;
+    }
+
+    public List<Object[]> getABDetailsByCourseId(String course_id, String academic_year){        //Get student id and other details from marks table where grade is E* by selected course........
+        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id, academic_year);
+        return abList;
+    }
+
 
     /*---------------------------------------------------------------------------------------- Service for marks table ----------------------------END-------------*/
 
@@ -420,14 +430,6 @@ public class ARService {
 
 
 
-    public List<Object[]> getABDetails(String approved_level){        //Get all  students records to list down from marks table having AB s for valid exams
-        List<Object[]> eStarList= arMarksRepo.getABDetails(approved_level);
-        return eStarList;
-    }
 
-    public List<Object[]> getABDetailsByCourseId(String course_id, String academic_year){        //Get student id and other details from marks table where grade is E* by selected course........
-        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id, academic_year);
-        return abList;
-    }
 }
 

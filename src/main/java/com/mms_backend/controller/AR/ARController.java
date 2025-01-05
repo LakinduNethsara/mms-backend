@@ -529,4 +529,16 @@ public class ARController {
 
     /*---------------------------------------------------------------------------------------- Controller for studentRegCourses table ----------------------------END-------------*/
 
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------START---------*/
+
+    @GetMapping("/checkMedicalForAB")
+    public void checkMedicalForAB(){
+
+
+    }
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------END---------*/
+
 }
