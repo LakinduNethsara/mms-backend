@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -424,6 +425,52 @@ public class ARService {
 
 
     /*---------------------------------------------------------------------------------------- Service for studentRegCourses table ----------------------------END-------------*/
+
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------START---------*/
+
+    public ResponseDTO checkMedicalForAB(Object studentDetails){
+
+        ResponseDTO result = new ResponseDTO();
+        Map<String,Object> studentDetailsMap = (Map<String, Object>) studentDetails;
+
+        String student_id = (String) studentDetailsMap.get("student_id");
+        String course_id = (String) studentDetailsMap.get("course_id");
+        String course_name = (String) studentDetailsMap.get("course_name");
+        String academic_year = (String) studentDetailsMap.get("academic_year");
+        String exam_type = (String) studentDetailsMap.get("exam_type");
+        String marks_table_exam_type = (String) studentDetailsMap.get("marks_table_exam_type");
+        String midORend = (String) studentDetailsMap.get("midORend");
+        String grade = (String) studentDetailsMap.get("grade");
+
+
+        System.out.println("student_id "+student_id);
+        System.out.println("course_id "+course_id);
+        System.out.println("course_name "+course_name);
+        System.out.println("academic_year "+academic_year);
+        System.out.println("exam_type "+exam_type);
+        System.out.println("marks_table_exam_type "+marks_table_exam_type);
+        System.out.println("midORend "+midORend);
+        System.out.println("grade "+grade);
+
+        List<Medical> allMedicalList = arMedicalRepo.getAllMedicalSubmissionsByYear(academic_year);     //Get all medical submissions by academic year
+
+        if(allMedicalList.isEmpty()){       //If there are no medical submissions available
+            result.setCode(VarList.RIP_NO_DATA_FOUND);
+            result.setMessage("No medical submissions available");
+            result.setContent(null);
+
+        }else{
+            System.out.println("Medical submissions available");
+        }
+
+        return result;
+
+    }
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------END---------*/
 
 
 
