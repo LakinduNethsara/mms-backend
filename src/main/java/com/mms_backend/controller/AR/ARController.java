@@ -534,8 +534,8 @@ public class ARController {
     /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------START---------*/
 
     @PostMapping("/checkMedicalForAB")
-    public void checkMedicalForAB(@RequestBody Object studentDetails){
-        arService.checkMedicalForAB(studentDetails);
+    public ResponseDTO checkMedicalForAB(@RequestBody Object studentDetails){
+        return arService.checkMedicalForAB(studentDetails);
 
     }
 

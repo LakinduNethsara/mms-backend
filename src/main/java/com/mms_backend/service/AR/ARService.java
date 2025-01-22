@@ -454,16 +454,33 @@ public class ARService {
         System.out.println("midORend "+midORend);
         System.out.println("grade "+grade);
 
-        List<Medical> allMedicalList = arMedicalRepo.getAllMedicalSubmissionsByYear(academic_year);     //Get all medical submissions by academic year
+        try{
+            List<Medical> allMedicalList = arMedicalRepo.getAllMedicalSubmissionsByYear(academic_year);     //Get all medical submissions by academic year
 
-        if(allMedicalList.isEmpty()){       //If there are no medical submissions available
-            result.setCode(VarList.RIP_NO_DATA_FOUND);
-            result.setMessage("No medical submissions available");
+            if(allMedicalList.isEmpty()){       //If there are no medical submissions available
+                result.setCode(VarList.RIP_NO_DATA_FOUND);
+                result.setMessage("Medical List is still not uploaded for the relevant academic year...");
+                result.setContent(null);
+
+            }else{
+
+                System.out.println("Medical submissions available");
+                List<Medical> selectedStudentMedicalDetails = arMedicalRepo.getSelectedStudentMedicalDetails(student_id,course_id,academic_year,midORend);        //Get selected student medical details
+
+                if(selectedStudentMedicalDetails.isEmpty()){
+                    result.setCode(VarList.RIP_SUCCESS);
+                    result.setMessage("Student has not submitted a medical.");
+                    //set content as newScore = 'F', color = "red"
+                    result.setContent("F");
+                }
+            }
+        }catch(Exception e){
+            result.setCode(VarList.RIP_ERROR);
+            result.setMessage("Error occurred while checking medical submissions...");
             result.setContent(null);
-
-        }else{
-            System.out.println("Medical submissions available");
+            return result;
         }
+
 
         return result;
 
