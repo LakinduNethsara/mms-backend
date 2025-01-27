@@ -4,11 +4,8 @@ import com.mms_backend.dto.*;
 import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.AR.CourseDTO;
 import com.mms_backend.dto.AR.MedicalDTO;
+import com.mms_backend.entity.*;
 import com.mms_backend.entity.AR.*;
-import com.mms_backend.entity.GPA;
-import com.mms_backend.entity.MarksEntity;
-import com.mms_backend.entity.StudentRegCourses;
-import com.mms_backend.entity.User;
 import com.mms_backend.repository.AR.*;
 
 import jakarta.transaction.Transactional;
@@ -49,6 +46,8 @@ public class ARService {
     private ARGPARepo arGPARepo;
     @Autowired
     private ARStudentRegCourses arStudentRegCourses;
+    @Autowired
+    private ARAttendanceEligibilityRepo arAttendanceEligibilityRepo;
 
     @Autowired
     private ModelMapper mp;
@@ -464,14 +463,17 @@ public class ARService {
 
             }else{
 
-                System.out.println("Medical submissions available");
+                System.out.println("Medical list is uploaded for the relevant academic year...");
                 List<Medical> selectedStudentMedicalDetails = arMedicalRepo.getSelectedStudentMedicalDetails(student_id,course_id,academic_year,midORend);        //Get selected student medical details
+                List<MedicalDTO> selectedStudentMedicalDetailsDTO = mp.map(selectedStudentMedicalDetails,new TypeToken<ArrayList<MedicalDTO>>(){}.getType());
+
+                result.setCode(VarList.RIP_SUCCESS);
+                result.setContent(selectedStudentMedicalDetailsDTO);
 
                 if(selectedStudentMedicalDetails.isEmpty()){
-                    result.setCode(VarList.RIP_SUCCESS);
                     result.setMessage("Student has not submitted a medical.");
-                    //set content as newScore = 'F', color = "red"
-                    result.setContent("F");
+                } else {
+                    result.setMessage("Student has submitted a medical.");
                 }
             }
         }catch(Exception e){
@@ -490,6 +492,44 @@ public class ARService {
     /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------END---------*/
 
 
+
+
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility------------START---------*/
+
+    public ResponseDTO getAttendanceEligibilityByStudentIdAndCourseId(String student_id,String course_id){
+
+        ResponseDTO result = new ResponseDTO();
+
+        try{
+            AttendanceEligibility attendanceEligibility = arAttendanceEligibilityRepo.getAttendanceEligibilityByStudentIdAndCourseId(student_id, course_id);
+
+            if (attendanceEligibility != null) {
+                result.setCode(VarList.RIP_SUCCESS);
+                result.setMessage("Attendance eligibility found for the student...");
+                result.setContent(mp.map(attendanceEligibility, AttendanceEligibilityDTO.class));
+            }else{
+                result.setCode(VarList.RIP_NO_DATA_FOUND);
+                result.setMessage("No attendance eligibility found for the student...");
+                result.setContent(null);
+            }
+        } catch(Exception e){
+            result.setCode(VarList.RIP_ERROR);
+            result.setMessage("Error occurred while checking attendance eligibility...");
+            result.setContent(null);
+
+        }
+
+
+        return result;
+
+    }
+
+
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility------------END---------*/
 
 
 
