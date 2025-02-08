@@ -529,4 +529,26 @@ public class ARController {
 
     /*---------------------------------------------------------------------------------------- Controller for studentRegCourses table ----------------------------END-------------*/
 
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------START---------*/
+
+    @PostMapping("/checkMedicalForAB")
+    public ResponseDTO checkMedicalForAB(@RequestBody Object studentDetails){
+        return arService.checkMedicalForAB(studentDetails);
+
+    }
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------END---------*/
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility -------------START-----------*/
+
+    @GetMapping("/getAttendanceEligibilityByStudentIdAndCourseId/{student_id}/{course_id}")
+    public ResponseDTO getAttendanceEligibilityByStudentIdAndCourseId(@PathVariable String student_id, @PathVariable String course_id){
+        return arService.getAttendanceEligibilityByStudentIdAndCourseId(student_id, course_id);
+    }
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility -------------END -------------*/
+
 }

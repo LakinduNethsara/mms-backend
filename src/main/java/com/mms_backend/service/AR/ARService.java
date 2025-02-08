@@ -4,11 +4,8 @@ import com.mms_backend.dto.*;
 import com.mms_backend.dto.AR.*;
 import com.mms_backend.dto.AR.CourseDTO;
 import com.mms_backend.dto.AR.MedicalDTO;
+import com.mms_backend.entity.*;
 import com.mms_backend.entity.AR.*;
-import com.mms_backend.entity.GPA;
-import com.mms_backend.entity.MarksEntity;
-import com.mms_backend.entity.StudentRegCourses;
-import com.mms_backend.entity.User;
 import com.mms_backend.repository.AR.*;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -48,6 +46,8 @@ public class ARService {
     private ARGPARepo arGPARepo;
     @Autowired
     private ARStudentRegCourses arStudentRegCourses;
+    @Autowired
+    private ARAttendanceEligibilityRepo arAttendanceEligibilityRepo;
 
     @Autowired
     private ModelMapper mp;
@@ -108,6 +108,16 @@ public class ARService {
 
     public List<Object> getAllAcademicYearList(){
         return arMarksRepo.getAllAcademicYearList();
+    }
+
+    public List<Object[]> getABDetails(String approved_level){        //Get all  students records to list down from marks table having AB s for valid exams
+        List<Object[]> eStarList= arMarksRepo.getABDetails(approved_level);
+        return eStarList;
+    }
+
+    public List<Object[]> getABDetailsByCourseId(String course_id, String academic_year){        //Get student id and other details from marks table where grade is E* by selected course........
+        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id, academic_year);
+        return abList;
     }
 
 
@@ -417,17 +427,113 @@ public class ARService {
 
 
 
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------START---------*/
+
+    public ResponseDTO checkMedicalForAB(Object studentDetails){
+
+        ResponseDTO result = new ResponseDTO();
+        Map<String,Object> studentDetailsMap = (Map<String, Object>) studentDetails;
+
+        String student_id = (String) studentDetailsMap.get("student_id");
+        String course_id = (String) studentDetailsMap.get("course_id");
+        String course_name = (String) studentDetailsMap.get("course_name");
+        String academic_year = (String) studentDetailsMap.get("academic_year");
+        String exam_type = (String) studentDetailsMap.get("exam_type");
+        String marks_table_exam_type = (String) studentDetailsMap.get("marks_table_exam_type");
+        String midORend = (String) studentDetailsMap.get("midORend");
+        String grade = (String) studentDetailsMap.get("grade");
 
 
+        System.out.println("student_id "+student_id);
+        System.out.println("course_id "+course_id);
+        System.out.println("course_name "+course_name);
+        System.out.println("academic_year "+academic_year);
+        System.out.println("exam_type "+exam_type);
+        System.out.println("marks_table_exam_type "+marks_table_exam_type);
+        System.out.println("midORend "+midORend);
+        System.out.println("grade "+grade);
 
-    public List<Object[]> getABDetails(String approved_level){        //Get all  students records to list down from marks table having AB s for valid exams
-        List<Object[]> eStarList= arMarksRepo.getABDetails(approved_level);
-        return eStarList;
+        try{
+            List<Medical> allMedicalList = arMedicalRepo.getAllMedicalSubmissionsByYear(academic_year);     //Get all medical submissions by academic year
+
+            if(allMedicalList.isEmpty()){       //If there are no medical submissions available
+                result.setCode(VarList.RIP_NO_DATA_FOUND);
+                result.setMessage("Medical List is still not uploaded for the relevant academic year...");
+                result.setContent(null);
+
+            }else{
+
+                System.out.println("Medical list is uploaded for the relevant academic year...");
+                List<Medical> selectedStudentMedicalDetails = arMedicalRepo.getSelectedStudentMedicalDetails(student_id,course_id,academic_year,midORend);        //Get selected student medical details
+                List<MedicalDTO> selectedStudentMedicalDetailsDTO = mp.map(selectedStudentMedicalDetails,new TypeToken<ArrayList<MedicalDTO>>(){}.getType());
+
+                result.setCode(VarList.RIP_SUCCESS);
+                result.setContent(selectedStudentMedicalDetailsDTO);
+
+                if(selectedStudentMedicalDetails.isEmpty()){
+                    result.setMessage("Student has not submitted a medical.");
+                } else {
+                    result.setMessage("Student has submitted a medical.");
+                }
+            }
+        }catch(Exception e){
+            result.setCode(VarList.RIP_ERROR);
+            result.setMessage("Error occurred while checking medical submissions...");
+            result.setContent(null);
+            return result;
+        }
+
+
+        return result;
+
     }
 
-    public List<Object[]> getABDetailsByCourseId(String course_id, String academic_year){        //Get student id and other details from marks table where grade is E* by selected course........
-        List<Object[]> abList= arMarksRepo.getABDetailsByCourseId(course_id, academic_year);
-        return abList;
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of UpdateABPage in frontend------------END---------*/
+
+
+
+
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility------------START---------*/
+
+    public ResponseDTO getAttendanceEligibilityByStudentIdAndCourseId(String student_id,String course_id){
+
+        ResponseDTO result = new ResponseDTO();
+
+        try{
+            AttendanceEligibility attendanceEligibility = arAttendanceEligibilityRepo.getAttendanceEligibilityByStudentIdAndCourseId(student_id, course_id);
+
+            if (attendanceEligibility != null) {
+                result.setCode(VarList.RIP_SUCCESS);
+                result.setMessage("Attendance eligibility found for the student...");
+                result.setContent(mp.map(attendanceEligibility, AttendanceEligibilityDTO.class));
+            }else{
+                result.setCode(VarList.RIP_NO_DATA_FOUND);
+                result.setMessage("No attendance eligibility found for the student...");
+                result.setContent(null);
+            }
+        } catch(Exception e){
+            result.setCode(VarList.RIP_ERROR);
+            result.setMessage("Error occurred while checking attendance eligibility...");
+            result.setContent(null);
+
+        }
+
+
+        return result;
+
     }
+
+
+
+
+    /* ---------------------------------------------------------------------------------------- Controller for functionalities of Attendance Eligibility------------END---------*/
+
+
+
+
+
 }
 
