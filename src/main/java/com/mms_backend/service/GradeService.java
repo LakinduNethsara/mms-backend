@@ -184,7 +184,7 @@ public class GradeService {
                                 }
 
 
-                                gradeRepo.save(grade);
+//                                gradeRepo.save(grade);
 
 
 
@@ -246,7 +246,7 @@ public class GradeService {
                                         log.error("e: ", ex);
                                     }
 
-                                    gradeRepo.save(grade);
+//                                    gradeRepo.save(grade);
 
                                 }else{
 
@@ -306,7 +306,7 @@ public class GradeService {
                                                 log.error("e: ", ex);
                                             }
 
-                                            gradeRepo.save(grade);
+//                                            gradeRepo.save(grade);
 
                                         }
 
@@ -381,7 +381,7 @@ public class GradeService {
                                     log.error("e: ", ex);
                                 }
 
-                                gradeRepo.save(grade);
+//                                gradeRepo.save(grade);
 
                             } else{
 
@@ -441,7 +441,7 @@ public class GradeService {
                                             log.error("e: ", ex);
                                         }
 
-                                        gradeRepo.save(grade);
+//                                        gradeRepo.save(grade);
 
                                     }
 
@@ -523,7 +523,7 @@ public class GradeService {
                                 log.error("e: ", ex);
                             }
 
-                            gradeRepo.save(grade);
+//                            gradeRepo.save(grade);
 
                         }
 
@@ -603,7 +603,7 @@ public class GradeService {
                                     log.error("e: ", e);
                                 }
 
-                                gradeRepo.save(grade);
+//                                gradeRepo.save(grade);
 
                             }
                         }else{
@@ -660,7 +660,7 @@ public class GradeService {
                                         log.error("e: ", e);
                                     }
 
-                                    gradeRepo.save(grade);
+//                                    gradeRepo.save(grade);
 
                                 }
 
@@ -719,7 +719,7 @@ public class GradeService {
                                             log.error("e: ", e);
                                         }
 
-                                        gradeRepo.save(grade);
+//                                        gradeRepo.save(grade);
                                     }
 
                                 }
