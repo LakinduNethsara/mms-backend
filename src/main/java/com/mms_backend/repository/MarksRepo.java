@@ -62,5 +62,19 @@ public interface MarksRepo extends JpaRepository<MarksEntity,Integer> {
     );
 
 
+    //for marks calculation
+    @Query(nativeQuery = true,value = "select count(distinct assignment_name) from marks where academic_year= (select current_academic_year from academic_year_details) and  evaluation_criteria_id=:evaluation_criteria_id;")
+    int getConductedAssessmentsByEvaluationCriteriaID(@Param("evaluation_criteria_id") String evaluation_criteria_id); //get total conducted assessments by evaluation criteria ID
+
+    @Query(nativeQuery = true,value = "select * from marks where academic_year=:academic_year and  student_id=:student_id and evaluation_criteria_id=:evaluation_criteria_id;")
+    List<MarksEntity> getMarksByStudentID(@Param("student_id") String student_id, @Param("academic_year") String academic_year, @Param("evaluation_criteria_id") String evaluation_criteria_id); //all marks details by evaluation_criteria_id, student_id and academic year
+
+
+
+
+
+
+
+
 
 }
