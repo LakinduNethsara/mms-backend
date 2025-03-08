@@ -177,8 +177,11 @@ public class MarksService {
                 int per = item.getPercentage();
                 percentage = per;
             }
+            System.out.println(M_evaluationCriteriaID);
+            System.out.println(evaluationCriteriaID);
 
             if (M_evaluationCriteriaID.equals(evaluationCriteriaID)){
+                System.out.println("---------------------------------------------------------------------------");
                 for (MarksEntity mark : marks) {
                     double score = 0;
                     double avg = 0;

@@ -58,7 +58,7 @@ public class GradeService {
 //
                 if(student.getIs_repeat()==0){
                     //scenario for proper---------------------------------------------------------------------------------------------------------------
-                    System.out.println("This is propper-------------------------------");
+                    System.out.println("This is proper-------------------------------");
                     List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
                     System.out.println("Mark list is");
                     System.out.println(markList);
@@ -101,6 +101,7 @@ public class GradeService {
 
                 }else{
                     //Scenario for repeat-----------------------------------------------------------------------------------------
+                    System.out.println("This is repeat-------------------------------");
                     if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D+")) || (grade.getGrade().equals("E"))){
 ////                        List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
 ////                        double sum=0.0 ;
@@ -742,7 +743,7 @@ public class GradeService {
                 marksApprovalLevel.setApproval_level("finalized");
                 marksApprovalLevel.setDepartment_id(courseRelatedDeptEntity.getDepartment_id());
 
-                approvalLevelRepo.save(marksApprovalLevel);
+//                approvalLevelRepo.save(marksApprovalLevel);
             }
 
 
