@@ -94,9 +94,9 @@ public class GradeService {
                     }
 
 
+                    System.out.println("Student "+student.getStudent_id()+ " Grade - "+grade.getGrade());
 
-
-                    //gradeRepo.save(grade);
+                    gradeRepo.save(grade);
 
 
                 }else{
@@ -734,7 +734,7 @@ public class GradeService {
             }
 
             List<CourseRelatedDeptEntity> courseRelatedDeptEntityList = courseRelatedDeptRepo.getDeptByCourse(course_id);
-
+            System.out.println("Course related department details ---" + courseRelatedDeptEntityList);
             for(CourseRelatedDeptEntity courseRelatedDeptEntity : courseRelatedDeptEntityList){
 
                 MarksApprovalLevel marksApprovalLevel = new MarksApprovalLevel();
@@ -743,7 +743,7 @@ public class GradeService {
                 marksApprovalLevel.setApproval_level("finalized");
                 marksApprovalLevel.setDepartment_id(courseRelatedDeptEntity.getDepartment_id());
 
-//                approvalLevelRepo.save(marksApprovalLevel);
+                approvalLevelRepo.save(marksApprovalLevel);
             }
 
 
