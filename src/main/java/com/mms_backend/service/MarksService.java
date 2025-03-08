@@ -42,6 +42,7 @@ public class MarksService {
     private FinalSelectionRepo finalSelectionRepo;
 
 
+
     public List<MarksDTO> getAllScore(){
 
         List<MarksEntity> markList=marksRepo.findAll();
@@ -154,6 +155,8 @@ public class MarksService {
 
         try {
             List<MarksEntity> marks=modelMapper.map(list,new TypeToken<ArrayList<MarksEntity>>(){}.getType());
+
+            marksRepo.saveAll(marks);
             String course_id = "";
             String M_evaluationCriteriaID = "";
 
@@ -163,54 +166,86 @@ public class MarksService {
 
                 String MeID = mark.getEvaluation_criteria_id();
                 M_evaluationCriteriaID = MeID; //get evaluation criteria id
-
             }
 
-            List<EvaluationCriteria> getDetails = evaluationCriteriaRepo.getNotETEDetails(course_id);
-            String evaluationCriteriaID = "";
-            int percentage = 0;
+            EvaluationCriteria getDetailsByEvaluationCriteriaID = evaluationCriteriaRepo.getEvaluationCriteriaByEvaluationCriteria_id(M_evaluationCriteriaID); //getEvaluationCriteriaDetails from EvaluationCriteriaRepo by EvaluationCriteriaID
+            System.out.println("hello-------------"+getDetailsByEvaluationCriteriaID);
 
-            for (EvaluationCriteria item : getDetails) {
-                String evID = item.getEvaluationcriteria_id();
-                evaluationCriteriaID = evID;
+            int numOfConducted = getDetailsByEvaluationCriteriaID.getNo_of_conducted();
+            int numOfTaken = getDetailsByEvaluationCriteriaID.getNo_of_taken();
+            int percentage = getDetailsByEvaluationCriteriaID.getPercentage();
 
-                int per = item.getPercentage();
-                percentage = per;
-            }
-
-            if (M_evaluationCriteriaID.equals(evaluationCriteriaID)){
-                for (MarksEntity mark : marks) {
-                    double score = 0;
-                    double avg = 0;
-                    if (mark.getAssignment_score() == "AB") {
-                        score = 0;
-                        avg = 0;
-                    }else {
-                        score = Double.parseDouble((mark.getAssignment_score()));
-                        avg = (score * percentage) / 100;
-                    }
+            int noOfConductedAssessmentsByEvaluationCriteriaID = marksRepo.getConductedAssessmentsByEvaluationCriteriaID(M_evaluationCriteriaID);
+            System.out.println("hey ------------------- : "+noOfConductedAssessmentsByEvaluationCriteriaID);
 
 
-                    Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
-
-                    singleStudentMarks.setEvaluation_criteria_id(evaluationCriteriaID);
-                    singleStudentMarks.setStudent_id(mark.getStudent_id());
-                    singleStudentMarks.setCourse_id(course_id);
-                    singleStudentMarks.setMark(String.valueOf(score));
-                    singleStudentMarks.setPercentage(String.valueOf(avg));
-                    singleStudentMarks.setAcademic_year(mark.getAcademic_year());
-
-                    marksCalculationsList.add(singleStudentMarks);
-                    System.out.println("singleStudentMarks " + singleStudentMarks);
+            if(noOfConductedAssessmentsByEvaluationCriteriaID == numOfConducted){
+                List<MarksEntity> marksDetailsByEvaluationCriteriaStudentAcademicYear;
+                for(MarksEntity mark : marks){
+                    marksDetailsByEvaluationCriteriaStudentAcademicYear = marksRepo.getMarksByStudentID(mark.getStudent_id(),mark.getAcademic_year(),M_evaluationCriteriaID);
+                    
 
                 }
-                calculationsRepo.saveAll(marksCalculationsList);
-
-                System.out.println("Marks Calculations " + marksCalculationsList);
 
             }
 
-            marksRepo.saveAll(marks);
+
+
+
+//            List<EvaluationCriteria> getDetails = evaluationCriteriaRepo.getEndEvaluationCriteriaDetails(course_id); //getEndEvaluationCriteriaDetails from EvaluationCriteriaRepo
+//            if (!getDetails.isEmpty()){
+
+
+//                for (EvaluationCriteria item : getDetails) {
+//                    String evID = item.getEvaluationcriteria_id();
+//                    evaluationCriteriaID = evID;
+//
+//                    int per = item.getPercentage();
+//                    percentage = per;
+//
+//
+//                    if (M_evaluationCriteriaID.equals(evaluationCriteriaID)){
+//                        for (MarksEntity mark : marks) {
+//                            double score = 0;
+//                            double avg = 0;
+//                            if (mark.getAssignment_score() == "AB") {
+//                                score = 0;
+//                                avg = 0;
+//                            }else {
+//                                score = Double.parseDouble((mark.getAssignment_score()));
+//                                avg = (score * percentage) / 100;
+//                            }
+//
+//
+//                            Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
+//
+//                            singleStudentMarks.setEvaluation_criteria_id(evaluationCriteriaID);
+//                            singleStudentMarks.setStudent_id(mark.getStudent_id());
+//                            singleStudentMarks.setCourse_id(course_id);
+//                            singleStudentMarks.setMark(String.valueOf(score));
+//                            singleStudentMarks.setPercentage(String.valueOf(avg));
+//                            singleStudentMarks.setAcademic_year(mark.getAcademic_year());
+//
+//                            marksCalculationsList.add(singleStudentMarks);
+//                            System.out.println("singleStudentMarks " + singleStudentMarks);
+//
+//                        }
+//                        calculationsRepo.saveAll(marksCalculationsList);
+//
+//                        System.out.println("Marks Calculations " + marksCalculationsList);
+//
+//                    }
+
+//                }
+//            }else {
+//
+//            }
+
+
+
+
+
+//            marksRepo.saveAll(marks);
 
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(null);
