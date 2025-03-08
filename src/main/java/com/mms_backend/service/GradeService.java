@@ -58,7 +58,10 @@ public class GradeService {
 //
                 if(student.getIs_repeat()==0){
                     //scenario for proper---------------------------------------------------------------------------------------------------------------
+                    System.out.println("This is propper-------------------------------");
                     List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
+                    System.out.println("Mark list is");
+                    System.out.println(markList);
                     double sum=0.0 ;
                     double roundedSum = 0.0 ;
                     for (Calculations mark : markList) {
@@ -75,24 +78,25 @@ public class GradeService {
                     try{
                         marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
                         if(!marginList.isEmpty()){
-                            if(grade.getCa_eligibility().equals("Eligible")){
+                            if(grade.getOverall_ca_eligibility().equals("Eligible")){
                                 grade.setGrade(marginList.get(0).getGrade());
 
-                            }else if (grade.getCa_eligibility().equals("Not eligible")){
+                            }else if (grade.getOverall_ca_eligibility().equals("Not eligible")){
                                 grade.setGrade("F");
-                            }else if(grade.getCa_eligibility().equals("WH")){
+                            }else if(grade.getOverall_ca_eligibility().equals("WH")){
                                 grade.setGrade("WH");
                             }
                         }
 
                     }catch (Exception e){
-                        log.error("e: ", e);
+                        System.out.println("Grade is not saved "+e.getMessage());
+
                     }
 
 
 
 
-                    gradeRepo.save(grade);
+                    //gradeRepo.save(grade);
 
 
                 }else{
