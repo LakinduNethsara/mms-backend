@@ -78,12 +78,12 @@ public class GradeService {
                     try{
                         marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
                         if(!marginList.isEmpty()){
-                            if(grade.getOverall_ca_eligibility().equals("Eligible")){
+                            if(grade.getOverall_eligibility().equals("Eligible")){
                                 grade.setGrade(marginList.get(0).getGrade());
 
-                            }else if (grade.getOverall_ca_eligibility().equals("Not eligible")){
+                            }else if (grade.getOverall_eligibility().equals("Not eligible")){
                                 grade.setGrade("F");
-                            }else if(grade.getOverall_ca_eligibility().equals("WH")){
+                            }else if(grade.getOverall_eligibility().equals("WH")){
                                 grade.setGrade("WH");
                             }
                         }
