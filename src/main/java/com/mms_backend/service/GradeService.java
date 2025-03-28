@@ -300,10 +300,10 @@ public class GradeService {
 
 //
 
-                                        }else if (grade.getCa_eligibility().equals("Not eligible")) {       //If student CA not eligible
+                                        }else if (grade.getOverall_eligibility().equals("Not eligible")) {       //If student CA not eligible
                                             grade.setGrade("F");        //Grade should be "F"
 
-                                        } else if (grade.getCa_eligibility().equals("WH")) {        //If student has "WH" for CA
+                                        } else if (grade.getOverall_eligibility().equals("WH")) {        //If student has "WH" for CA
                                             grade.setGrade("WH");       //grade should be "WH"
                                         }
 
@@ -373,10 +373,10 @@ public class GradeService {
                                             }
                                         }
 
-                                    } else if (grade.getCa_eligibility().equals("Not eligible")) {      //If student not eligible for CA
+                                    } else if (grade.getOverall_eligibility().equals("Not eligible")) {      //If student not eligible for CA
                                         grade.setGrade("F");        //Grade should be "F"
 
-                                    } else if (grade.getCa_eligibility().equals("WH")) {        //if student has "WH"
+                                    } else if (grade.getOverall_eligibility().equals("WH")) {        //if student has "WH"
                                         grade.setGrade("WH");       //Grade should be "WH"
                                     }
 
@@ -447,10 +447,10 @@ public class GradeService {
 
 
                                     }
-                                    else if (grade.getCa_eligibility().equals("Not eligible")) {        //Is student has not eligible CA
+                                    else if (grade.getOverall_eligibility().equals("Not eligible")) {        //Is student has not eligible CA
                                         grade.setGrade("F");        //Grade should be "F"
 
-                                    } else if (grade.getCa_eligibility().equals("WH")) {        //If student has "WH" for CA
+                                    } else if (grade.getOverall_eligibility().equals("WH")) {        //If student has "WH" for CA
                                         grade.setGrade("WH");       //grade should be "WH"
                                     }
                                     try{
@@ -534,10 +534,10 @@ public class GradeService {
 
 
                         }
-                        else if (grade.getCa_eligibility().equals("Not eligible")) {
+                        else if (grade.getOverall_eligibility().equals("Not eligible")) {
                             grade.setGrade("F");
 
-                        } else if (grade.getCa_eligibility().equals("WH")) {
+                        } else if (grade.getOverall_eligibility().equals("WH")) {
                             grade.setGrade("WH");
                         }
 
@@ -688,9 +688,9 @@ public class GradeService {
 
 
                                 }
-                                else if (grade.getCa_eligibility().equals("Not eligible")){
+                                else if (grade.getOverall_eligibility().equals("Not eligible")){
                                     grade.setGrade("F");
-                                }else if(grade.getCa_eligibility().equals("WH")){
+                                }else if(grade.getOverall_eligibility().equals("WH")){
                                     grade.setGrade("WH");
                                 }
 
@@ -735,13 +735,13 @@ public class GradeService {
                                     grade.setTotal_final_mark(String.valueOf(sum));
                                     grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
-                                    if(grade.getCa_eligibility().equals("Eligible")) {
+                                    if(grade.getOverall_eligibility().equals("Eligible")) {
 
                                         List<MarksRangeOfGrade> marginList = null;
                                         try{
                                             marginList = marksRangeOfCourseRepo.getGradeForProper(course_id,academic_year, String.valueOf(roundedSum));
                                             if(!marginList.isEmpty()){
-                                                if(grade.getCa_eligibility().equals("Eligible")){
+                                                if(grade.getOverall_eligibility().equals("Eligible")){
                                                     grade.setGrade(marginList.get(0).getGrade());
 
                                                 }
@@ -752,9 +752,9 @@ public class GradeService {
                                         }
 
 //
-                                    }else if (grade.getCa_eligibility().equals("Not eligible")){
+                                    }else if (grade.getOverall_eligibility().equals("Not eligible")){
                                         grade.setGrade("F");
-                                    }else if(grade.getCa_eligibility().equals("WH")){
+                                    }else if(grade.getOverall_eligibility().equals("WH")){
                                         grade.setGrade("WH");
                                     }
                                     try{
@@ -831,20 +831,7 @@ public class GradeService {
             }else{
                 //Scenario for repeat-----------------------------------------------------------------------------------------
                 if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D+")) || (grade.getGrade().equals("E"))){
-////                        List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
-////                        double sum=0.0 ;
-////                        double roundedSum = 0.0 ;
-////                        for (Calculations mark : markList) {
-////                            sum= sum +Double.parseDouble(mark.getPercentage());
-////                        }
-////                        roundedSum = Math.round(sum*100)/100.00 ;
-////                        System.out.println("Sum" + sum);
-////                        System.out.println("Rounded Sum" + roundedSum);
 ////
-////                        grade.setTotal_final_mark(String.valueOf(sum));
-////                        grade.setTotal_rounded_mark(String.valueOf(roundedSum));
-////
-////                        gradeRepo.save(grade);
 //
                     List<Calculations> endCalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"End");
                     List<Calculations> pre_ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"CA");
@@ -876,7 +863,11 @@ public class GradeService {
                             grade.setTotal_final_mark(String.valueOf(sum));
                             grade.setTotal_rounded_mark(String.valueOf(roundedSum));
 
-                            gradeRepo.save(grade);
+                            try{
+                                gradeRepo.save(grade);      //Save grade details in Database
+                            } catch(Exception err){
+                                System.out.println("Error is occurred while saving saving repeat student grade details ");
+                            }
 
 
 
@@ -911,7 +902,7 @@ public class GradeService {
 
                                 if((!ca_CalculationList.isEmpty()) && (!mid_CalculationList.isEmpty())){
 
-                                    if(grade.getCa_eligibility().equals("Eligible")){
+                                    if(grade.getOverall_eligibility().equals("Eligible")){
 
                                         for(Calculations ca_Calculation : ca_CalculationList){
                                             sum = sum + Double.parseDouble(ca_Calculation.getPercentage());
@@ -976,7 +967,7 @@ public class GradeService {
 
                             if((!ca_CalculationList.isEmpty()) && (!mid_CalculationList.isEmpty())){
 
-                                if(grade.getCa_eligibility().equals("Eligible")){
+                                if(grade.getOverall_eligibility().equals("Eligible")){
 
                                     for(Calculations ca_Calculation : ca_CalculationList){
                                         sum = sum + Double.parseDouble(ca_Calculation.getPercentage());
@@ -1013,7 +1004,7 @@ public class GradeService {
                     double sum = 0.0 ;
                     double roundedSum = 0.0;
 
-                    if(grade.getCa_eligibility().equals("Eligible")){
+                    if(grade.getOverall_eligibility().equals("Eligible")){
                         if(!endCalculationList.isEmpty()){
 
                             for(Calculations endCalculation : endCalculationList){
@@ -1073,7 +1064,7 @@ public class GradeService {
                         double sum = 0.0 ;
                         double roundedSum = 0.0;
 
-                        if(grade.getCa_eligibility().equals("Eligible")){
+                        if(grade.getOverall_eligibility().equals("Eligible")){
 
                             if(!endCalculationList.isEmpty()){
 
@@ -1112,7 +1103,7 @@ public class GradeService {
                             double sum = 0.0 ;
                             double roundedSum = 0.0;
 
-                            if(grade.getCa_eligibility().equals("Eligible")){
+                            if(grade.getOverall_eligibility().equals("Eligible")){
 
                                 if(!endCalculationList.isEmpty()){
 
@@ -1152,7 +1143,7 @@ public class GradeService {
                                 double sum = 0.0 ;
                                 double roundedSum = 0.0;
 
-                                if(grade.getCa_eligibility().equals("Eligible")) {
+                                if(grade.getOverall_eligibility().equals("Eligible")) {
 
                                     if (!endCalculationList.isEmpty()) {
 
