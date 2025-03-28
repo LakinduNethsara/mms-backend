@@ -96,28 +96,18 @@ public class GradeService {
 
                     System.out.println("Student "+student.getStudent_id()+ " Grade - "+grade.getGrade());
 
-                    gradeRepo.save(grade);
+                    try{
+                        gradeRepo.save(grade);      //Save grade details in Database
+                    } catch(Exception err){
+                        System.out.println("Error is occurred while saving saving proper student grade details ");
+                    }
 
 
                 }else{
                     //Scenario for repeat-----------------------------------------------------------------------------------------
                     System.out.println("This is repeat-------------------------------");
                     if((grade.getGrade().equals("C-")) || (grade.getGrade().equals("D")) || (grade.getGrade().equals("D+")) || (grade.getGrade().equals("E"))){
-////                        List<Calculations> markList = calculationsRepo.getStudentMarkPercentageList(course_id,student.getStudent_id(),academic_year);
-////                        double sum=0.0 ;
-////                        double roundedSum = 0.0 ;
-////                        for (Calculations mark : markList) {
-////                            sum= sum +Double.parseDouble(mark.getPercentage());
-////                        }
-////                        roundedSum = Math.round(sum*100)/100.00 ;
-////                        System.out.println("Sum" + sum);
-////                        System.out.println("Rounded Sum" + roundedSum);
 ////
-////                        grade.setTotal_final_mark(String.valueOf(sum));
-////                        grade.setTotal_rounded_mark(String.valueOf(roundedSum));
-////
-////                        gradeRepo.save(grade);
-//
                         List<Calculations> endCalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"End");     //Get current(new) end marks
                         List<Calculations> pre_ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"CA");      //Get perevious year CA Marks
                         List<Calculations> pre_mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"Mid");    //Get previous year Mid Marks
@@ -181,7 +171,11 @@ public class GradeService {
                                 }
 
 
-                                gradeRepo.save(grade);
+                                try{
+                                    gradeRepo.save(grade);      //Save grade details in Database
+                                } catch(Exception err){
+                                    System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                }
 
 
 
@@ -243,9 +237,14 @@ public class GradeService {
                                         log.error("e: ", ex);
                                     }
 
-                                    gradeRepo.save(grade);  //Save the grade details in the back end
+                                    try{
+                                        gradeRepo.save(grade);      //Save grade details in Database
+                                    } catch(Exception err){
+                                        System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                    }  //Save the grade details in the back end
 
-                                }else{      //If he write all the exams as a repeat student after 2 years
+
+                                }else{      //If he writes all the exams as a repeat student after 2 years
 
                                     List<Calculations> ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"CA");      //Get current year CA marks as repeat student (Need to write ca again )
                                     List<Calculations> mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"Mid");    //Get current year Mid marks as repeat student (Need to write ca again )
@@ -310,7 +309,11 @@ public class GradeService {
 
                                     }
 
-                                    gradeRepo.save(grade);
+                                    try{
+                                        gradeRepo.save(grade);      //Save grade details in Database
+                                    } catch(Exception err){
+                                        System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                    }
                                 }
                             }
 
@@ -382,7 +385,11 @@ public class GradeService {
                                     log.error("e: ", ex);
                                 }
 
-                                gradeRepo.save(grade);      //Save grade details to database
+                                try{
+                                    gradeRepo.save(grade);      //Save grade details in Database
+                                } catch(Exception err){
+                                    System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                }      //Save grade details to database
 
                             } else{
 
@@ -446,9 +453,13 @@ public class GradeService {
                                     } else if (grade.getCa_eligibility().equals("WH")) {        //If student has "WH" for CA
                                         grade.setGrade("WH");       //grade should be "WH"
                                     }
+                                    try{
+                                        gradeRepo.save(grade);      //Save grade details in Database
+                                    } catch(Exception err){
+                                        System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                    }      //Save grade details in Database
 
                                 }
-                                gradeRepo.save(grade);      //Save grade details in Database
                             }
 
                         }
@@ -531,9 +542,9 @@ public class GradeService {
                         }
 
                         try{
-                            gradeRepo.save(grade);      //
+                            gradeRepo.save(grade);      //Save grade details in Database
                         } catch(Exception err){
-                            System.out.println("Error occured while savin saving repeat student grade detials ");
+                            System.out.println("Error is occurred while savin saving repeat student grade details ");
                         }
 
                     }else if (grade.getGrade().equals("MC")){       //scenario for grade WH student
@@ -564,7 +575,7 @@ public class GradeService {
                             List<Calculations> ca_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,pre_academic_year,"CA");
                             List<Calculations> mid_CalculationList = calculationsRepo.getCalculationData(student.getStudent_id(),course_id,academic_year,"Mid");
 
-                            if()
+
 
                             double sum = 0.0 ;
                             double roundedSum = 0.0;
@@ -609,14 +620,19 @@ public class GradeService {
                                     log.error("e: ", e);
                                 }
 
-//                                gradeRepo.save(grade);
-
                             }
                             else if (grade.getOverall_eligibility().equals("Not eligible")){
                                 grade.setGrade("F");
                             }else if(grade.getOverall_eligibility().equals("WH")){
                                 grade.setGrade("WH");
                             }
+
+                            try{
+                                gradeRepo.save(grade);      //Save grade details in Database
+                            } catch(Exception err){
+                                System.out.println("Error is occurred while saving saving repeat student grade details ");
+                            }
+
                         }else{
                             if(isMidMc){
 
@@ -669,7 +685,7 @@ public class GradeService {
                                         log.error("e: ", e);
                                     }
 
-//                                    gradeRepo.save(grade);
+
 
                                 }
                                 else if (grade.getCa_eligibility().equals("Not eligible")){
@@ -677,6 +693,13 @@ public class GradeService {
                                 }else if(grade.getCa_eligibility().equals("WH")){
                                     grade.setGrade("WH");
                                 }
+
+                                try{
+                                    gradeRepo.save(grade);      //Save grade details in Database
+                                } catch(Exception err){
+                                    System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                }
+
 
                             }else{
                                 if(isEndMc){
@@ -728,22 +751,26 @@ public class GradeService {
                                             log.error("e: ", e);
                                         }
 
-//                                        gradeRepo.save(grade);
+//
                                     }else if (grade.getCa_eligibility().equals("Not eligible")){
                                         grade.setGrade("F");
                                     }else if(grade.getCa_eligibility().equals("WH")){
                                         grade.setGrade("WH");
                                     }
-
+                                    try{
+                                        gradeRepo.save(grade);      //Save grade details in Database
+                                    } catch(Exception err){
+                                        System.out.println("Error is occurred while saving saving repeat student grade details ");
+                                    }
                                 }
                             }
                         }
 
-                        try{
-                            gradeRepo.save(grade);
-                        } catch(Exception err){
-                            System.out.println("Error occured while savin saving repeat MC student grade detials ");
-                        }
+//                        try{
+//                            gradeRepo.save(grade);
+//                        } catch(Exception err){
+//                            System.out.println("Error occured while savin saving repeat MC student grade detials ");
+//                        }
 
 
                     }
