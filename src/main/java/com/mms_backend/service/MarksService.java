@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,6 +40,10 @@ public class MarksService {
 
     @Autowired
     private FinalSelectionRepo finalSelectionRepo;
+
+//    @Autowired
+//    private Calculations calculationsObj;
+
 
 
     public List<MarksDTO> getAllScore(){
@@ -154,6 +158,8 @@ public class MarksService {
 
         try {
             List<MarksEntity> marks=modelMapper.map(list,new TypeToken<ArrayList<MarksEntity>>(){}.getType());
+
+            marksRepo.saveAll(marks); //save all marks
             String course_id = "";
             String M_evaluationCriteriaID = "";
 
@@ -163,54 +169,57 @@ public class MarksService {
 
                 String MeID = mark.getEvaluation_criteria_id();
                 M_evaluationCriteriaID = MeID; //get evaluation criteria id
-
             }
 
-            List<EvaluationCriteria> getDetails = evaluationCriteriaRepo.getNotETEDetails(course_id);
-            String evaluationCriteriaID = "";
-            int percentage = 0;
+            EvaluationCriteria getDetailsByEvaluationCriteriaID = evaluationCriteriaRepo.getEvaluationCriteriaByEvaluationCriteria_id(M_evaluationCriteriaID); //getEvaluationCriteriaDetails from EvaluationCriteriaRepo by EvaluationCriteriaID
+            System.out.println("hello-------------"+getDetailsByEvaluationCriteriaID);
 
-            for (EvaluationCriteria item : getDetails) {
-                String evID = item.getEvaluationcriteria_id();
-                evaluationCriteriaID = evID;
+            int numOfConducted = getDetailsByEvaluationCriteriaID.getNo_of_conducted();
+            int numOfTaken = getDetailsByEvaluationCriteriaID.getNo_of_taken();
+            int percentage = getDetailsByEvaluationCriteriaID.getPercentage();
 
-                int per = item.getPercentage();
-                percentage = per;
-            }
+            int noOfConductedAssessmentsByEvaluationCriteriaID = marksRepo.getConductedAssessmentsByEvaluationCriteriaID(M_evaluationCriteriaID);
+            System.out.println("hey ------------------- : "+noOfConductedAssessmentsByEvaluationCriteriaID);
 
-            if (M_evaluationCriteriaID.equals(evaluationCriteriaID)){
-                for (MarksEntity mark : marks) {
-                    double score = 0;
-                    double avg = 0;
-                    if (mark.getAssignment_score() == "AB") {
-                        score = 0;
-                        avg = 0;
-                    }else {
-                        score = Double.parseDouble((mark.getAssignment_score()));
-                        avg = (score * percentage) / 100;
+
+            if(noOfConductedAssessmentsByEvaluationCriteriaID == numOfConducted){
+                List<MarksEntity> marksDetailsByEvaluationCriteriaStudentAcademicYear; //create list to get marks by student id, academic year and evaluation criteria id
+
+                List<Calculations> calculatedMarksList = new ArrayList<>();
+
+                //set course id and evaluation criteria id to the calculations object
+
+                //loop for all students
+                for(MarksEntity mark : marks){
+
+                    Calculations calculationsObj = new Calculations(); //create object from calculation entity
+                    calculationsObj.setCourse_id(course_id);
+                    calculationsObj.setEvaluation_criteria_id(M_evaluationCriteriaID);
+//                    System.out.println("student id by pass for loop : "+mark.getStudent_id());
+
+                    marksDetailsByEvaluationCriteriaStudentAcademicYear = marksRepo.getMarksByStudentID(mark.getStudent_id(),mark.getAcademic_year(),M_evaluationCriteriaID);
+                    calculationsObj.setAcademic_year(mark.getAcademic_year()); //set academic year to the calculations object
+                    //add marks in to a list
+                    List<Double> marksArray = new ArrayList<>();
+                    for (MarksEntity toMaxMarks : marksDetailsByEvaluationCriteriaStudentAcademicYear){
+                        marksArray.add(Double.valueOf(toMaxMarks.getAssignment_score()));
                     }
+                    // sorting descending
+                    marksArray.sort(Collections.reverseOrder());
+                    List<Double> maxMarksList = marksArray.subList(0,numOfTaken);
+                    double AVGOfMaxMarks = (maxMarksList.stream().mapToDouble(Double::doubleValue).sum())/numOfTaken;
+                    double AVG_Marks_percentage = AVGOfMaxMarks * percentage / 100;
 
+                    //add calculated marks to the calculations object
+                    calculationsObj.setMark(String.valueOf(AVGOfMaxMarks));
+                    calculationsObj.setPercentage(String.valueOf(AVG_Marks_percentage));
+                    calculationsObj.setStudent_id(mark.getStudent_id());
 
-                    Calculations singleStudentMarks = new Calculations(); //create object from calculation entity
-
-                    singleStudentMarks.setEvaluation_criteria_id(evaluationCriteriaID);
-                    singleStudentMarks.setStudent_id(mark.getStudent_id());
-                    singleStudentMarks.setCourse_id(course_id);
-                    singleStudentMarks.setMark(String.valueOf(score));
-                    singleStudentMarks.setPercentage(String.valueOf(avg));
-                    singleStudentMarks.setAcademic_year(mark.getAcademic_year());
-
-                    marksCalculationsList.add(singleStudentMarks);
-                    System.out.println("singleStudentMarks " + singleStudentMarks);
+                    calculationsRepo.save(calculationsObj); //save calculated marks
+                    System.out.println("calculatedMarksList : "+calculationsObj);
 
                 }
-                calculationsRepo.saveAll(marksCalculationsList);
-
-                System.out.println("Marks Calculations " + marksCalculationsList);
-
             }
-
-            marksRepo.saveAll(marks);
 
             responseDTO.setCode(VarList.RIP_SUCCESS);
             responseDTO.setContent(null);
