@@ -186,6 +186,7 @@ public class ARController {
     /*---------------------------------------------------------------------------------------- Controller for grade table ----------------------------START-------------*/
     @PutMapping("/updateStudentFinalGrade")     //Update selected student's Final grade to WH
     public void updateStudentFinalGrade(@RequestBody GradeDTO gradeDTO){
+        System.out.println("Trying to update grade.....................................................................................................");
         arService.updateStudentFinalGrade(gradeDTO);
 
 
